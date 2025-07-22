@@ -40,7 +40,7 @@ CREATE TABLE waitlist (
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/snappycards.git
+   git clone https://github.com/CAFEENGLISH/snappycards.git
    cd snappycards
    ```
 
@@ -112,4 +112,4 @@ MIT License - see LICENSE file for details
 
 ---
 
-**Made with 🧠 and ⚡ for the future of learning** 
+**Made with 🧠 and ⚡ for the future of learning**
