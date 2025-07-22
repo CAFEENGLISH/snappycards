@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: snappycards-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SMTP_HOST
+        value: smtp.zoho.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        value: info@snappycards.io
+      - key: SMTP_PASS
+        sync: false # Set this in Render dashboard for security 
