@@ -1129,44 +1129,65 @@
             }
             
             // Update button state
-            submitBtn.textContent = 'Joining...';
+            submitBtn.textContent = 'Sending confirmation...';
             submitBtn.disabled = true;
             
             try {
                 // Generate confirmation token
                 const confirmationToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                 
-                // Insert email into Supabase
-                const { data, error } = await supabase
+                // First, insert email into Supabase (unconfirmed)
+                const { data: insertData, error: insertError } = await supabase
                     .from('waitlist')
                     .insert([
                         { 
                             email: emailInput.value,
-                            confirmation_token: confirmationToken
+                            confirmation_token: confirmationToken,
+                            confirmed: false
                         }
                     ]);
 
-                if (error) {
-                    if (error.code === '23505') { // Unique constraint violation
+                if (insertError) {
+                    if (insertError.code === '23505') { // Unique constraint violation
                         throw new Error('This email is already on the waitlist!');
                     }
-                    throw error;
+                    throw insertError;
+                }
+
+                // Send confirmation email via Edge Function
+                const emailResponse = await fetch(`${SUPABASE_URL}/functions/v1/send-confirmation-email`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        email: emailInput.value,
+                        confirmationToken: confirmationToken
+                    })
+                });
+
+                const emailResult = await emailResponse.json();
+
+                if (!emailResponse.ok || !emailResult.success) {
+                    throw new Error(emailResult.error || 'Failed to send confirmation email');
                 }
 
                 // Success - hide form and show success message
                 emailInput.style.display = 'none';
                 submitBtn.style.display = 'none';
                 successMessage.innerHTML = `
-                    <strong>Thank you!</strong> You're on the waitlist! 🎉<br>
-                    <small>We'll be in touch soon with early access details.</small>
+                    <strong>Check your email!</strong> 📧<br>
+                    <small>We've sent a confirmation link to <strong>${emailInput.value}</strong>.<br>
+                    Click the link to complete your waitlist registration.</small>
                 `;
                 successMessage.style.display = 'block';
 
                 // Log for development
-                console.log('Email successfully added to waitlist:', emailInput.value);
+                console.log('Confirmation email sent successfully to:', emailInput.value);
 
             } catch (error) {
-                console.error('Error adding email to waitlist:', error);
+                console.error('Error in waitlist registration:', error);
                 
                 // Reset button state
                 submitBtn.textContent = 'Join Waitlist';

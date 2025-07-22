@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation - SnappyCards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .confirmation-container {
+            background: white;
+            border-radius: 24px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .status-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1a202c;
+        }
+
+        .status-message {
+            font-size: 1.1rem;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: #e53e3e;
+        }
+
+        .success {
+            color: #38a169;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <div class="brand-logo">🧠 SnappyCards</div>
+        
+        <div id="loading-state">
+            <div class="loading"></div>
+            <h1 class="status-title">Confirming your email...</h1>
+            <p class="status-message">Please wait while we verify your subscription.</p>
+        </div>
+
+        <div id="success-state" style="display: none;">
+            <span class="status-icon">🎉</span>
+            <h1 class="status-title success">Email Confirmed!</h1>
+            <p class="status-message">
+                Welcome to the SnappyCards waitlist! You'll be among the first to experience 
+                the future of AI-powered learning when we launch.
+            </p>
+            <a href="/" class="back-button">Back to SnappyCards</a>
+        </div>
+
+        <div id="error-state" style="display: none;">
+            <span class="status-icon">❌</span>
+            <h1 class="status-title error">Confirmation Failed</h1>
+            <p class="status-message" id="error-message">
+                We couldn't verify your email. The confirmation link may have expired or is invalid.
+            </p>
+            <a href="/" class="back-button">Back to SnappyCards</a>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        // Show/hide states
+        function showState(stateName) {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('success-state').style.display = 'none';
+            document.getElementById('error-state').style.display = 'none';
+            document.getElementById(`${stateName}-state`).style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('error-message').textContent = message;
+            showState('error');
+        }
+
+        // Confirm email function
+        async function confirmEmail() {
+            if (!token) {
+                showError('No confirmation token provided. Please check your email link.');
+                return;
+            }
+
+            try {
+                // Update the waitlist entry to confirmed
+                const { data, error } = await supabase
+                    .from('waitlist')
+                    .update({ 
+                        confirmed: true, 
+                        confirmed_at: new Date().toISOString() 
+                    })
+                    .eq('confirmation_token', token)
+                    .select();
+
+                if (error) {
+                    console.error('Supabase error:', error);
+                    throw error;
+                }
+
+                if (!data || data.length === 0) {
+                    throw new Error('Invalid or expired confirmation token.');
+                }
+
+                // Success!
+                showState('success');
+                console.log('Email confirmed successfully for:', data[0].email);
+
+            } catch (error) {
+                console.error('Confirmation error:', error);
+                showError(error.message || 'An unexpected error occurred. Please try again.');
+            }
+        }
+
+        // Start confirmation when page loads
+        document.addEventListener('DOMContentLoaded', confirmEmail);
+    </script>
+</body>
+</html> 
