@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnappyCards - The world's first FlashCard system your brain will actually love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1a202c;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 0 20px;
+            background: transparent;
+            position: relative;
+            z-index: 100;
+        }
+
+        .brand {
+            text-align: center;
+            animation: brandFadeIn 1.5s ease;
+        }
+
+        .brand-name {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            letter-spacing: -0.02em;
+            animation: letterSpacing 2s ease, textGlow 3s ease-in-out infinite;
+        }
+
+        .brand-tagline {
+            font-size: 0.9rem;
+            color: #4a5568;
+            font-weight: 500;
+            margin-top: 5px;
+            opacity: 0;
+            animation: taglineFadeIn 1s ease 0.8s forwards;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Brand Animations */
+        @keyframes brandFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes letterSpacing {
+            0% {
+                letter-spacing: 0.3em;
+                opacity: 0;
+            }
+            50% {
+                letter-spacing: 0.1em;
+                opacity: 0.7;
+            }
+            100% {
+                letter-spacing: -0.02em;
+                opacity: 1;
+            }
+        }
+
+        @keyframes taglineFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes textGlow {
+            0%, 100% {
+                filter: brightness(1);
+            }
+            50% {
+                filter: brightness(1.1);
+            }
+        }
+
+        /* Sticky CTA */
+        .sticky-cta {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
+        .sticky-cta.visible {
+            transform: translateY(0);
+        }
+
+        .sticky-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: calc(100vh - 120px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            padding-top: 40px;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            animation: fadeInUp 1s ease;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-text {
+            text-align: left;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: all 0.3s ease;
+        }
+
+        .hero-image img:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+        }
+
+
+
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .hero-text {
+                text-align: center;
+            }
+            
+            .hero-image img {
+                transform: none;
+                max-width: 90%;
+            }
+            
+            .hero-image img:hover {
+                transform: scale(1.02);
+            }
+
+            .mobile-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: center;
+            }
+            
+            .mobile-text {
+                text-align: center;
+            }
+            
+            .mobile-image img {
+                max-width: 85%;
+            }
+
+            .science-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .science-image {
+                position: static;
+                order: -1;
+            }
+            
+            .science-image img {
+                max-width: 80%;
+            }
+            
+            .science-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .multimodal-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .multimodal-hero {
+                order: -1;
+            }
+            
+            .multimodal-hero img {
+                max-width: 80%;
+            }
+
+            .content-types {
+                gap: 20px;
+            }
+
+            .content-type {
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .content-type-icon {
+                font-size: 1.5rem;
+                min-width: 40px;
+            }
+
+            .testimonial-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            .testimonial-text {
+                text-align: center;
+            }
+            
+            .testimonial-image img {
+                max-width: 70%;
+            }
+
+            .testimonial {
+                padding: 60px 40px;
+            }
+
+            .header {
+                padding: 20px 0 15px;
+            }
+
+            .brand-name {
+                font-size: clamp(2rem, 8vw, 2.8rem);
+            }
+
+            .brand-tagline {
+                font-size: 0.8rem;
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1a202c 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: #4a5568;
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            color: #1a202c;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .science-hero-text {
+            font-size: clamp(2.5rem, 6vw, 3.8rem);
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Why Different Section */
+        .why-different {
+            background: white;
+            border-radius: 24px;
+            padding: 80px 0;
+            margin: 60px 0;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.05);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-emoji {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1a202c;
+        }
+
+        .feature-card p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 24px;
+            margin: 60px 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .step p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        /* Science Section */
+        .science-section {
+            background: #1a202c;
+            color: white;
+            border-radius: 24px;
+            margin: 60px 0;
+        }
+
+        .science-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: start;
+            margin-top: 60px;
+        }
+
+        .science-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: sticky;
+            top: 100px;
+        }
+
+        .science-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .science-image img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 25px 80px rgba(102, 126, 234, 0.4);
+        }
+
+        .science-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .science-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .science-term {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .science-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Mobile Learning */
+        .mobile-learning {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+            color: white;
+            border-radius: 24px;
+            margin: 60px 0;
+        }
+
+        .mobile-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            padding: 0;
+        }
+
+        .mobile-text {
+            text-align: left;
+        }
+
+        .mobile-tagline {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .mobile-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-image img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Multimodal Section */
+        .multimodal {
+            background: white;
+            border-radius: 24px;
+            margin: 60px 0;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.05);
+        }
+
+        .multimodal-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 60px;
+        }
+
+        .multimodal-hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .multimodal-hero img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .multimodal-hero img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .content-types {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .content-type {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .content-type:hover {
+            background: #f1f5f9;
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .content-type-icon {
+            font-size: 2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .content-type-text h4 {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .content-type-text p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .content-type h4 {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .content-type p {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 80px 60px;
+            margin: 60px 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .testimonial-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .testimonial-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .testimonial-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-image img:hover {
+            transform: scale(1.02);
+        }
+
+        .testimonial-text {
+            text-align: left;
+        }
+
+        .quote {
+            font-size: 1.8rem;
+            font-style: italic;
+            color: #1a202c;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .quote::before,
+        .quote::after {
+            content: '"';
+            color: #667eea;
+            font-size: 2.5rem;
+        }
+
+        .author {
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            border-radius: 24px;
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .final-cta .section-title {
+            color: white;
+        }
+
+        .final-cta .section-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .email-form {
+            max-width: 400px;
+            margin: 40px auto 0;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .email-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .email-input:focus {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .email-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .submit-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .success-message {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(72, 187, 120, 0.2);
+            border: 1px solid rgba(72, 187, 120, 0.3);
+            border-radius: 12px;
+            color: #68d391;
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .email-form {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .email-input {
+                min-width: 100%;
+                margin-bottom: 12px;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="brand">
+                <h1 class="brand-name">Snappy Cards</h1>
+                <div class="brand-tagline">AI-Powered Learning</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky CTA -->
+    <button class="sticky-cta" onclick="scrollToForm()">Join the Waitlist</button>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>The world's first FlashCard system your brain will actually love</h1>
+                    <p>Artificial intelligence meets neuroscience. Learn more effectively than ever before.</p>
+                    <a href="#waitlist" class="cta-button">Join the Waitlist</a>
+                </div>
+                <div class="hero-image">
+                    <img src="images/hero_the-three-spinning-cards-of-the-slot-machine-shoul.png" alt="FlashCard system - Three cards flash like a slot machine" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Different -->
+    <section class="why-different">
+        <div class="container">
+            <h2 class="section-title fade-in">Why will this be different?</h2>
+            <p class="section-subtitle fade-in">Not just another flashcard app. This is a completely new approach to learning, built around how your brain naturally works.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <span class="feature-emoji">🧠</span>
+                    <h3>Personalized AI</h3>
+                    <p>The intelligent system learns how you learn, adapting pace and methodology to your individual needs.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <span class="feature-emoji">⚡</span>
+                    <h3>Reaction-time based learning</h3>
+                    <p>It doesn't just look at whether your answer is correct, but also how quickly you got there. This optimizes your next repetition.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <span class="feature-emoji">🎯</span>
+                    <h3>Neural priming effect</h3>
+                    <p>Cards appear in sequences that prime your brain for the next piece of information. Scientifically proven efficiency.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works section">
+        <div class="container">
+            <h2 class="section-title fade-in">How does it work?</h2>
+            <p class="section-subtitle fade-in">Four simple steps to a revolutionary learning experience</p>
+            
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Three cards flash</h3>
+                    <p>The system intelligently selects the next three items to learn based on neural priming algorithms.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3>You respond</h3>
+                    <p>You react to the cards - the system measures your reaction time and answer quality.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Adaptive scheduling</h3>
+                    <p>The spaced repetition 2.0 algorithm calculates the perfect time for your next review.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">4</div>
+                    <h3>AI agents at work</h3>
+                    <p>Background AI agents analyze your learning patterns and optimize the entire experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Science Section -->
+    <section class="science-section section">
+        <div class="container">
+            <h2 class="section-title fade-in">The science behind it</h2>
+            <p class="science-hero-text fade-in">Learning methodology built on neuroscience research</p>
+            
+            <div class="science-content">
+                <div class="science-image fade-in">
+                    <img src="images/create-a-sleek--futuristic-hero-illustration-symbo (1).png" alt="Futuristic neuroscience and AI learning illustration" loading="lazy">
+                </div>
+                <div class="science-grid">
+                    <div class="science-item fade-in">
+                        <div class="science-term">Spaced Repetition 2.0</div>
+                        <p class="science-description">The next generation of spaced learning that takes individual cognitive patterns into account and optimizes timing.</p>
+                    </div>
+                    <div class="science-item fade-in">
+                        <div class="science-term">Neural Priming Effect</div>
+                        <p class="science-description">Card sequences prime the brain for the next information, improving memorization efficiency by 23%.</p>
+                    </div>
+                    <div class="science-item fade-in">
+                        <div class="science-term">Reaction-Time Weighted Learning</div>
+                        <p class="science-description">Measures knowledge depth based on response speed and adapts repetition frequency accordingly.</p>
+                    </div>
+                    <div class="science-item fade-in">
+                        <div class="science-term">Multimodal Encoding</div>
+                        <p class="science-description">Combining images, sounds, and text creates stronger neural connections in the brain.</p>
+                    </div>
+                    <div class="science-item fade-in">
+                        <div class="science-term">Adaptive Chunking Strategy</div>
+                        <p class="science-description">Dynamically breaks down complex information into optimal learning chunks based on individual cognitive load capacity.</p>
+                    </div>
+                    <div class="science-item fade-in">
+                        <div class="science-term">Goal-Oriented Feedback Loops</div>
+                        <p class="science-description">Creates personalized micro-rewards and progress tracking that align with your brain's dopamine pathways for sustained motivation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Learning -->
+    <section class="mobile-learning section">
+        <div class="container">
+            <div class="mobile-content">
+                <div class="mobile-text">
+                    <h2 class="mobile-tagline fade-in">Learn while you drive. Literally.</h2>
+                    <p class="section-subtitle fade-in" style="color: rgba(255,255,255,0.9);">
+                        Hands-free mode lets you learn while driving, exercising, or during any activity. 
+                        The system speaks the questions out loud, and you respond verbally. 
+                        Speech recognition evaluates your answers.
+                    </p>
+                </div>
+                <div class="mobile-image fade-in">
+                    <img src="images/a-modern-car-interior-with-a-person--gender-neutra.png" alt="Person learning in a modern car interior using hands-free mode" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multimodal Section -->
+    <section class="multimodal section">
+        <div class="container">
+            <h2 class="section-title fade-in">Not just words</h2>
+            <p class="section-subtitle fade-in">Learn words, sentences, images, videos, and animations. Everything in one place, everything intelligently.</p>
+            
+            <div class="multimodal-content">
+                <div class="multimodal-hero fade-in">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=600&fit=crop&crop=center" alt="Multimodal learning with various content types" loading="lazy">
+                </div>
+                <div class="content-types">
+                    <div class="content-type fade-in">
+                        <div class="content-type-icon">📝</div>
+                        <div class="content-type-text">
+                            <h4>Words & Sentences</h4>
+                            <p>Traditional and contextual learning</p>
+                        </div>
+                    </div>
+                    <div class="content-type fade-in">
+                        <div class="content-type-icon">🖼️</div>
+                        <div class="content-type-text">
+                            <h4>Images</h4>
+                            <p>Visual memory activation</p>
+                        </div>
+                    </div>
+                    <div class="content-type fade-in">
+                        <div class="content-type-icon">🎥</div>
+                        <div class="content-type-text">
+                            <h4>Videos</h4>
+                            <p>Dynamic learning experience</p>
+                        </div>
+                    </div>
+                    <div class="content-type fade-in">
+                        <div class="content-type-icon">✨</div>
+                        <div class="content-type-text">
+                            <h4>Animations</h4>
+                            <p>Interactive visualization</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial fade-in">
+        <div class="container">
+            <div class="testimonial-content">
+                <div class="testimonial-image">
+                    <img src="images/create-a-clean--minimalistic-testimonial-illustrat.png" alt="Clean minimalistic testimonial illustration" loading="lazy">
+                </div>
+                <div class="testimonial-text">
+                    <p class="quote">This finally feels like how my brain wants to learn.</p>
+                    <p class="author">– Sarah K., UX Researcher</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta section" id="waitlist">
+        <div class="container">
+            <h2 class="section-title fade-in">Secure your spot on the waitlist</h2>
+            <p class="section-subtitle fade-in">Be among the first to experience the future of flashcard learning.</p>
+            
+            <form class="email-form fade-in" onsubmit="handleSubmit(event)">
+                <input 
+                    type="email" 
+                    class="email-input" 
+                    placeholder="Enter your email address" 
+                    required
+                    id="emailInput"
+                >
+                <button type="submit" class="submit-btn">Join Waitlist</button>
+            </form>
+            
+            <div class="success-message" id="successMessage">
+                Thank you! You're on the waitlist. We'll be in touch soon! 🎉
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Sticky CTA visibility
+        function handleScroll() {
+            const stickyCTA = document.querySelector('.sticky-cta');
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            if (scrolled > 100) {
+                stickyCTA.classList.add('visible');
+            } else {
+                stickyCTA.classList.remove('visible');
+            }
+        }
+
+        // Smooth scroll to form
+        function scrollToForm() {
+            document.getElementById('waitlist').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // Fade in animations on scroll
+        function handleFadeIn() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const emailInput = document.getElementById('emailInput');
+            const successMessage = document.getElementById('successMessage');
+            const submitBtn = event.target.querySelector('.submit-btn');
+            
+            // Simple email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                alert('Please enter a valid email address!');
+                return;
+            }
+            
+            // Simulate form submission
+            submitBtn.textContent = 'Joining...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                emailInput.style.display = 'none';
+                submitBtn.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Here you would normally send the email to your backend
+                console.log('Email submitted:', emailInput.value);
+            }, 1000);
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleFadeIn);
+        window.addEventListener('load', handleFadeIn);
+
+        // Initial fade in check
+        handleFadeIn();
+    </script>
+</body>
+</html> 
