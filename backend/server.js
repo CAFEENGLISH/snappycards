@@ -134,7 +134,7 @@ app.post('/send-confirmation', async (req, res) => {
         }
 
         // Generate confirmation URL
-        const confirmationUrl = `https://snappy-cards.netlify.app/confirm?token=${confirmationToken}`;
+        const confirmationUrl = `https://snappycards.netlify.app/confirm?token=${confirmationToken}`;
 
         // Email options
         const mailOptions = {
