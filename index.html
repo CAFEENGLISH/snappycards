@@ -1171,42 +1171,22 @@
                     throw insertError;
                 }
 
-                // Send email directly via FormSubmit.co (no backend needed!)
-                const formData = new FormData();
-                formData.append('email', emailInput.value);
-                formData.append('subject', '🧠 SnappyCards Waitlist Confirmation');
-                formData.append('message', `
-Kedves ${emailInput.value}!
-
-Köszönjük, hogy csatlakoztál a SnappyCards waitlist-hez!
-
-Kérjük, erősítsd meg az email címedet a következő linkre kattintva:
-https://snappy-cards.netlify.app/confirm?token=${confirmationToken}
-
-🎯 Mi történik ezután?
-• Exkluzív korai hozzáférés az indulásnál
-• Kulisszatitkok az AI fejlesztésről  
-• Speciális indulási árak csak waitlist tagoknak
-• Első próbálók lesztek a forradalmi funkciókban
-
-Üdvözlettel,
-SnappyCards Team
-info@snappycards.io
-                `);
-                formData.append('_replyto', 'info@snappycards.io');
-                formData.append('_subject', `New SnappyCards waitlist signup: ${emailInput.value}`);
-                formData.append('_autoresponse', 'Thank you for joining SnappyCards waitlist! Please check your email for confirmation.');
-                formData.append('_template', 'table');
-
-                const emailResponse = await fetch('https://formsubmit.co/ajax/info@snappycards.io', {
+                // Send email via Node.js backend API on Render
+                const emailResponse = await fetch('https://snappycards-api.onrender.com/send-confirmation', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: emailInput.value,
+                        confirmationToken: confirmationToken
+                    })
                 });
 
                 const emailResult = await emailResponse.json();
 
                 if (!emailResponse.ok || !emailResult.success) {
-                    throw new Error('Failed to send confirmation email');
+                    throw new Error(emailResult.error || 'Failed to send confirmation email');
                 }
 
                 emailInput.style.display = 'none';
