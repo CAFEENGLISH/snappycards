@@ -190,7 +190,7 @@ app.post('/register', async (req, res) => {
             
         // Create a backend verification endpoint that will handle automatic login
         const backendUrl = process.env.NODE_ENV === 'production' 
-            ? 'https://snappycards-backend.onrender.com' 
+            ? 'https://snappycards-api.onrender.com' 
             : 'http://localhost:8080';
 
         // Step 1: Create Supabase user if requested (without automatic email)
