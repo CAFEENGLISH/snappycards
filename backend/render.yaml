@@ -8,11 +8,11 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: SMTP_HOST
-        value: smtp.zoho.com
-      - key: SMTP_PORT
-        value: 587
-      - key: SMTP_USER
-        value: info@snappycards.io
-      - key: SMTP_PASS
+      - key: PORT
+        value: 8080
+      - key: SUPABASE_URL
+        value: https://ycxqxdhaxehspypqbnpi.supabase.co
+      - key: SUPABASE_SERVICE_KEY
+        sync: false # Set this in Render dashboard for security
+      - key: RESEND_API_KEY
         sync: false # Set this in Render dashboard for security 
