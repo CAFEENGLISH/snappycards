@@ -638,7 +638,10 @@
 
             try {
                 // Step 1: Send beautiful Resend email via backend ONLY (no Supabase signup yet)
-                const emailResponse = await fetch('http://localhost:8080/register', {
+                const backendUrl = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:8080' 
+                    : 'https://snappycards-api.onrender.com';
+                const emailResponse = await fetch(`${backendUrl}/register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

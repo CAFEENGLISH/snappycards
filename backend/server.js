@@ -183,10 +183,10 @@ app.post('/register', async (req, res) => {
             });
         }
 
-        // Generate Supabase-compatible verification URL
-        const baseUrl = process.env.NODE_ENV === 'production' 
+        // Generate frontend and backend URLs
+        const frontendUrl = process.env.NODE_ENV === 'production' 
             ? 'https://snappycards.netlify.app' 
-            : 'http://localhost:8080';
+            : 'http://localhost:3000';
             
         // Create a backend verification endpoint that will handle automatic login
         const backendUrl = process.env.NODE_ENV === 'production' 
@@ -361,7 +361,7 @@ app.get('/verify', async (req, res) => {
                 <body style="font-family: system-ui; text-align: center; padding: 50px;">
                     <h1 style="color: #dc2626;">❌ Verification Error</h1>
                     <p>Email address is required for verification.</p>
-                    <a href="http://localhost:3001/login.html" style="color: #667eea;">Go to Login</a>
+                    <a href="${frontendUrl}/login.html" style="color: #667eea;">Go to Login</a>
                 </body></html>
             `);
         }
@@ -461,7 +461,7 @@ app.get('/verify', async (req, res) => {
                         Sikeresen megerősítettük az email címedet: <strong>${email}</strong><br>
                         Most már bejelentkezhetsz a Snappy Cards fiókodba!
                     </p>
-                    <a href="http://localhost:3001/login.html?verified=true&email=${encodeURIComponent(email)}" class="btn">
+                    <a href="${frontendUrl}/login.html?verified=true&email=${encodeURIComponent(email)}" class="btn">
                         🚀 Bejelentkezés
                     </a>
                     <div class="redirect-info">
@@ -471,7 +471,7 @@ app.get('/verify', async (req, res) => {
                 
                 <script>
                     setTimeout(() => {
-                        window.location.href = 'http://localhost:3001/login.html?verified=true&email=${encodeURIComponent(email)}';
+                        window.location.href = '${frontendUrl}/login.html?verified=true&email=${encodeURIComponent(email)}';
                     }, 5000);
                 </script>
             </body>
@@ -486,7 +486,7 @@ app.get('/verify', async (req, res) => {
             <body style="font-family: system-ui; text-align: center; padding: 50px;">
                 <h1 style="color: #dc2626;">❌ Verification Error</h1>
                 <p>Something went wrong during verification.</p>
-                <a href="http://localhost:3001/login.html" style="color: #667eea;">Go to Login</a>
+                <a href="${frontendUrl}/login.html" style="color: #667eea;">Go to Login</a>
             </body></html>
         `);
     }
