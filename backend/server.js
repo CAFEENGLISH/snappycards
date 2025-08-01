@@ -1,5 +1,6 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -10,95 +11,127 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Zoho SMTP Configuration (same as Python script that worked)
-const smtpConfig = {
-    host: 'smtp.zoho.com',
-    port: 587,
-    secure: false, // Use TLS
-    auth: {
-        user: 'info@snappycards.io',
-        pass: 'QrfRsj9yPzaB' // The App Password that worked
-    }
-};
+// Resend API Configuration
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Create nodemailer transporter
-const transporter = nodemailer.createTransport(smtpConfig);
+// Supabase Admin Configuration
+const supabaseUrl = process.env.SUPABASE_URL || 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzIwMzAzMSwiZXhwIjoyMDY4Nzc5MDMxfQ.4K9dOlR6ZpGhsJvAWLKZQhshZtPE6-Zq3wJr8JDPzIQ';
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
-// Verify SMTP connection
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('SMTP Connection Failed:', error);
-    } else {
-        console.log('✅ SMTP Server Ready for messages');
-    }
-});
+// Verify Resend API key
+if (!process.env.RESEND_API_KEY) {
+    console.error('❌ RESEND_API_KEY environment variable is required');
+    console.error('   Please set your Resend API key:');
+    console.error('   export RESEND_API_KEY="your_api_key_here"');
+    process.exit(1);
+} else {
+    console.log('✅ Resend API initialized');
+}
 
-// Email template function
-function createEmailTemplate(email, confirmationUrl) {
-    return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SnappyCards Waitlist Megerősítés</title>
-        <style>
-            body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; background: #f8fafc; }
-            .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; }
-            .header h1 { color: white; font-size: 32px; margin: 0; font-weight: 800; letter-spacing: -0.02em; }
-            .header p { color: rgba(255,255,255,0.9); margin: 8px 0 0; font-size: 16px; font-weight: 500; }
-            .content { padding: 40px 30px; }
-            .content h2 { color: #1a202c; font-size: 24px; margin-bottom: 20px; font-weight: 700; }
-            .content p { color: #4a5568; line-height: 1.6; margin-bottom: 20px; font-size: 16px; }
-            .cta-button { display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 18px 36px; text-decoration: none; border-radius: 50px; font-weight: 600; margin: 20px 0; font-size: 16px; }
-            .footer { background: #f8fafc; padding: 30px; text-align: center; color: #718096; font-size: 14px; border-top: 1px solid #e2e8f0; }
-            .token { background: #f1f5f9; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 13px; word-break: break-all; margin: 20px 0; }
-            .highlight { color: #667eea; font-weight: 600; }
-        </style>
-    </head>
-    <body>
-        <div style="padding: 20px;">
-            <div class="container">
-                <div class="header">
-                    <h1>🧠 SnappyCards</h1>
-                    <p>AI-Powered Learning Revolution</p>
-                </div>
-                <div class="content">
-                    <h2>Üdvözölünk a tanulás jövőjében! 🚀</h2>
-                    <p>Köszönjük, hogy csatlakoztál a <span class="highlight">SnappyCards waitlist</span>-hez! Hamarosan megtapasztalhatod a világ első FlashCard rendszerét, amit az agyad is imádni fog.</p>
-                    
-                    <p>A regisztráció befejezéséhez és a helyedet biztosításához, kérjük erősítsd meg az email címedet:</p>
-                    
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="${confirmationUrl}" class="cta-button">✨ Email cím megerősítése</a>
-                    </div>
-                    
-                    <p><strong>Nem működik a gomb?</strong> Másold be ezt a linket:</p>
-                    <div class="token">${confirmationUrl}</div>
-                    
-                    <p><strong>🎯 Mi történik ezután?</strong></p>
-                    <ul>
-                        <li><strong>Exkluzív korai hozzáférés</strong> az indulásnál</li>
-                        <li><strong>Kulisszatitkok</strong> az AI fejlesztésről</li>
-                        <li><strong>Speciális indulási árak</strong> csak waitlist tagoknak</li>
-                        <li><strong>Első próbálók</strong> lesztek a forradalmi funkciókban</li>
-                    </ul>
-                    
-                    <p>⏰ <em>Ez a megerősítő link 24 órán belül lejár a biztonság érdekében.</em></p>
-                </div>
-                <div class="footer">
-                    <p><strong>Kérdések?</strong> Válaszolj erre az emailre - minden üzenetet elolvasunk! 💬</p>
-                    <p>Ha nem te iratkoztál fel, biztonságosan figyelmen kívül hagyhatod ezt az emailt.</p>
-                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-                    <p>&copy; 2025 SnappyCards. 🧠-tel és ⚡-val készítve a tanulás jövőjéért.</p>
-                    <p><a href="mailto:info@snappycards.io" style="color: #667eea;">info@snappycards.io</a></p>
-                </div>
+// Verify Supabase Service Key
+if (!process.env.SUPABASE_SERVICE_KEY) {
+    console.error('❌ SUPABASE_SERVICE_KEY environment variable is required');
+    console.error('   Please set your Supabase Service Role key in .env file');
+    process.exit(1);
+} else {
+    console.log('✅ Supabase Admin API initialized');
+}
+
+// Elegant verification email templates (from lib/resend.ts)
+function createVerificationEmailTemplate(firstName, verificationUrl, language = 'hu') {
+  const templates = {
+    hu: {
+      subject: '🎯 Snappy Cards - Erősítsd meg az e-mail címed',
+      html: `
+        <div style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center; border-radius: 20px 20px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">
+              ✨ Snappy Cards
+            </h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0; font-size: 16px;">
+              Tanulj nyelveket interaktív kártyákkal
+            </p>
+          </div>
+          
+          <div style="background: white; padding: 40px 20px; border-radius: 0 0 20px 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            <h2 style="color: #333; margin: 0 0 20px; font-size: 24px;">
+              Szia ${firstName}! 👋
+            </h2>
+            
+            <p style="color: #666; line-height: 1.6; margin: 0 0 30px; font-size: 16px;">
+              Köszönjük a regisztrációt! Hogy elkezdhess tanulni, kérjük erősítsd meg az e-mail címed.
+            </p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationUrl}" 
+                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        color: white; 
+                        text-decoration: none; 
+                        padding: 15px 30px; 
+                        border-radius: 50px; 
+                        font-weight: bold; 
+                        font-size: 16px;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                🚀 E-mail cím megerősítése
+              </a>
             </div>
+            
+            <p style="color: #999; font-size: 14px; margin: 30px 0 0; text-align: center;">
+              Ha nem te regisztráltál, figyelmen kívül hagyhatod ezt az e-mailt.
+            </p>
+          </div>
         </div>
-    </body>
-    </html>
-    `;
+      `,
+    },
+    en: {
+      subject: '🎯 Snappy Cards - Verify your email address',
+      html: `
+        <div style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center; border-radius: 20px 20px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">
+              ✨ Snappy Cards
+            </h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0; font-size: 16px;">
+              Learn languages with interactive flashcards
+            </p>
+          </div>
+          
+          <div style="background: white; padding: 40px 20px; border-radius: 0 0 20px 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            <h2 style="color: #333; margin: 0 0 20px; font-size: 24px;">
+              Hi ${firstName}! 👋
+            </h2>
+            
+            <p style="color: #666; line-height: 1.6; margin: 0 0 30px; font-size: 16px;">
+              Thanks for signing up! To start learning, please verify your email address.
+            </p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationUrl}" 
+                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        color: white; 
+                        text-decoration: none; 
+                        padding: 15px 30px; 
+                        border-radius: 50px; 
+                        font-weight: bold; 
+                        font-size: 16px;
+                        display: inline-block;
+                        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                🚀 Verify Email Address
+              </a>
+            </div>
+            
+            <p style="color: #999; font-size: 14px; margin: 30px 0 0; text-align: center;">
+              If you didn't sign up, you can safely ignore this email.
+            </p>
+          </div>
+        </div>
+      `,
+    }
+  };
+
+  return templates[language] || templates['hu'];
 }
 
 // Health check endpoint
@@ -107,11 +140,148 @@ app.get('/', (req, res) => {
         status: 'OK',
         message: 'SnappyCards Email API is running',
         timestamp: new Date().toISOString(),
-        smtp_status: 'Connected to smtp.zoho.com'
+        email_provider: 'Resend API'
     });
 });
 
-// Send confirmation email endpoint
+// Register user endpoint - with Resend verification email
+app.post('/register', async (req, res) => {
+    try {
+        const { firstName, email, password, userRole = 'student', language = 'hu', supabaseUserId, createSupabaseUser = false } = req.body;
+
+        // Input validation
+        if (!firstName || !email || !password) {
+            return res.status(400).json({
+                success: false,
+                error: 'First name, email and password are required'
+            });
+        }
+
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid email format'
+            });
+        }
+
+        // Password validation
+        if (password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                error: 'Password must be at least 6 characters long'
+            });
+        }
+
+        // User role validation
+        const validRoles = ['student', 'teacher', 'admin'];
+        if (!validRoles.includes(userRole)) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid user role. Must be student, teacher, or admin'
+            });
+        }
+
+        // Generate Supabase-compatible verification URL
+        const baseUrl = process.env.NODE_ENV === 'production' 
+            ? 'https://snappycards.netlify.app' 
+            : 'http://localhost:8080';
+            
+        // Create a backend verification endpoint that will handle automatic login
+        const backendUrl = process.env.NODE_ENV === 'production' 
+            ? 'https://snappycards-backend.onrender.com' 
+            : 'http://localhost:8080';
+
+        // Step 1: Create Supabase user if requested (without automatic email)
+        let actualSupabaseUserId = supabaseUserId;
+        
+        if (createSupabaseUser) {
+            try {
+                const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+                    email: email,
+                    password: password,
+                    user_metadata: {
+                        first_name: firstName,
+                        user_role: userRole,
+                        language: language
+                    },
+                    email_confirm: false // Important: Don't send Supabase email
+                });
+                
+                if (createError) {
+                    console.error('❌ Supabase user creation error:', createError);
+                    throw createError;
+                }
+                
+                actualSupabaseUserId = newUser.user.id;
+                console.log(`✅ Supabase user created: ${actualSupabaseUserId}`);
+                
+            } catch (supabaseError) {
+                console.error('❌ Failed to create Supabase user:', supabaseError);
+                return res.status(500).json({
+                    success: false,
+                    error: 'Failed to create user account',
+                    details: supabaseError.message
+                });
+            }
+        }
+
+        // Step 2: Create verification URL and email template
+        const verificationUrl = `${backendUrl}/verify?email=${encodeURIComponent(email)}&supabase_user_id=${actualSupabaseUserId || 'pending'}`;
+        const template = createVerificationEmailTemplate(firstName, verificationUrl, language);
+
+        console.log(`📧 Sending beautiful Resend email to: ${email}`);
+        console.log(`👤 User Role: ${userRole}`);
+        console.log(`🔗 Verification URL: ${verificationUrl}`);
+        if (actualSupabaseUserId) {
+            console.log(`👤 Supabase User ID: ${actualSupabaseUserId}`);
+        }
+
+        // Send email via Resend
+        const { data, error } = await resend.emails.send({
+            from: 'Snappy Cards <noreply@snappycards.io>',
+            to: [email],
+            subject: template.subject,
+            html: template.html,
+        });
+
+        if (error) {
+            console.error('❌ Resend email error:', error);
+            throw new Error('Failed to send verification email');
+        }
+
+        console.log('✅ Beautiful verification email sent successfully:', data.id);
+
+        res.json({
+            success: true,
+            message: actualSupabaseUserId 
+                ? 'User created in Supabase. Beautiful verification email sent via Resend.'
+                : 'Registration initiated. Please check your email for verification.',
+            emailId: data.id,
+            firstName: firstName,
+            email: email,
+            userRole: userRole,
+            verificationUrl: verificationUrl,
+            provider: 'resend',
+            supabaseUserId: actualSupabaseUserId,
+            hybrid: !!actualSupabaseUserId,
+            timestamp: new Date().toISOString()
+        });
+
+    } catch (error) {
+        console.error('❌ Registration failed:', error);
+        
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Registration failed',
+            provider: 'resend',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// Send confirmation email endpoint (for waitlist)
 app.post('/send-confirmation', async (req, res) => {
     try {
         const { email, confirmationToken } = req.body;
@@ -136,40 +306,34 @@ app.post('/send-confirmation', async (req, res) => {
         // Generate confirmation URL
         const confirmationUrl = `https://snappycards.netlify.app/confirm?token=${confirmationToken}`;
 
-        // Email options
-        const mailOptions = {
-            from: '"SnappyCards Team" <info@snappycards.io>',
-            to: email,
-            subject: '🧠 Üdvözölünk a SnappyCards-nál - Erősítsd meg a waitlist helyedet!',
-            html: createEmailTemplate(email, confirmationUrl),
-            text: `
-Üdvözölünk a SnappyCards waitlist-ben!
+        // Get email template for waitlist
+        const template = createVerificationEmailTemplate('Kedves felhasználó', confirmationUrl, 'hu');
 
-Kérjük, erősítsd meg az email címedet a következő linkre kattintva:
-${confirmationUrl}
-
-Üdvözlettel,
-SnappyCards Team
-info@snappycards.io
-            `
-        };
-
-        console.log(`📧 Sending email to: ${email}`);
+        console.log(`📧 Sending waitlist confirmation to: ${email}`);
         console.log(`🔗 Confirmation URL: ${confirmationUrl}`);
 
-        // Send email
-        const info = await transporter.sendMail(mailOptions);
+        // Send email via Resend
+        const { data, error } = await resend.emails.send({
+            from: 'Snappy Cards <noreply@snappycards.io>',
+            to: [email],
+            subject: '🎯 Snappy Cards - Erősítsd meg waitlist helyedet',
+            html: template.html,
+        });
+
+        if (error) {
+            console.error('❌ Resend email error:', error);
+            throw new Error('Failed to send confirmation email');
+        }
         
-        console.log('✅ Email sent successfully:', info.messageId);
+        console.log('✅ Waitlist email sent successfully:', data.id);
 
         res.json({
             success: true,
             message: 'Confirmation email sent successfully',
-            messageId: info.messageId,
-            from: 'info@snappycards.io',
-            to: email,
+            emailId: data.id,
+            email: email,
             confirmationUrl: confirmationUrl,
-            provider: 'zoho_smtp',
+            provider: 'resend',
             timestamp: new Date().toISOString()
         });
 
@@ -179,20 +343,166 @@ info@snappycards.io
         res.status(500).json({
             success: false,
             error: error.message || 'Failed to send confirmation email',
-            provider: 'zoho_smtp',
+            provider: 'resend',
             timestamp: new Date().toISOString()
         });
     }
 });
 
-// CORS preflight for send-confirmation
+// Email verification endpoint - handles automatic login
+app.get('/verify', async (req, res) => {
+    try {
+        const { email, supabase_user_id } = req.query;
+
+        if (!email) {
+            return res.status(400).send(`
+                <!DOCTYPE html>
+                <html><head><title>Verification Error</title></head>
+                <body style="font-family: system-ui; text-align: center; padding: 50px;">
+                    <h1 style="color: #dc2626;">❌ Verification Error</h1>
+                    <p>Email address is required for verification.</p>
+                    <a href="http://localhost:3001/login.html" style="color: #667eea;">Go to Login</a>
+                </body></html>
+            `);
+        }
+
+        console.log(`✅ Email verification successful for: ${email}`);
+        console.log(`👤 Supabase User ID: ${supabase_user_id}`);
+
+        // Confirm the user in Supabase using Admin API
+        if (supabase_user_id && supabase_user_id !== 'pending') {
+            try {
+                const { data: userData, error: confirmError } = await supabaseAdmin.auth.admin.updateUserById(
+                    supabase_user_id,
+                    { 
+                        email_confirm: true,
+                        email_confirmed_at: new Date().toISOString()
+                    }
+                );
+
+                if (confirmError) {
+                    console.error('⚠️ Supabase confirmation error:', confirmError);
+                } else {
+                    console.log('✅ Supabase user email confirmed:', userData.user?.email);
+                }
+            } catch (adminError) {
+                console.error('⚠️ Admin API error:', adminError);
+            }
+        }
+
+        // Success page with automatic redirect
+        res.send(`
+            <!DOCTYPE html>
+            <html lang="hu">
+            <head>
+                <meta charset="UTF-8">
+                <title>Email Megerősítve - SnappyCards</title>
+                <style>
+                    body { 
+                        font-family: 'Inter', system-ui; 
+                        background: linear-gradient(135deg, #f1f5f9 0%, #c7d2fe 100%);
+                        text-align: center; 
+                        padding: 50px 20px; 
+                        min-height: 100vh;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .container {
+                        background: rgba(255, 255, 255, 0.9);
+                        backdrop-filter: blur(12px);
+                        border-radius: 24px;
+                        padding: 40px;
+                        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                        max-width: 500px;
+                    }
+                    h1 { 
+                        color: #16a34a; 
+                        font-size: 2.5rem; 
+                        margin-bottom: 1rem;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
+                    p { 
+                        color: #64748b; 
+                        font-size: 1.1rem; 
+                        margin-bottom: 2rem;
+                        line-height: 1.6;
+                    }
+                    .btn {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        padding: 16px 32px;
+                        border-radius: 16px;
+                        text-decoration: none;
+                        font-weight: 600;
+                        font-size: 16px;
+                        display: inline-block;
+                        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+                        transition: all 0.3s ease;
+                        margin: 8px;
+                    }
+                    .btn:hover {
+                        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.6);
+                        transform: translateY(-2px);
+                    }
+                    .redirect-info {
+                        font-size: 14px;
+                        color: #94a3b8;
+                        margin-top: 20px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>✅ Email Megerősítve!</h1>
+                    <p>
+                        Sikeresen megerősítettük az email címedet: <strong>${email}</strong><br>
+                        Most már bejelentkezhetsz a Snappy Cards fiókodba!
+                    </p>
+                    <a href="http://localhost:3001/login.html?verified=true&email=${encodeURIComponent(email)}" class="btn">
+                        🚀 Bejelentkezés
+                    </a>
+                    <div class="redirect-info">
+                        Automatikus átirányítás 5 másodperc múlva...
+                    </div>
+                </div>
+                
+                <script>
+                    setTimeout(() => {
+                        window.location.href = 'http://localhost:3001/login.html?verified=true&email=${encodeURIComponent(email)}';
+                    }, 5000);
+                </script>
+            </body>
+            </html>
+        `);
+
+    } catch (error) {
+        console.error('❌ Verification error:', error);
+        res.status(500).send(`
+            <!DOCTYPE html>
+            <html><head><title>Verification Error</title></head>
+            <body style="font-family: system-ui; text-align: center; padding: 50px;">
+                <h1 style="color: #dc2626;">❌ Verification Error</h1>
+                <p>Something went wrong during verification.</p>
+                <a href="http://localhost:3001/login.html" style="color: #667eea;">Go to Login</a>
+            </body></html>
+        `);
+    }
+});
+
+// CORS preflight for endpoints
+app.options('/register', cors());
 app.options('/send-confirmation', cors());
+app.options('/verify', cors());
 
 // Start server
 app.listen(PORT, () => {
     console.log(`🚀 SnappyCards API Server running on port ${PORT}`);
-    console.log(`📧 SMTP: ${smtpConfig.host}:${smtpConfig.port}`);
-    console.log(`📬 From: ${smtpConfig.auth.user}`);
+    console.log(`📧 Email Provider: Resend API`);
+    console.log(`📬 From: noreply@snappycards.io`);
+    console.log(`🎯 Endpoints: /register, /send-confirmation`);
 });
 
 module.exports = app; 

@@ -11,6 +11,8 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
     <style>
         * {
             margin: 0;
@@ -340,6 +342,8 @@
                 heroSubtitle: `Egy megerősítő email-t küldtünk a megadott címre.<br>
                               Kérjük, nyisd meg az email-t és kattints a megerősítő linkre<br>
                               a regisztráció befejezéséhez.`,
+                heroTitleVerified: "Email megerősítve!",
+                heroSubtitleVerified: `Az email címed sikeresen megerősítve!<br>Most már bejelentkezhetsz a fiókodba.`,
                 loginButton: "Bejelentkezés",
                 registerButton: "Újra regisztráció",
             },
@@ -348,6 +352,8 @@
                 heroSubtitle: `We've sent a confirmation email to your address.<br>
                               Please open the email and click the confirmation link<br>
                               to complete your registration.`,
+                heroTitleVerified: "Email verified!",
+                heroSubtitleVerified: `Your email has been successfully verified!<br>You can now sign in to your account.`,
                 loginButton: "Sign In",
                 registerButton: "Register Again",
             }
@@ -379,11 +385,22 @@
             currentLanguage = lang;
             const t = texts[lang];
 
-            // Update UI texts
-            document.getElementById('heroTitle').textContent = t.heroTitle;
-            document.getElementById('heroSubtitle').innerHTML = t.heroSubtitle;
+            // Check if this is verified state (Supabase verification)
+            const urlParams = new URLSearchParams(window.location.search);
+            const isVerified = urlParams.get('access_token') && urlParams.get('type') === 'signup';
+
+            // Update UI texts based on verification state
+            if (isVerified) {
+                document.getElementById('heroTitle').textContent = t.heroTitleVerified;
+                document.getElementById('heroSubtitle').innerHTML = t.heroSubtitleVerified;
+                document.getElementById('registerButton').style.display = 'none';
+            } else {
+                document.getElementById('heroTitle').textContent = t.heroTitle;
+                document.getElementById('heroSubtitle').innerHTML = t.heroSubtitle;
+                document.getElementById('registerButton').textContent = t.registerButton;
+            }
+            
             document.getElementById('loginButton').textContent = t.loginButton;
-            document.getElementById('registerButton').textContent = t.registerButton;
 
             // Update active language button
             document.querySelectorAll('.language-button').forEach(btn => {
@@ -392,8 +409,48 @@
             document.querySelector(`[onclick="setLanguage('${lang}')"]`).classList.add('active');
         }
 
+        // Initialize Supabase
+        const supabaseUrl = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Check URL parameters for Supabase verification
+        async function checkVerificationToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Supabase uses different parameters for email verification
+            const access_token = urlParams.get('access_token');
+            const refresh_token = urlParams.get('refresh_token');
+            const type = urlParams.get('type');
+            
+            if (access_token && refresh_token && type === 'signup') {
+                try {
+                    // Set the session from the verification link
+                    const { data, error } = await supabase.auth.setSession({
+                        access_token: access_token,
+                        refresh_token: refresh_token
+                    });
+                    
+                    if (error) {
+                        throw error;
+                    }
+                    
+                    // User clicked verification link and it's valid - show success
+                    document.getElementById('emailIcon').textContent = '✅';
+                    // setLanguage will handle the text updates based on verification state
+                    setLanguage(currentLanguage);
+                    
+                    console.log('✅ Email verification successful:', data);
+                } catch (error) {
+                    console.error('❌ Email verification failed:', error);
+                    // Show error but don't redirect
+                }
+            }
+        }
+
         // Initialize
         detectLanguage();
+        checkVerificationToken();
     </script>
 </body>
 </html>

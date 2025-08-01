@@ -8,18 +8,25 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "nodemailer": "^6.9.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1"
+    "resend": "^4.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
-  "keywords": ["email", "api", "zoho", "smtp"],
+  "keywords": [
+    "email",
+    "api",
+    "zoho",
+    "smtp"
+  ],
   "author": "SnappyCards Team",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
   }
-} 
+}

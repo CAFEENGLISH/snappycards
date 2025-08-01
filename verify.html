@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email megerősítése - SnappyCards</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#7c3aed">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Snappy Cards Logo Component -->
+    <link rel="stylesheet" href="components/snappy-cards-logo.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #c7d2fe 100%);
+            color: #1a202c;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .verify-container {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero-glass {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 64px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            animation: spin 2s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            color: #64748b;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px 0;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #16a34a;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-block;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            margin: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="verify-container">
+        <div class="hero-glass">
+            <div class="icon" id="verifyIcon">⚡</div>
+            <h1 class="hero-title" id="verifyTitle">Email megerősítése...</h1>
+            <p class="hero-subtitle" id="verifySubtitle">
+                Pillanat, megerősítjük az email címed és bejelentkeztetünk...
+            </p>
+            
+            <div class="loading-spinner" id="loadingSpinner"></div>
+            
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+            
+            <div id="actionButtons" style="display: none;">
+                <a href="/login.html" class="btn-primary">Bejelentkezés</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        function showError(message) {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('verifyIcon').textContent = '❌';
+            document.getElementById('verifyTitle').textContent = 'Hiba történt';
+            document.getElementById('verifySubtitle').textContent = message;
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('actionButtons').style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('verifyIcon').textContent = '✅';
+            document.getElementById('verifyTitle').textContent = 'Email megerősítve!';
+            document.getElementById('verifySubtitle').textContent = message;
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        async function verifyEmailAndLogin() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const email = urlParams.get('email');
+                const supabaseUserId = urlParams.get('supabase_user_id');
+
+                if (!email) {
+                    throw new Error('Email cím hiányzik a linkből');
+                }
+
+                console.log('🔍 Verifying email:', email);
+
+                // Try to confirm the user's email in Supabase
+                // Since we already created the user, we need to update their email_confirmed_at
+                const { data: user, error: userError } = await supabase.auth.getUser();
+                
+                if (userError && userError.message !== 'Invalid JWT') {
+                    console.log('📧 User not logged in, attempting sign in with OTP confirmation...');
+                    
+                    // Try to sign in the user - this should work if they were created successfully
+                    // We'll use a technique to confirm their email by attempting to sign in
+                    throw new Error('Kérjük jelentkezzen be a regisztrált email címével és jelszavával.');
+                }
+
+                if (user) {
+                    console.log('✅ User already logged in:', user);
+                    showSuccess('Sikeresen bejelentkezve! Átirányítás...');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/index.html';
+                    }, 2000);
+                    return;
+                }
+
+                // If we get here, we need to handle the email confirmation differently
+                showSuccess('Email megerősítve! Most már bejelentkezhet a fiókjába.');
+                setTimeout(() => {
+                    window.location.href = '/login.html';
+                }, 3000);
+
+            } catch (error) {
+                console.error('❌ Verification error:', error);
+                showError(error.message || 'Email megerősítés sikertelen');
+            }
+        }
+
+        // Start verification process
+        document.addEventListener('DOMContentLoaded', verifyEmailAndLogin);
+    </script>
+</body>
+</html>

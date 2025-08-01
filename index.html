@@ -12,6 +12,10 @@
     <meta name="theme-color" content="#7c3aed">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Snappy Cards Logo Component -->
+    <link rel="stylesheet" href="components/snappy-cards-logo.css">
+    
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -90,104 +94,7 @@
             width: 100%;
         }
 
-        .hero-glass-container {
-            position: relative;
-            display: inline-block;
-        }
 
-        .hero-glass-card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            font-weight: 800;
-            margin: 0;
-            letter-spacing: -0.02em;
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero-gradient-text {
-            background: linear-gradient(to right, #4f46e5, #7c3aed, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-cards-text {
-            margin-left: 12px;
-            color: #374151;
-        }
-
-        .hero-bubble-1 {
-            position: absolute;
-            top: -16px;
-            left: -24px;
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .hero-bubble-2 {
-            position: absolute;
-            top: -32px;
-            right: -16px;
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #7c3aed, #ec4899);
-            border-radius: 50%;
-            opacity: 0.7;
-            animation: float 2.5s ease-in-out infinite reverse;
-        }
-
-        .hero-bubble-3 {
-            position: absolute;
-            bottom: -24px;
-            left: 25%;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #ec4899, #4f46e5);
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: float 3.5s ease-in-out infinite;
-        }
-
-        .hero-bubble-4 {
-            position: absolute;
-            bottom: -16px;
-            right: -32px;
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, #4f46e5, #ec4899);
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: float 2s ease-in-out infinite reverse;
-        }
-
-        .hero-glow {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to right, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2), rgba(236, 72, 153, 0.2));
-            filter: blur(48px);
-            transform: scale(1.1);
-            z-index: -1;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
 
         .brand-tagline {
             font-size: 0.9rem;
@@ -984,12 +891,31 @@
 
     <!-- Hero Section -->
     <section class="hero" style="text-align: center; padding: 3rem 0 4rem 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+        <!-- Login Button - Top Right -->
+        <div style="position: absolute; top: 2rem; right: 2rem; z-index: 100;">
+            <a href="login.html" style="
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                padding: 12px 24px;
+                color: #374151;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0, 0, 0, 0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(0, 0, 0, 0.1)';">
+                Login
+            </a>
+        </div>
+        
         <div class="container">
             <!-- Floating Snappy Cards Logo - centered -->
             <div style="text-align: center; margin-bottom: 4rem;">
                 <div class="hero-glass-container">
                     <div class="hero-glass-card">
-                        <h1 class="hero-title" style="font-size: clamp(3rem, 6vw, 4.5rem); margin: 0;">
+                        <h1 class="hero-title" style="font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 800; margin: 0; letter-spacing: -0.02em; position: relative; z-index: 10;">
                             <span class="hero-gradient-text">Snappy</span>
                             <span class="hero-cards-text">Cards</span>
                         </h1>
@@ -1016,7 +942,7 @@
                         <p style="color: #2d3748; font-weight: 500; font-size: 1.2rem; margin-bottom: 2rem;">
                             Artificial intelligence meets neuroscience. Learn more effectively than ever before.
                         </p>
-                        <a href="register.html" class="cta-button" style="font-size: 1.1rem; padding: 16px 32px;">Sign-up/Login</a>
+                        <a href="register.html" class="cta-button" style="font-size: 1.1rem; padding: 16px 32px;">Sign Up</a>
                     </div>
                     <div style="flex: 1; max-width: 700px;">
                         <img src="images/hero_the-three-spinning-cards-of-the-slot-machine-shoul.png" 
