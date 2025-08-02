@@ -445,3 +445,122 @@ html {
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
+
+/* ============================================================
+   LUCIDE ICONS - GLOBAL STYLES
+   ============================================================ */
+
+/* Base Lucide Icon Style */
+.lucide-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+}
+
+/* Icon Sizes */
+.lucide-icon.icon-xs { width: 14px; height: 14px; stroke-width: 2.5; }
+.lucide-icon.icon-sm { width: 16px; height: 16px; stroke-width: 2.2; }
+.lucide-icon.icon-md { width: 20px; height: 20px; stroke-width: 2; }
+.lucide-icon.icon-lg { width: 24px; height: 24px; stroke-width: 1.8; }
+.lucide-icon.icon-xl { width: 28px; height: 28px; stroke-width: 1.6; }
+
+/* Icon Colors - Semantic */
+.lucide-icon.icon-primary { stroke: #667eea; }
+.lucide-icon.icon-success { stroke: #22c55e; }
+.lucide-icon.icon-warning { stroke: #f59e0b; }
+.lucide-icon.icon-danger { stroke: #ef4444; }
+.lucide-icon.icon-info { stroke: #3b82f6; }
+.lucide-icon.icon-secondary { stroke: #6b7280; }
+.lucide-icon.icon-white { stroke: #ffffff; }
+.lucide-icon.icon-muted { stroke: #9ca3af; opacity: 0.7; }
+
+/* Icon Hover Effects */
+.lucide-icon.icon-hover:hover { 
+    transform: scale(1.1); 
+    opacity: 0.8; 
+}
+
+.lucide-icon.icon-rotate:hover { 
+    transform: rotate(180deg); 
+}
+
+/* Button Icon Combinations */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-icon .lucide-icon {
+    margin: 0;
+}
+
+.btn-icon:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Action Button Styles (matching dashboard) */
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action.btn-add { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+.btn-action.btn-edit { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+.btn-action.btn-list { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+.btn-action.btn-import { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.btn-action.btn-delete { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+.btn-action.btn-leave { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); }
+
+/* Common Icon Definitions */
+.icon-plus { viewBox: "0 0 24 24"; }
+.icon-edit { viewBox: "0 0 24 24"; }
+.icon-list { viewBox: "0 0 24 24"; }
+.icon-download { viewBox: "0 0 24 24"; }
+.icon-trash { viewBox: "0 0 24 24"; }
+.icon-logout { viewBox: "0 0 24 24"; }
+.icon-settings { viewBox: "0 0 24 24"; }
+.icon-search { viewBox: "0 0 24 24"; }
+.icon-close { viewBox: "0 0 24 24"; }
+.icon-check { viewBox: "0 0 24 24"; }
+.icon-arrow-right { viewBox: "0 0 24 24"; }
+.icon-arrow-left { viewBox: "0 0 24 24"; }
+.icon-chevron-down { viewBox: "0 0 24 24"; }
+.icon-chevron-up { viewBox: "0 0 24 24"; }
+
+/* Utility Classes */
+.icon-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

@@ -53,9 +53,14 @@ export type Database = {
           created_at: string
           title: string
           english_title: string
+          title_formatted?: string
+          english_title_formatted?: string
           image_url: string
           image_alt: string
-          category: string
+          media_type?: string
+          media_url?: string
+          category?: string
+          category_id?: string
           difficulty_level: number
         }
         Insert: {
@@ -63,9 +68,14 @@ export type Database = {
           created_at?: string
           title: string
           english_title: string
+          title_formatted?: string
+          english_title_formatted?: string
           image_url: string
           image_alt: string
-          category: string
+          media_type?: string
+          media_url?: string
+          category?: string
+          category_id?: string
           difficulty_level?: number
         }
         Update: {
@@ -73,10 +83,136 @@ export type Database = {
           created_at?: string
           title?: string
           english_title?: string
+          title_formatted?: string
+          english_title_formatted?: string
           image_url?: string
           image_alt?: string
+          media_type?: string
+          media_url?: string
           category?: string
+          category_id?: string
           difficulty_level?: number
+        }
+      }
+      categories: {
+        Row: {
+          id: string
+          name: string
+          description?: string
+          color?: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string
+          color?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string
+          color?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      card_categories: {
+        Row: {
+          id: string
+          card_id: string
+          category_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          card_id: string
+          category_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          card_id?: string
+          category_id?: string
+          created_at?: string
+        }
+      }
+      flashcard_sets: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          language_a: string
+          language_b: string
+          created_at: string
+          updated_at: string
+          user_id?: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description: string
+          language_a: string
+          language_b: string
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          language_a?: string
+          language_b?: string
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+      }
+      flashcard_set_cards: {
+        Row: {
+          id: string
+          set_id: string
+          card_id: string
+          position: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          set_id: string
+          card_id: string
+          position?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          set_id?: string
+          card_id?: string
+          position?: number
+          created_at?: string
+        }
+      }
+      flashcard_set_categories: {
+        Row: {
+          id: string
+          set_id: string
+          category_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          set_id: string
+          category_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          set_id?: string
+          category_id?: string
+          created_at?: string
         }
       }
     }
