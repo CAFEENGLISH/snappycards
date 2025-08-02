@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanulás - SnappyCards</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#7c3aed">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Snappy Cards Logo Component -->
+    <link rel="stylesheet" href="components/snappy-cards-logo.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #c7d2fe 100%);
+            color: #1a202c;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-small {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            background: rgba(100, 116, 139, 0.1);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            color: #64748b;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(100, 116, 139, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Study Interface */
+        .study-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .study-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .study-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .study-description {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
+        .progress-item {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 20px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .progress-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Clean Study Card */
+        .study-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 32px;
+            padding: 60px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 300px;
+            gap: 60px;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-label {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .study-input {
+            width: 100%;
+            padding: 24px 0;
+            border: none;
+            border-bottom: 3px solid rgba(102, 126, 234, 0.2);
+            background: transparent;
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .study-input:focus {
+            border-bottom-color: #667eea;
+        }
+
+        .study-input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .input-sublabel {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        .media-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            border: 2px dashed rgba(102, 126, 234, 0.2);
+            border-radius: 24px;
+            background: rgba(102, 126, 234, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .media-section:hover {
+            border-color: rgba(102, 126, 234, 0.4);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .media-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            color: #94a3b8;
+        }
+
+        .media-icon {
+            font-size: 48px;
+            opacity: 0.6;
+        }
+
+        .media-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .card-media {
+            max-width: 100%;
+            max-height: 280px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        #cardYoutube {
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
+        }
+
+
+
+        /* Controls */
+        .study-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            color: #667eea;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .control-btn:disabled:hover {
+            transform: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Answer Buttons */
+        .answer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .answer-btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            min-width: 160px;
+            backdrop-filter: blur(16px);
+        }
+
+        .answer-btn.hard {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .answer-btn.medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .answer-btn.easy {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-btn.hard:hover {
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .answer-btn.medium:hover {
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .answer-btn.easy:hover {
+            background: rgba(34, 197, 94, 0.15);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .study-card {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                gap: 40px;
+            }
+
+            .media-section {
+                grid-column: 1 / -1;
+                max-height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .study-container {
+                padding: 40px 20px;
+            }
+
+            .study-card {
+                grid-template-columns: 1fr;
+                padding: 40px 30px;
+                gap: 30px;
+            }
+
+            .input-section {
+                gap: 30px;
+            }
+
+            .study-input {
+                font-size: 24px;
+                padding: 20px 0;
+            }
+
+            .media-section {
+                min-height: 200px;
+            }
+
+            .answer-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .answer-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .progress-info {
+                gap: 20px;
+            }
+
+            .progress-item {
+                padding: 16px 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .study-card {
+                padding: 30px 20px;
+            }
+
+            .study-input {
+                font-size: 20px;
+            }
+
+            .media-section {
+                min-height: 150px;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-up {
+            animation: slideInUp 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo-small">
+                    <div class="hero-glass-container" style="margin-bottom: 0; display: inline-block;">
+                        <div class="hero-glass-card" style="padding: 8px 16px; animation: none;">
+                            <h1 class="hero-title" style="margin: 0;">
+                                <span class="hero-gradient-text">Snappy</span><span class="hero-cards-text">Cards</span>
+                            </h1>
+                        </div>
+                    </div>
+                </a>
+                
+                <div class="header-actions">
+                    <a href="dashboard.html" class="back-btn">← Vissza a Dashboard-ra</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Study Interface -->
+    <div class="study-container">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            <div class="loading-spinner"></div>
+            <h3>Szókártyák betöltése...</h3>
+        </div>
+
+        <!-- Study Content -->
+        <div id="studyContent" style="display: none;">
+            <!-- Study Header -->
+            <div class="study-header slide-in-up">
+                <h1 class="study-title" id="setTitle">Angol alapszókincs</h1>
+                <p class="study-description" id="setDescription">Alapvető angol szavak mindennapi használatra</p>
+            </div>
+
+            <!-- Progress Info -->
+            <div class="progress-info slide-in-up">
+                <div class="progress-item">
+                    <div class="progress-number" id="currentCard">1</div>
+                    <div class="progress-label">Jelenlegi kártya</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-number" id="totalCards">45</div>
+                    <div class="progress-label">Összes kártya</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-number" id="masteredCards">0</div>
+                    <div class="progress-label">Elsajátítva</div>
+                </div>
+            </div>
+
+            <!-- Study Card -->
+            <div class="study-card slide-in-up">
+                <div class="input-section">
+                    <div class="input-group">
+                        <label class="input-label" id="termLabel">Enter term</label>
+                        <input type="text" class="study-input" id="termInput" placeholder="" readonly>
+                        <div class="input-sublabel" id="termSublabel">TERM</div>
+                    </div>
+                </div>
+                
+                <div class="input-section">
+                    <div class="input-group">
+                        <label class="input-label" id="definitionLabel">Enter definition</label>
+                        <input type="text" class="study-input" id="definitionInput" placeholder="" readonly>
+                        <div class="input-sublabel" id="definitionSublabel">DEFINITION</div>
+                    </div>
+                </div>
+                
+                <div class="media-section" id="mediaSection">
+                    <div class="media-placeholder" id="mediaPlaceholder">
+                        <div class="media-icon">🖼️</div>
+                        <div class="media-text">Image</div>
+                    </div>
+                    <img id="cardMedia" class="card-media" src="" alt="" style="display: none;">
+                    <video id="cardVideo" class="card-media" controls style="display: none;"></video>
+                    <iframe id="cardYoutube" class="card-media" frameborder="0" allowfullscreen style="display: none;"></iframe>
+                </div>
+
+            </div>
+
+            <!-- Controls -->
+            <div class="study-controls slide-in-up">
+                <button class="control-btn" id="prevBtn" onclick="previousCard()" disabled>
+                    ←
+                </button>
+                <button class="control-btn" onclick="toggleAnswer()" id="toggleBtn">
+                    👁️
+                </button>
+                <button class="control-btn" id="nextBtn" onclick="nextCard()">
+                    →
+                </button>
+            </div>
+
+            <!-- Answer Buttons -->
+            <div class="answer-buttons slide-in-up">
+                <button class="answer-btn hard" onclick="answerCard('hard')">
+                    😰 Nehéz
+                </button>
+                <button class="answer-btn medium" onclick="answerCard('medium')">
+                    🤔 Közepes
+                </button>
+                <button class="answer-btn easy" onclick="answerCard('easy')">
+                    😊 Könnyű
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let currentSet = null;
+        let flashcards = [];
+        let currentCardIndex = 0;
+        let isAnswerVisible = false;
+        let userProgress = {};
+
+        // Get set ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const setId = urlParams.get('setId');
+        const setType = urlParams.get('type') || 'own';
+
+        // Initialize study session
+        async function initStudySession() {
+            try {
+                // Check authentication
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error || !user) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                currentUser = user;
+
+                if (!setId) {
+                    alert('Nincs kiválasztott szett!');
+                    window.location.href = '/dashboard.html';
+                    return;
+                }
+
+                await loadFlashcardSet();
+                await loadFlashcards();
+                await loadUserProgress();
+
+                showStudyContent();
+                displayCurrentCard();
+                
+            } catch (error) {
+                console.error('Error initializing study session:', error);
+                alert('Hiba történt a tanulási szesszió indításakor');
+                window.location.href = '/dashboard.html';
+            }
+        }
+
+        // Load flashcard set information
+        async function loadFlashcardSet() {
+            const { data, error } = await supabase
+                .from('flashcard_sets')
+                .select('*')
+                .eq('id', setId)
+                .single();
+
+            if (error) {
+                console.error('Error loading flashcard set:', error);
+                throw error;
+            }
+
+            currentSet = data;
+            document.getElementById('setTitle').textContent = currentSet.title;
+            document.getElementById('setDescription').textContent = currentSet.description || '';
+        }
+
+        // Load flashcards for the set
+        async function loadFlashcards() {
+            const { data, error } = await supabase
+                .from('flashcard_set_cards')
+                .select(`
+                    position,
+                    cards (
+                        id,
+                        title,
+                        english_title,
+                        title_formatted,
+                        english_title_formatted,
+                        image_url,
+                        image_alt,
+                        media_type,
+                        media_url,
+                        category,
+                        difficulty_level
+                    )
+                `)
+                .eq('set_id', setId)
+                .order('position');
+
+            if (error) {
+                console.error('Error loading flashcards:', error);
+                throw error;
+            }
+
+            flashcards = data.map(item => item.cards);
+            document.getElementById('totalCards').textContent = flashcards.length;
+        }
+
+        // Load user progress for the set
+        async function loadUserProgress() {
+            const { data, error } = await supabase
+                .from('user_card_progress')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .eq('set_id', setId);
+
+            if (error) {
+                console.error('Error loading user progress:', error);
+                return;
+            }
+
+            userProgress = {};
+            data.forEach(progress => {
+                userProgress[progress.card_id] = progress;
+            });
+
+            // Update mastered cards count
+            const masteredCount = Object.values(userProgress).filter(p => p.mastery_level >= 3).length;
+            document.getElementById('masteredCards').textContent = masteredCount;
+        }
+
+        // Show study content and hide loading
+        function showStudyContent() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('studyContent').style.display = 'block';
+        }
+
+        // Display current card
+        function displayCurrentCard() {
+            if (flashcards.length === 0) return;
+
+            const card = flashcards[currentCardIndex];
+            
+            // Update labels based on set languages
+            if (currentSet) {
+                document.getElementById('termLabel').textContent = `Enter ${currentSet.language_a || 'term'}`;
+                document.getElementById('definitionLabel').textContent = `Enter ${currentSet.language_b || 'definition'}`;
+                document.getElementById('termSublabel').textContent = (currentSet.language_a || 'TERM').toUpperCase();
+                document.getElementById('definitionSublabel').textContent = (currentSet.language_b || 'DEFINITION').toUpperCase();
+            }
+            
+            // Update card content - only show term initially
+            // Use formatted text if available, otherwise fallback to plain text
+            const termInput = document.getElementById('termInput');
+            const definitionInput = document.getElementById('definitionInput');
+            
+            if (card.title_formatted) {
+                termInput.innerHTML = card.title_formatted;
+                termInput.style.border = 'none';
+                termInput.style.background = 'transparent';
+                termInput.readOnly = true;
+            } else {
+                termInput.value = card.title;
+            }
+            
+            if (isAnswerVisible) {
+                if (card.english_title_formatted) {
+                    definitionInput.innerHTML = card.english_title_formatted;
+                    definitionInput.style.border = 'none';
+                    definitionInput.style.background = 'transparent';
+                } else {
+                    definitionInput.value = card.english_title;
+                }
+            } else {
+                definitionInput.value = '';
+                definitionInput.innerHTML = '';
+            }
+
+
+            // Update media content
+            displayMedia(card);
+
+            // Update progress
+            document.getElementById('currentCard').textContent = currentCardIndex + 1;
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentCardIndex === 0;
+            document.getElementById('nextBtn').disabled = currentCardIndex === flashcards.length - 1;
+
+            // Reset answer visibility
+            if (!isAnswerVisible) {
+                hideAnswer();
+            }
+        }
+
+        // Display media based on type
+        function displayMedia(card) {
+            const mediaUrl = card.media_url || card.image_url;
+            const mediaType = card.media_type || 'image';
+            
+            // Hide all media elements
+            document.getElementById('mediaPlaceholder').style.display = 'flex';
+            document.getElementById('cardMedia').style.display = 'none';
+            document.getElementById('cardVideo').style.display = 'none';
+            document.getElementById('cardYoutube').style.display = 'none';
+            
+            if (!mediaUrl) return;
+            
+            document.getElementById('mediaPlaceholder').style.display = 'none';
+            
+            switch (mediaType) {
+                case 'image':
+                case 'gif':
+                    const img = document.getElementById('cardMedia');
+                    img.src = mediaUrl;
+                    img.alt = card.image_alt || card.title;
+                    img.style.display = 'block';
+                    break;
+                    
+                case 'video':
+                    const video = document.getElementById('cardVideo');
+                    video.src = mediaUrl;
+                    video.style.display = 'block';
+                    break;
+                    
+                case 'youtube':
+                    const iframe = document.getElementById('cardYoutube');
+                    // Convert YouTube URL to embed format
+                    let embedUrl = mediaUrl;
+                    if (mediaUrl.includes('youtube.com/watch?v=')) {
+                        const videoId = mediaUrl.split('v=')[1].split('&')[0];
+                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    } else if (mediaUrl.includes('youtu.be/')) {
+                        const videoId = mediaUrl.split('youtu.be/')[1].split('?')[0];
+                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    }
+                    iframe.src = embedUrl;
+                    iframe.style.display = 'block';
+                    break;
+                    
+                default:
+                    // Show placeholder
+                    document.getElementById('mediaPlaceholder').style.display = 'flex';
+            }
+        }
+
+        // Toggle answer visibility
+        function toggleAnswer() {
+            isAnswerVisible = !isAnswerVisible;
+            
+            const card = flashcards[currentCardIndex];
+            const definitionInput = document.getElementById('definitionInput');
+            const toggleBtn = document.getElementById('toggleBtn');
+            
+            if (isAnswerVisible) {
+                showAnswer();
+            } else {
+                hideAnswer();
+            }
+        }
+
+        // Show answer
+        function showAnswer() {
+            const card = flashcards[currentCardIndex];
+            document.getElementById('definitionInput').value = card.english_title;
+            document.getElementById('toggleBtn').textContent = '🙈';
+            isAnswerVisible = true;
+        }
+
+        // Hide answer
+        function hideAnswer() {
+            document.getElementById('definitionInput').value = '';
+            document.getElementById('toggleBtn').textContent = '👁️';
+            isAnswerVisible = false;
+        }
+
+        // Previous card
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                isAnswerVisible = false;
+                displayCurrentCard();
+            }
+        }
+
+        // Next card
+        function nextCard() {
+            if (currentCardIndex < flashcards.length - 1) {
+                currentCardIndex++;
+                isAnswerVisible = false;
+                displayCurrentCard();
+            }
+        }
+
+        // Answer card (difficulty feedback)
+        async function answerCard(difficulty) {
+            const card = flashcards[currentCardIndex];
+            let masteryLevel = 0;
+            
+            // Determine mastery level based on difficulty
+            switch (difficulty) {
+                case 'hard':
+                    masteryLevel = Math.max(0, (userProgress[card.id]?.mastery_level || 0) - 1);
+                    break;
+                case 'medium':
+                    masteryLevel = userProgress[card.id]?.mastery_level || 1;
+                    break;
+                case 'easy':
+                    masteryLevel = Math.min(3, (userProgress[card.id]?.mastery_level || 0) + 1);
+                    break;
+            }
+
+            // Update user progress
+            const now = new Date().toISOString();
+            const nextReview = calculateNextReview(difficulty, masteryLevel);
+            
+            const progressData = {
+                user_id: currentUser.id,
+                card_id: card.id,
+                set_id: setId,
+                mastery_level: masteryLevel,
+                last_reviewed: now,
+                next_review: nextReview,
+                review_count: (userProgress[card.id]?.review_count || 0) + 1,
+                correct_count: difficulty === 'easy' ? (userProgress[card.id]?.correct_count || 0) + 1 : (userProgress[card.id]?.correct_count || 0),
+                updated_at: now
+            };
+
+            // Upsert progress
+            const { error } = await supabase
+                .from('user_card_progress')
+                .upsert(progressData);
+
+            if (error) {
+                console.error('Error updating progress:', error);
+            } else {
+                // Update local progress
+                userProgress[card.id] = progressData;
+                
+                // Update mastered cards count
+                const masteredCount = Object.values(userProgress).filter(p => p.mastery_level >= 3).length;
+                document.getElementById('masteredCards').textContent = masteredCount;
+            }
+
+            // Move to next card automatically
+            setTimeout(() => {
+                isAnswerVisible = false;
+                nextCard();
+            }, 500);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowLeft':
+                    previousCard();
+                    break;
+                case 'ArrowRight':
+                    nextCard();
+                    break;
+                case ' ':
+                case 'Enter':
+                    e.preventDefault();
+                    toggleAnswer();
+                    break;
+                case '1':
+                    answerCard('hard');
+                    break;
+                case '2':
+                    answerCard('medium');
+                    break;
+                case '3':
+                    answerCard('easy');
+                    break;
+            }
+        });
+
+        // Spaced repetition algorithm
+        function calculateNextReview(difficulty, masteryLevel) {
+            const now = new Date();
+            let daysToAdd = 1; // Default: 1 day
+            
+            // Base interval based on difficulty
+            switch (difficulty) {
+                case 'hard':
+                    daysToAdd = 0.5; // 12 hours
+                    break;
+                case 'medium':
+                    daysToAdd = 1 + masteryLevel; // 1-4 days based on mastery
+                    break;
+                case 'easy':
+                    daysToAdd = Math.max(2, masteryLevel * 2); // 2-6 days based on mastery
+                    break;
+            }
+            
+            // Add some randomization to prevent clustering
+            const randomFactor = 0.8 + (Math.random() * 0.4); // 0.8 - 1.2
+            daysToAdd *= randomFactor;
+            
+            // Calculate next review date
+            const nextReview = new Date(now.getTime() + (daysToAdd * 24 * 60 * 60 * 1000));
+            return nextReview.toISOString();
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initStudySession);
+    </script>
+</body>
+</html>

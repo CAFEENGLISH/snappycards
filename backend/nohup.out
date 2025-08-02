@@ -1,0 +1,12 @@
+✅ Resend API initialized
+✅ Supabase Admin API initialized
+🚀 SnappyCards API Server running on port 8080
+📧 Email Provider: Resend API
+📬 From: noreply@snappycards.io
+🎯 Endpoints: /register, /send-confirmation
+✅ Supabase user created: d85ddd96-abac-4347-bee0-153b78cb4704
+📧 Sending beautiful Resend email to: test@example.com
+👤 User Role: student
+🔗 Verification URL: http://localhost:8080/verify?email=test%40example.com&supabase_user_id=d85ddd96-abac-4347-bee0-153b78cb4704
+👤 Supabase User ID: d85ddd96-abac-4347-bee0-153b78cb4704
+✅ Beautiful verification email sent successfully: 6e178a47-1947-488a-a181-ad5e545f4f46

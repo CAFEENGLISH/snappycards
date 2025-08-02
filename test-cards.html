@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cards Test</title>
+</head>
+<body>
+    <h1>CNN10 Szett Kártyák Tesztelése</h1>
+    <div id="results"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        async function testCards() {
+            const resultsDiv = document.getElementById('results');
+            const setId = 'b9cc339c-0b04-48e9-8c77-13d5d74a6c88'; // CNN10 szett ID
+            
+            resultsDiv.innerHTML = '<p>Kártyák betöltése...</p>';
+            
+            try {
+                // 1. Ellenőrizzük a szett létezését
+                console.log('🔍 1. Szett ellenőrzése...');
+                const { data: set, error: setError } = await supabase
+                    .from('flashcard_sets')
+                    .select('*')
+                    .eq('id', setId)
+                    .single();
+                
+                if (setError) {
+                    resultsDiv.innerHTML += `<p style="color: red;">❌ Szett hiba: ${setError.message}</p>`;
+                    return;
+                }
+                
+                resultsDiv.innerHTML += `<p>✅ Szett találva: <strong>${set.title}</strong></p>`;
+                
+                // 2. Flashcard_set_cards tábla ellenőrzése
+                console.log('🔍 2. Flashcard_set_cards tábla...');
+                const { data: setCards, error: setCardsError } = await supabase
+                    .from('flashcard_set_cards')
+                    .select('*')
+                    .eq('set_id', setId);
+                
+                if (setCardsError) {
+                    resultsDiv.innerHTML += `<p style="color: red;">❌ Set_cards hiba: ${setCardsError.message}</p>`;
+                    return;
+                }
+                
+                resultsDiv.innerHTML += `<p>📋 Flashcard_set_cards találatok: <strong>${setCards.length} db</strong></p>`;
+                if (setCards.length > 0) {
+                    resultsDiv.innerHTML += '<ul>';
+                    setCards.forEach(sc => {
+                        resultsDiv.innerHTML += `<li>Card ID: ${sc.card_id}, Position: ${sc.position}</li>`;
+                    });
+                    resultsDiv.innerHTML += '</ul>';
+                }
+                
+                // 3. Cards tábla ellenőrzése a card_id-k alapján
+                if (setCards.length > 0) {
+                    console.log('🔍 3. Cards tábla...');
+                    const cardIds = setCards.map(sc => sc.card_id);
+                    
+                    const { data: cards, error: cardsError } = await supabase
+                        .from('cards')
+                        .select('*')
+                        .in('id', cardIds);
+                    
+                    if (cardsError) {
+                        resultsDiv.innerHTML += `<p style="color: red;">❌ Cards hiba: ${cardsError.message}</p>`;
+                        return;
+                    }
+                    
+                    resultsDiv.innerHTML += `<p>🃏 Cards találatok: <strong>${cards.length} db</strong></p>`;
+                    if (cards.length > 0) {
+                        resultsDiv.innerHTML += '<ul>';
+                        cards.forEach(card => {
+                            resultsDiv.innerHTML += `<li><strong>${card.title}</strong> → ${card.english_title}</li>`;
+                        });
+                        resultsDiv.innerHTML += '</ul>';
+                    }
+                } else {
+                    resultsDiv.innerHTML += `<p style="color: orange;">⚠️ Nincs kártya hozzárendelve ehhez a szetthez!</p>`;
+                }
+                
+                // 4. JOIN lekérdezés tesztelése (ahogy a slot-machine használja)
+                console.log('🔍 4. JOIN lekérdezés...');
+                const { data: joinResult, error: joinError } = await supabase
+                    .from('flashcard_set_cards')
+                    .select(`
+                        cards (
+                            id,
+                            title,
+                            english_title,
+                            title_formatted,
+                            english_title_formatted,
+                            media_url,
+                            media_type
+                        )
+                    `)
+                    .eq('set_id', setId)
+                    .order('position', { ascending: true });
+                
+                if (joinError) {
+                    resultsDiv.innerHTML += `<p style="color: red;">❌ JOIN hiba: ${joinError.message}</p>`;
+                    return;
+                }
+                
+                const joinCards = joinResult?.map(item => item.cards).filter(Boolean) || [];
+                resultsDiv.innerHTML += `<p>🔄 JOIN eredmény: <strong>${joinCards.length} db</strong></p>`;
+                if (joinCards.length > 0) {
+                    resultsDiv.innerHTML += '<h3>Részletes kártyák:</h3><ul>';
+                    joinCards.forEach(card => {
+                        resultsDiv.innerHTML += `
+                            <li>
+                                <strong>${card.title || 'N/A'}</strong> → 
+                                <strong>${card.english_title || 'N/A'}</strong><br>
+                                <small>ID: ${card.id}, Media: ${card.media_url || 'nincs'}</small>
+                            </li>
+                        `;
+                    });
+                    resultsDiv.innerHTML += '</ul>';
+                }
+                
+            } catch (error) {
+                console.error('Teszt hiba:', error);
+                resultsDiv.innerHTML += `<p style="color: red;">❌ Általános hiba: ${error.message}</p>`;
+            }
+        }
+        
+        // Automatikus indítás
+        testCards();
+    </script>
+</body>
+</html>

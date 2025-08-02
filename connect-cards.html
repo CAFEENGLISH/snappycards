@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kártyák Összekapcsolása</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .card { border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔗 Kártyák Összekapcsolása CNN10 Szetttel</h1>
+    <div id="results"></div>
+    <button onclick="connectCards()" id="connectBtn">🔗 Kártyák Összekapcsolása</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let cnn10SetId = null;
+        let availableCards = [];
+        
+        async function analyzeDatabase() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="info">🔍 Adatbázis elemzése folyamatban...</div>';
+            
+            try {
+                // 1. CNN10 szett keresése
+                console.log('🔍 1. CNN10 szett keresése...');
+                const { data: sets, error: setsError } = await supabase
+                    .from('flashcard_sets')
+                    .select('*')
+                    .or('title.ilike.%CNN10%,title.ilike.%cnn10%');
+                
+                if (setsError) {
+                    resultsDiv.innerHTML += `<div class="error">❌ Szettek lekérdezési hiba: ${setsError.message}</div>`;
+                    return;
+                }
+                
+                if (sets.length === 0) {
+                    // Debug: összes szett lekérése
+                    console.log('🔍 Debug: összes szett lekérése...');
+                    const { data: allSets, error: allSetsError } = await supabase
+                        .from('flashcard_sets')
+                        .select('id, title')
+                        .limit(10);
+                    
+                    resultsDiv.innerHTML += `<div class="error">❌ Nem találtam CNN10 szetet!</div>`;
+                    resultsDiv.innerHTML += `<div class="info">🔍 <strong>Debug - Első 10 szett az adatbázisban:</strong><br>`;
+                    if (allSets && allSets.length > 0) {
+                        allSets.forEach(set => {
+                            resultsDiv.innerHTML += `• <strong>${set.title}</strong> (ID: ${set.id})<br>`;
+                        });
+                    } else {
+                        resultsDiv.innerHTML += '• Nincs szett az adatbázisban!<br>';
+                    }
+                    resultsDiv.innerHTML += `</div>`;
+                    return;
+                }
+                
+                cnn10SetId = sets[0].id;
+                resultsDiv.innerHTML += `<div class="success">✅ CNN10 szett találva: <strong>${sets[0].title}</strong><br>ID: <code>${cnn10SetId}</code></div>`;
+                
+                // 2. Meglévő kapcsolatok ellenőrzése
+                console.log('🔍 2. Meglévő kapcsolatok...');
+                const { data: existingConnections, error: connectionsError } = await supabase
+                    .from('flashcard_set_cards')
+                    .select('*')
+                    .eq('set_id', cnn10SetId);
+                
+                if (connectionsError) {
+                    resultsDiv.innerHTML += `<div class="error">❌ Kapcsolatok lekérdezési hiba: ${connectionsError.message}</div>`;
+                    return;
+                }
+                
+                resultsDiv.innerHTML += `<div class="info">📋 Meglévő kapcsolatok: <strong>${existingConnections.length} db</strong></div>`;
+                
+                // 3. Összes kártya lekérdezése
+                console.log('🔍 3. Összes kártya...');
+                const { data: allCards, error: cardsError } = await supabase
+                    .from('cards')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+                
+                if (cardsError) {
+                    resultsDiv.innerHTML += `<div class="error">❌ Kártyák lekérdezési hiba: ${cardsError.message}</div>`;
+                    return;
+                }
+                
+                resultsDiv.innerHTML += `<div class="info">🃏 Összes kártya: <strong>${allCards.length} db</strong></div>`;
+                
+                // 4. Szabad kártyák (nem kapcsolódnak a CNN10 szetthez)
+                const connectedCardIds = existingConnections.map(conn => conn.card_id);
+                availableCards = allCards.filter(card => !connectedCardIds.includes(card.id));
+                
+                resultsDiv.innerHTML += `<div class="info">🆓 Szabad kártyák: <strong>${availableCards.length} db</strong></div>`;
+                
+                if (availableCards.length > 0) {
+                    resultsDiv.innerHTML += '<h3>📋 Szabad kártyák listája:</h3>';
+                    availableCards.forEach((card, index) => {
+                        resultsDiv.innerHTML += `
+                            <div class="card">
+                                <strong>${index + 1}. ${card.title || 'N/A'}</strong> → 
+                                <strong>${card.english_title || 'N/A'}</strong><br>
+                                <small>ID: ${card.id} | Létrehozva: ${new Date(card.created_at).toLocaleString()}</small>
+                            </div>
+                        `;
+                    });
+                    
+                    document.getElementById('connectBtn').style.display = 'block';
+                } else {
+                    resultsDiv.innerHTML += `<div class="info">ℹ️ Nincsenek szabad kártyák az összekapcsoláshoz.</div>`;
+                    document.getElementById('connectBtn').style.display = 'none';
+                }
+                
+            } catch (error) {
+                console.error('Elemzési hiba:', error);
+                resultsDiv.innerHTML += `<div class="error">❌ Általános hiba: ${error.message}</div>`;
+            }
+        }
+        
+        async function connectCards() {
+            const resultsDiv = document.getElementById('results');
+            const connectBtn = document.getElementById('connectBtn');
+            
+            if (!cnn10SetId || availableCards.length === 0) {
+                resultsDiv.innerHTML += `<div class="error">❌ Nincs szett ID vagy nincsenek kártyák!</div>`;
+                return;
+            }
+            
+            connectBtn.disabled = true;
+            connectBtn.textContent = '⏳ Összekapcsolás...';
+            
+            try {
+                resultsDiv.innerHTML += `<div class="info">🔗 ${availableCards.length} kártya összekapcsolása a CNN10 szetttel...</div>`;
+                
+                let successCount = 0;
+                let errorCount = 0;
+                
+                for (let i = 0; i < availableCards.length; i++) {
+                    const card = availableCards[i];
+                    
+                    try {
+                        const { error: linkError } = await supabase
+                            .from('flashcard_set_cards')
+                            .insert({
+                                set_id: cnn10SetId,
+                                card_id: card.id,
+                                position: i + 1
+                            });
+                        
+                        if (linkError) {
+                            console.error(`Hiba a ${card.title} kártya összekapcsolásakor:`, linkError);
+                            errorCount++;
+                        } else {
+                            console.log(`✅ Sikeresen összekapcsolt: ${card.title}`);
+                            successCount++;
+                        }
+                        
+                    } catch (cardError) {
+                        console.error(`Kivétel a ${card.title} kártya összekapcsolásakor:`, cardError);
+                        errorCount++;
+                    }
+                }
+                
+                resultsDiv.innerHTML += `
+                    <div class="success">
+                        🎉 <strong>Összekapcsolás befejezve!</strong><br>
+                        ✅ Sikeres: ${successCount} db<br>
+                        ❌ Hibás: ${errorCount} db
+                    </div>
+                `;
+                
+                if (successCount > 0) {
+                    resultsDiv.innerHTML += `
+                        <div class="info">
+                            🚀 <strong>Most már működni fog a SlotMachine!</strong><br>
+                            Menj vissza a dashboard-ra és próbáld ki a CNN10 szettet!
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Összekapcsolási hiba:', error);
+                resultsDiv.innerHTML += `<div class="error">❌ Összekapcsolási hiba: ${error.message}</div>`;
+            } finally {
+                connectBtn.disabled = false;
+                connectBtn.textContent = '🔗 Kártyák Összekapcsolása';
+            }
+        }
+        
+        // Automatikus elemzés indítása
+        analyzeDatabase();
+    </script>
+</body>
+</html>

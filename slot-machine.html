@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snappy Cards - Tanulási Felület</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="components/snappy-cards-logo.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Hero Section with Glassmorphism */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-cards-text {
+            color: #334155;
+            margin-left: 0.75rem;
+        }
+
+        .hero-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+            margin: 1.5rem auto;
+            width: 24rem;
+        }
+
+        /* Stopwatch */
+        .stopwatch {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: inline-block;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .stopwatch-time {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.25rem;
+        }
+
+        .stopwatch-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Cards Section - Updated for Figma Design */
+        .cards-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .study-card {
+            width: 316.8px;
+            height: 422.4px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transform: rotateX(0deg);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Spinning state: 3 full rotations with custom easing */
+        .card-inner.spinning {
+            transform: rotateX(1080deg) !important;
+            transition: transform 1.5s cubic-bezier(0.55, 0.055, 0.675, 0.19) !important;
+        }
+
+        /* Force card faces to their base state during any animation */
+        .card-inner.spinning .card-face,
+        .card-inner.spinning-to-flipped .card-face,
+        .card-inner.flipping-back .card-face {
+            transform: none !important;
+            transition: none !important;
+        }
+
+        .card-inner.spinning .card-image,
+        .card-inner.spinning-to-flipped .card-image,
+        .card-inner.flipping-back .card-image {
+            transform: none !important;
+            transition: none !important;
+        }
+
+        /* After spinning, transition to flipped state */
+        .card-inner.spinning-to-flipped {
+            transform: rotateX(180deg) !important;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+
+        /* Normal flipped state */
+        .card-inner.flipped {
+            transform: rotateX(180deg) !important;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+
+        /* Faster reverse flip to avoid ghosting */
+        .card-inner.flipping-back {
+            transform: rotateX(0deg) !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        /* Hover effects only for NON-flipped cards and NOT during any animation */
+        .card-inner:not(.spinning):not(.spinning-to-flipped):not(.flipped):not(.flipping-back) .card-face:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        /* NO hover effects for flipped cards to prevent transform conflicts */
+
+        .card-back {
+            transform: rotateX(180deg);
+            border: 2px solid #6366f1;
+        }
+
+        /* Ensure card-back transform is preserved during any animation */
+        .card-inner.spinning .card-back,
+        .card-inner.spinning-to-flipped .card-back,
+        .card-inner.flipping-back .card-back {
+            transform: rotateX(180deg) !important;
+        }
+
+        /* Fix visibility during flip transitions */
+        .card-inner .card-face {
+            z-index: 1;
+        }
+        
+        .card-inner .card-back {
+            z-index: 0;
+        }
+        
+        /* During reverse flip, prioritize front face */
+        .card-inner:not(.spinning):not(.spinning-to-flipped):not(.flipped) .card-face:first-child,
+        .card-inner.flipping-back .card-face:first-child {
+            z-index: 2;
+        }
+
+        /* Front Card (Hungarian) */
+        .card-image-container {
+            height: 50%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        /* Only allow image hover when NOT spinning AND NOT flipped AND NOT flipping back */
+        .card-inner:not(.spinning):not(.spinning-to-flipped):not(.flipped):not(.flipping-back) .card-face:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        /* Disable interactions during any animation */
+        .card-inner.spinning,
+        .card-inner.spinning-to-flipped,
+        .card-inner.flipping-back {
+            pointer-events: none;
+        }
+
+        .card-divider {
+            height: 2px;
+            background: #e2e8f0;
+        }
+
+        .card-text-section {
+            height: 50%;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #475569;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        /* Back Card (English) */
+        .card-back .card-image-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(99, 102, 241, 0.3), transparent);
+        }
+
+        .card-back .card-divider {
+            background: #6366f1;
+        }
+
+        .card-back .card-text-section {
+            background: linear-gradient(135deg, #eef2ff 0%, #dbeafe 100%);
+            height: 35%;
+        }
+
+        .card-back .card-title {
+            color: #4338ca;
+        }
+
+        .en-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #4338ca;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        /* Feedback Section - Only on Back */
+        .feedback-section {
+            height: 15%;
+            padding: 0.75rem;
+            background: white;
+            border-top: 2px solid #e0e7ff;
+        }
+
+        .feedback-section.spinning {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6366f1;
+            font-size: 0.875rem;
+        }
+
+        .snappy-feedback-container {
+            display: flex;
+            gap: 0.375rem;
+            height: 100%;
+        }
+
+        .snappy-btn-base {
+            flex: 1;
+            padding: 0.375rem 0.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-width: 70px;
+            max-width: 75px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            user-select: none;
+            outline: none;
+            position: relative;
+            z-index: 1001;
+            pointer-events: auto;
+            touch-action: manipulation;
+        }
+
+        .snappy-btn-green {
+            background: #22c55e;
+            color: white;
+            box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
+        }
+
+        .snappy-btn-green:hover {
+            background: #16a34a;
+            transform: scale(1.02);
+        }
+
+        .snappy-btn-yellow {
+            background: #eab308;
+            color: white;
+            box-shadow: 0 2px 4px rgba(234, 179, 8, 0.2);
+        }
+
+        .snappy-btn-yellow:hover {
+            background: #ca8a04;
+            transform: scale(1.02);
+        }
+
+        .snappy-btn-red {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+        }
+
+        .snappy-btn-red:hover {
+            background: #dc2626;
+            transform: scale(1.02);
+        }
+
+        .snappy-btn-selected {
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+
+
+        /* Statistics - 3+3 Layout */
+        .statistics {
+            margin-top: 3rem;
+        }
+
+        .statistics-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .statistics-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .statistics-box {
+            width: 5rem;
+            height: 4rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .statistics-box:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .statistics-value {
+            font-size: 1.125rem;
+            font-weight: 400;
+            line-height: 1;
+        }
+
+        .statistics-label {
+            font-size: 0.75rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.9;
+            line-height: 1;
+        }
+
+        .stat-green { background: #22c55e; }
+        .stat-yellow { background: #f59e0b; }
+        .stat-red { background: #ef4444; }
+        .stat-orange { background: #f97316; }
+        .stat-blue { background: #3b82f6; }
+        .stat-purple { background: #8b5cf6; }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid rgba(79, 70, 229, 0.2);
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .cards-container {
+                gap: 1rem;
+            }
+
+            .study-card {
+                width: 280px;
+                height: 380px;
+            }
+
+            .statistics-container {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .study-card {
+                width: 260px;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-glass-container" onclick="window.location.href='dashboard.html'" style="cursor: pointer;" title="Vissza a Dashboard-ra">
+                <div class="hero-glass-card">
+                    <h1 class="hero-title">
+                        <span class="hero-gradient-text">Snappy</span>
+                        <span class="hero-cards-text">Cards</span>
+                    </h1>
+                    
+                    <!-- Floating Bubbles -->
+                    <div class="hero-bubble-1"></div>
+                    <div class="hero-bubble-2"></div>
+                    <div class="hero-bubble-3"></div>
+                    <div class="hero-bubble-4"></div>
+                </div>
+                
+                <!-- Background Glow -->
+                <div class="hero-glow"></div>
+            </div>
+            
+            <div class="hero-divider"></div>
+            
+            <!-- Stopwatch -->
+            <div class="stopwatch">
+                <div class="stopwatch-time" id="stopwatchTime">00:00</div>
+                <div class="stopwatch-label">Tanulási idő</div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            <div class="loading-spinner"></div>
+            <div>Kártyák betöltése...</div>
+        </div>
+
+        <!-- Cards Container -->
+        <div id="cardsContainer" class="cards-container" style="display: none;">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+
+        <!-- Statistics -->
+        <div id="statisticsSection" class="statistics" style="display: none;">
+            <div class="statistics-container">
+                <!-- Left Group - Feedback Types -->
+                <div class="statistics-group">
+                    <div class="statistics-box stat-green">
+                        <div class="statistics-value" id="statTudom">0</div>
+                        <div class="statistics-label">Tudom</div>
+                    </div>
+                    <div class="statistics-box stat-yellow">
+                        <div class="statistics-value" id="statBizonytalan">0</div>
+                        <div class="statistics-label">Bizonytalan</div>
+                    </div>
+                    <div class="statistics-box stat-red">
+                        <div class="statistics-value" id="statTanulandó">0</div>
+                        <div class="statistics-label">Tanulandó</div>
+                    </div>
+                </div>
+
+                <!-- Right Group - General Statistics -->
+                <div class="statistics-group">
+                    <div class="statistics-box stat-orange">
+                        <div class="statistics-value" id="statMegnezve">0</div>
+                        <div class="statistics-label">Megnézve</div>
+                    </div>
+                    <div class="statistics-box stat-blue">
+                        <div class="statistics-value" id="statHatra">0</div>
+                        <div class="statistics-label">Hátra van</div>
+                    </div>
+                    <div class="statistics-box stat-purple">
+                        <div class="statistics-value" id="statOsszesen">0</div>
+                        <div class="statistics-label">Összesen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        // Supabase configuration  
+        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Global Variables
+        let currentSetId = null;
+        let currentCards = [];
+        let currentCardIndex = 0;
+        let flippedCards = new Set();
+        let feedback = {};
+        let isStopwatchRunning = false;
+        let stopwatchStartTime = 0;
+        let stopwatchInterval = null;
+        let statistics = {
+            tudom: 0,
+            bizonytalan: 0,
+            tanulandó: 0,
+            totalViewed: 0
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initSlotMachine();
+        });
+
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        async function initSlotMachine() {
+            try {
+                currentSetId = getUrlParameter('setId');
+                if (!currentSetId) {
+                    showError('Nincs szett ID megadva az URL-ben.');
+                    return;
+                }
+
+                await loadCards(currentSetId);
+                showInitialCards();
+                startStopwatch();
+                
+                // Hide loading, show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('cardsContainer').style.display = 'flex';
+                document.getElementById('statisticsSection').style.display = 'block';
+                
+                updateStatistics();
+                
+            } catch (error) {
+                console.error('Error initializing SlotMachine:', error);
+                showError('Hiba történt a kártyák betöltése során.');
+            }
+        }
+
+        async function loadCards(setId) {
+            try {
+                // Get cards for this set through the junction table
+                const { data: flashcardSetCards, error } = await supabase
+                    .from('flashcard_set_cards')
+                    .select(`
+                        cards (
+                            id,
+                            title,
+                            english_title,
+                            title_formatted,
+                            english_title_formatted,
+                            media_url,
+                            media_type
+                        )
+                    `)
+                    .eq('set_id', setId)
+                    .order('position', { ascending: true });
+
+                if (error) throw error;
+
+                // Extract and transform cards from the junction table result
+                const cards = flashcardSetCards?.map(item => item.cards).filter(Boolean) || [];
+                currentCards = cards?.map(card => ({
+                    id: card.id,
+                    title: card.title,
+                    english_title: card.english_title,
+                    title_formatted: card.title_formatted,
+                    english_title_formatted: card.english_title_formatted,
+                    media_url: card.media_url,
+                    media_type: card.media_type
+                })) || [];
+                
+                console.log('Loaded', currentCards.length, 'cards for SlotMachine');
+                
+                if (currentCards.length === 0) {
+                    showError('Nincsenek kártyák ebben a szettben.');
+                    return;
+                }
+
+            } catch (error) {
+                console.error('Error loading cards:', error);
+                throw error;
+            }
+        }
+
+        function showInitialCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            
+            const cardsToShow = currentCards.slice(currentCardIndex, currentCardIndex + 3);
+            
+            cardsToShow.forEach((card, index) => {
+                const cardElement = createStudyCard(card, index);
+                container.appendChild(cardElement);
+            });
+        }
+
+        function createStudyCard(card, index) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'study-card';
+            cardDiv.innerHTML = `
+                <div class="card-inner" id="cardInner${index}">
+                    <!-- Front Side (Hungarian) -->
+                    <div class="card-face">
+                        <div class="card-image-container">
+                            <img class="card-image" src="${card.media_url || '/images/placeholder.jpg'}" alt="${card.title}" onerror="this.src='/images/placeholder.jpg'">
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-text-section">
+                            <div class="card-title">${card.title || 'Kártya'}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Back Side (English) -->
+                    <div class="card-face card-back">
+                        <div class="card-image-container">
+                            <img class="card-image" src="${card.media_url || '/images/placeholder.jpg'}" alt="${card.english_title}" onerror="this.src='/images/placeholder.jpg'">
+                            <div class="en-badge">EN</div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-text-section">
+                            <div class="card-title">${card.english_title || 'Card'}</div>
+                        </div>
+                        <div class="feedback-section" id="feedbackSection${index}">
+                            <div class="snappy-feedback-container">
+                                <button class="snappy-btn-base snappy-btn-green" onclick="handleFeedback(${index}, 'tudom')">Tudom</button>
+                                <button class="snappy-btn-base snappy-btn-yellow" onclick="handleFeedback(${index}, 'bizonytalan')">Bizonytalan</button>
+                                <button class="snappy-btn-base snappy-btn-red" onclick="handleFeedback(${index}, 'tanulandó')">Tanulandó</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            cardDiv.addEventListener('click', function(e) {
+                if (!e.target.closest('.snappy-feedback-container')) {
+                    flipCard(index);
+                }
+            });
+            
+            return cardDiv;
+        }
+
+        function flipCard(index) {
+            const cardInner = document.getElementById(`cardInner${index}`);
+            if (!cardInner) return;
+            
+            // Prevent multiple clicks during animation
+            if (cardInner.classList.contains('spinning') || cardInner.classList.contains('spinning-to-flipped') || cardInner.classList.contains('flipping-back')) return;
+            
+            // Clean any previous states
+            cardInner.classList.remove('spinning', 'spinning-to-flipped', 'flipped', 'flipping-back');
+            
+            // Force reflow to ensure clean state
+            cardInner.offsetHeight;
+            
+            if (!flippedCards.has(index)) {
+                // Show spinning indicator in feedback section
+                const feedbackSection = document.getElementById(`feedbackSection${index}`);
+                if (feedbackSection) {
+                    feedbackSection.innerHTML = '<div class="feedback-section spinning">🪙 Pörgés...</div>';
+                }
+                
+                // Phase 1: Spinning (1080deg for 1.5s) - exactly like Framer Motion
+                cardInner.classList.add('spinning');
+                
+                // Phase 2: After 1.5s, simulate Framer Motion state change (isSpinning: false + isFlipped: true)
+                setTimeout(() => {
+                    // Clean ALL classes first
+                    cardInner.classList.remove('spinning', 'spinning-to-flipped', 'flipped');
+                    
+                    // Force reflow
+                    cardInner.offsetHeight;
+                    
+                    // Add spinning-to-flipped immediately
+                    cardInner.classList.add('spinning-to-flipped');
+                    
+                    // Mark as flipped in our state
+                    flippedCards.add(index);
+                    
+                    // After the transition to 180deg completes (0.6s), finalize the state
+                    setTimeout(() => {
+                        cardInner.classList.remove('spinning-to-flipped');
+                        cardInner.classList.add('flipped');
+                        
+                        // Force another reflow to ensure clean state
+                        cardInner.offsetHeight;
+                        
+                        // Log current transform for debugging
+                        console.log(`Card ${index} final transform:`, window.getComputedStyle(cardInner).transform);
+                        
+                        // Restore feedback buttons
+                        if (feedbackSection) {
+                            feedbackSection.innerHTML = `
+                                <div class="snappy-feedback-container">
+                                    <button class="snappy-btn-base snappy-btn-green" onclick="handleFeedback(${index}, 'tudom')">Tudom</button>
+                                    <button class="snappy-btn-base snappy-btn-yellow" onclick="handleFeedback(${index}, 'bizonytalan')">Bizonytalan</button>
+                                    <button class="snappy-btn-base snappy-btn-red" onclick="handleFeedback(${index}, 'tanulandó')">Tanulandó</button>
+                                </div>
+                            `;
+                        }
+                        
+                        // Start stopwatch 1 second after first card is fully flipped
+                        if (flippedCards.size === 1 && !isStopwatchRunning) {
+                            setTimeout(() => {
+                                startStopwatch();
+                            }, 1000);
+                        }
+                    }, 600); // Wait for transition to 180deg to complete
+                }, 1500); // Wait for spinning animation to complete
+                
+            } else {
+                // Flip back to front with fast animation to avoid ghosting
+                cardInner.classList.remove('flipped');
+                cardInner.classList.add('flipping-back');
+                flippedCards.delete(index);
+                
+                // Remove flipping-back class after animation completes
+                setTimeout(() => {
+                    cardInner.classList.remove('flipping-back');
+                }, 300); // Match the CSS transition duration
+            }
+        }
+
+        function handleFeedback(cardIndex, feedbackType) {
+            // Stop stopwatch on any feedback
+            stopStopwatch();
+            
+            // Update visual feedback
+            const feedbackSection = document.getElementById(`feedbackSection${cardIndex}`);
+            if (feedbackSection) {
+                const buttons = feedbackSection.querySelectorAll('.snappy-btn-base');
+                buttons.forEach(btn => btn.classList.remove('snappy-btn-selected'));
+                
+                const selectedButton = Array.from(buttons).find(btn => 
+                    btn.textContent.trim().toLowerCase() === feedbackType.toLowerCase()
+                );
+                if (selectedButton) {
+                    selectedButton.classList.add('snappy-btn-selected');
+                }
+            }
+            
+            // Update feedback
+            feedback[cardIndex] = feedbackType;
+            
+            // Update statistics
+            statistics[feedbackType]++;
+            statistics.totalViewed++;
+            
+            updateStatistics();
+            
+            // Check if all cards have feedback
+            const cardsToShow = Math.min(3, currentCards.length - currentCardIndex);
+            const hasAllFeedback = Array.from({length: cardsToShow}).every((_, index) => 
+                feedback[index] !== undefined
+            );
+            
+            if (hasAllFeedback) {
+                setTimeout(() => {
+                    showNextCards();
+                }, 1000);
+            }
+        }
+
+        function showNextCards() {
+            currentCardIndex += 3;
+            
+            if (currentCardIndex >= currentCards.length) {
+                showSessionComplete();
+                return;
+            }
+            
+            // Reset for next set
+            flippedCards.clear();
+            feedback = {};
+            
+            // Show new cards
+            showInitialCards();
+        }
+
+        function showSessionComplete() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 3rem; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);">
+                    <h2 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">🎉 Szett befejezve!</h2>
+                    <p style="color: #64748b; margin-bottom: 2rem;">Összes kártya átnézve. Szuper munka!</p>
+                    <button onclick="window.location.href='dashboard.html'" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                        Vissza a Dashboard-ra
+                    </button>
+                </div>
+            `;
+        }
+
+        function startStopwatch() {
+            if (!isStopwatchRunning) {
+                isStopwatchRunning = true;
+                stopwatchStartTime = Date.now();
+                stopwatchInterval = setInterval(updateStopwatch, 1000);
+            }
+        }
+
+        function stopStopwatch() {
+            if (isStopwatchRunning) {
+                isStopwatchRunning = false;
+                if (stopwatchInterval) {
+                    clearInterval(stopwatchInterval);
+                    stopwatchInterval = null;
+                }
+            }
+        }
+
+        function updateStopwatch() {
+            if (!isStopwatchRunning) return;
+            
+            const elapsed = Date.now() - stopwatchStartTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            const timeString = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            document.getElementById('stopwatchTime').textContent = timeString;
+        }
+
+        function updateStatistics() {
+            document.getElementById('statTudom').textContent = statistics.tudom;
+            document.getElementById('statBizonytalan').textContent = statistics.bizonytalan;
+            document.getElementById('statTanulandó').textContent = statistics.tanulandó;
+            document.getElementById('statMegnezve').textContent = statistics.totalViewed;
+            document.getElementById('statHatra').textContent = Math.max(0, currentCards.length - statistics.totalViewed);
+            document.getElementById('statOsszesen').textContent = currentCards.length;
+        }
+
+        function showError(message) {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 3rem; background: rgba(239, 68, 68, 0.1); backdrop-filter: blur(20px); border-radius: 1.5rem; border: 1px solid rgba(239, 68, 68, 0.3); color: #dc2626;">
+                    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">❌ Hiba</h2>
+                    <p style="margin-bottom: 2rem;">${message}</p>
+                    <button onclick="window.location.href='dashboard.html'" style="background: #dc2626; color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                        Vissza a Dashboard-ra
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('cardsContainer').style.display = 'flex';
+        }
+
+        // Make functions globally accessible
+        window.handleFeedback = handleFeedback;
+    </script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Szettek és Kártyák Kezelése</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .section { background: white; margin: 20px 0; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .set-item { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; background: #f9f9f9; }
+        .card-item { border: 1px solid #e0e0e0; padding: 10px; margin: 5px 0; border-radius: 5px; background: #fafafa; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; color: #856404; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        button { padding: 8px 16px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .delete-btn { background: #dc3545; color: white; }
+        .delete-btn:hover { background: #c82333; }
+        .connect-btn { background: #28a745; color: white; }
+        .connect-btn:hover { background: #218838; }
+        .refresh-btn { background: #007bff; color: white; }
+        .refresh-btn:hover { background: #0056b3; }
+        .create-btn { background: #17a2b8; color: white; }
+        .create-btn:hover { background: #138496; }
+        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .meta { font-size: 12px; color: #666; }
+        .highlight { background: #fff3cd; border: 2px solid #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🛠️ Szettek és Kártyák Kezelője</h1>
+    
+    <div class="section">
+        <h2>🔄 Frissítés</h2>
+        <button onclick="loadData()" class="refresh-btn">🔄 Adatok újratöltése</button>
+        <button onclick="createCNN10Set()" class="create-btn">➕ CNN10 szett létrehozása</button>
+    </div>
+
+    <div class="section">
+        <h2>📚 Szettek kezelése</h2>
+        <div id="setsContainer">Betöltés...</div>
+    </div>
+
+    <div class="section">
+        <h2>🃏 Szabad kártyák</h2>
+        <div id="cardsContainer">Betöltés...</div>
+    </div>
+
+    <div class="section">
+        <h2>🔗 Összekapcsolás</h2>
+        <div id="connectionContainer">Várj az adatok betöltésére...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let allSets = [];
+        let allCards = [];
+        let cnn10Set = null;
+        
+        async function loadData() {
+            try {
+                document.getElementById('setsContainer').innerHTML = '⏳ Szettek betöltése...';
+                document.getElementById('cardsContainer').innerHTML = '⏳ Kártyák betöltése...';
+                
+                // Szettek betöltése
+                const { data: sets, error: setsError } = await supabase
+                    .from('flashcard_sets')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (setsError) {
+                    document.getElementById('setsContainer').innerHTML = `<div class="error">❌ Szettek hiba: ${setsError.message}</div>`;
+                    return;
+                }
+                
+                allSets = sets || [];
+                
+                // Kártyák betöltése
+                const { data: cards, error: cardsError } = await supabase
+                    .from('cards')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (cardsError) {
+                    document.getElementById('cardsContainer').innerHTML = `<div class="error">❌ Kártyák hiba: ${cardsError.message}</div>`;
+                    return;
+                }
+                
+                allCards = cards || [];
+                
+                // CNN10 szett keresése
+                cnn10Set = allSets.find(set => 
+                    set.title && (
+                        set.title.toLowerCase().includes('cnn10') || 
+                        set.title.toLowerCase().includes('cnn 10')
+                    )
+                );
+                
+                displaySets();
+                displayCards();
+                displayConnectionOptions();
+                
+            } catch (error) {
+                console.error('Adatbetöltési hiba:', error);
+                document.getElementById('setsContainer').innerHTML = `<div class="error">❌ Általános hiba: ${error.message}</div>`;
+            }
+        }
+        
+        function displaySets() {
+            const container = document.getElementById('setsContainer');
+            
+            if (allSets.length === 0) {
+                container.innerHTML = '<div class="info">ℹ️ Nincsenek szettek az adatbázisban.</div>';
+                return;
+            }
+            
+            let html = `<div class="info">📊 <strong>${allSets.length} szett</strong> az adatbázisban:</div>`;
+            
+            allSets.forEach(set => {
+                const isCNN10 = set.title && (set.title.toLowerCase().includes('cnn10') || set.title.toLowerCase().includes('cnn 10'));
+                const highlightClass = isCNN10 ? ' highlight' : '';
+                
+                html += `
+                    <div class="set-item${highlightClass}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${set.title || 'Névtelen szett'}</strong>
+                                ${isCNN10 ? ' 🎯 <em>(CNN10 szett)</em>' : ''}
+                                <br>
+                                <small>${set.description || 'Nincs leírás'}</small>
+                                <br>
+                                <span class="meta">ID: ${set.id} | Létrehozva: ${new Date(set.created_at).toLocaleString()}</span>
+                            </div>
+                            <div>
+                                ${!isCNN10 ? `<button onclick="deleteSet('${set.id}', '${set.title}')" class="delete-btn">🗑️ Törlés</button>` : '<span style="color: green;">🔒 Védett</span>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function displayCards() {
+            const container = document.getElementById('cardsContainer');
+            
+            if (allCards.length === 0) {
+                container.innerHTML = '<div class="info">ℹ️ Nincsenek kártyák az adatbázisban.</div>';
+                return;
+            }
+            
+            // Yesterday filter
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            yesterday.setHours(0, 0, 0, 0);
+            
+            const today = new Date();
+            today.setHours(23, 59, 59, 999);
+            
+            const recentCards = allCards.filter(card => {
+                const cardDate = new Date(card.created_at);
+                return cardDate >= yesterday && cardDate <= today;
+            });
+            
+            let html = `
+                <div class="info">📊 <strong>${allCards.length} kártya</strong> az adatbázisban</div>
+                <div class="warning">🔍 <strong>${recentCards.length} kártya</strong> tegnap/ma létrehozva:</div>
+            `;
+            
+            if (recentCards.length > 0) {
+                recentCards.forEach(card => {
+                    html += `
+                        <div class="card-item highlight">
+                            <strong>${card.title || 'N/A'}</strong> → <strong>${card.english_title || 'N/A'}</strong>
+                            <br>
+                            <span class="meta">ID: ${card.id} | Létrehozva: ${new Date(card.created_at).toLocaleString()}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<div class="error">❌ Nincsenek tegnap/ma létrehozott kártyák!</div>';
+                
+                // Show latest 5 cards
+                html += '<div class="info">📋 <strong>Legutóbbi 5 kártya:</strong></div>';
+                allCards.slice(0, 5).forEach(card => {
+                    html += `
+                        <div class="card-item">
+                            <strong>${card.title || 'N/A'}</strong> → <strong>${card.english_title || 'N/A'}</strong>
+                            <br>
+                            <span class="meta">ID: ${card.id} | Létrehozva: ${new Date(card.created_at).toLocaleString()}</span>
+                        </div>
+                    `;
+                });
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function displayConnectionOptions() {
+            const container = document.getElementById('connectionContainer');
+            
+            if (!cnn10Set) {
+                container.innerHTML = `
+                    <div class="error">❌ Nincs CNN10 szett!</div>
+                    <button onclick="createCNN10Set()" class="create-btn">➕ CNN10 szett létrehozása</button>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="success">✅ CNN10 szett megtalálva: <strong>${cnn10Set.title}</strong></div>
+                <button onclick="connectAllCardsToSet('${cnn10Set.id}')" class="connect-btn">🔗 Összes kártya összekapcsolása a CNN10 szettel</button>
+                <button onclick="connectRecentCardsToSet('${cnn10Set.id}')" class="connect-btn">🔗 Csak tegnapi/mai kártyák összekapcsolása</button>
+            `;
+        }
+        
+        async function deleteSet(setId, setTitle) {
+            if (!confirm(`Biztosan törölni akarod a "${setTitle}" szettet?`)) return;
+            
+            try {
+                console.log(`🗑️ Törlés kezdete: ${setTitle} (${setId})`);
+                
+                // 1. Check connections first
+                const { data: connections, error: checkError } = await supabase
+                    .from('flashcard_set_cards')
+                    .select('*')
+                    .eq('set_id', setId);
+                
+                if (checkError) {
+                    console.error('Kapcsolatok ellenőrzési hiba:', checkError);
+                    alert(`❌ Kapcsolatok ellenőrzési hiba: ${checkError.message}`);
+                    return;
+                }
+                
+                console.log(`📋 Talált kapcsolatok: ${connections?.length || 0} db`);
+                
+                // 2. Delete connections if any
+                if (connections && connections.length > 0) {
+                    console.log('🔗 Kapcsolatok törlése...');
+                    const { data: deletedConnections, error: connectionsError } = await supabase
+                        .from('flashcard_set_cards')
+                        .delete()
+                        .eq('set_id', setId)
+                        .select();
+                    
+                    if (connectionsError) {
+                        console.error('Kapcsolatok törlési hiba:', connectionsError);
+                        alert(`❌ Kapcsolatok törlési hiba: ${connectionsError.message}`);
+                        return;
+                    }
+                    
+                    console.log('✅ Kapcsolatok törölve:', deletedConnections?.length || 0);
+                }
+                
+                // 3. Check for categories connections
+                const { data: categories, error: catCheckError } = await supabase
+                    .from('flashcard_set_categories')
+                    .select('*')
+                    .eq('set_id', setId);
+                
+                if (catCheckError) {
+                    console.error('Kategóriák ellenőrzési hiba:', catCheckError);
+                }
+                
+                console.log(`🏷️ Talált kategória kapcsolatok: ${categories?.length || 0} db`);
+                
+                // 4. Delete category connections if any
+                if (categories && categories.length > 0) {
+                    console.log('🏷️ Kategória kapcsolatok törlése...');
+                    const { error: catDeleteError } = await supabase
+                        .from('flashcard_set_categories')
+                        .delete()
+                        .eq('set_id', setId);
+                    
+                    if (catDeleteError) {
+                        console.error('Kategória kapcsolatok törlési hiba:', catDeleteError);
+                        alert(`❌ Kategória kapcsolatok törlési hiba: ${catDeleteError.message}`);
+                        return;
+                    }
+                    
+                    console.log('✅ Kategória kapcsolatok törölve');
+                }
+                
+                // 5. Finally delete the set
+                console.log('📚 Szett törlése...');
+                const { data: deletedSet, error: setError } = await supabase
+                    .from('flashcard_sets')
+                    .delete()
+                    .eq('id', setId)
+                    .select();
+                
+                if (setError) {
+                    console.error('Szett törlési hiba:', setError);
+                    alert(`❌ Szett törlési hiba: ${setError.message}`);
+                    return;
+                }
+                
+                console.log('✅ Szett törölve:', deletedSet);
+                
+                alert(`✅ "${setTitle}" szett és minden kapcsolata sikeresen törölve!`);
+                
+                // Force reload
+                console.log('🔄 Adatok újratöltése...');
+                await loadData();
+                
+            } catch (error) {
+                console.error('Általános törlési hiba:', error);
+                alert(`❌ Általános törlési hiba: ${error.message}`);
+            }
+        }
+        
+        async function createCNN10Set() {
+            try {
+                const { data, error } = await supabase
+                    .from('flashcard_sets')
+                    .insert({
+                        title: 'CNN10 - május 5',
+                        description: 'CNN10 hírek tanulása',
+                        language_a: 'Hungarian',
+                        language_b: 'English',
+                        language_a_code: 'hu',
+                        language_b_code: 'en',
+                        is_public: false,
+                        creator_id: '11111111-1111-1111-1111-111111111111' // Default user ID
+                    })
+                    .select()
+                    .single();
+                
+                if (error) {
+                    alert(`❌ CNN10 szett létrehozási hiba: ${error.message}`);
+                    return;
+                }
+                
+                alert(`✅ CNN10 szett sikeresen létrehozva!`);
+                loadData(); // Reload data
+                
+            } catch (error) {
+                alert(`❌ Általános hiba: ${error.message}`);
+            }
+        }
+        
+        async function connectAllCardsToSet(setId) {
+            await connectCardsToSet(setId, allCards);
+        }
+        
+        async function connectRecentCardsToSet(setId) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            yesterday.setHours(0, 0, 0, 0);
+            
+            const today = new Date();
+            today.setHours(23, 59, 59, 999);
+            
+            const recentCards = allCards.filter(card => {
+                const cardDate = new Date(card.created_at);
+                return cardDate >= yesterday && cardDate <= today;
+            });
+            
+            await connectCardsToSet(setId, recentCards);
+        }
+        
+        async function connectCardsToSet(setId, cards) {
+            if (cards.length === 0) {
+                alert('❌ Nincsenek kártyák az összekapcsoláshoz!');
+                return;
+            }
+            
+            if (!confirm(`Összekapcsolsz ${cards.length} kártyát a szettel?`)) return;
+            
+            try {
+                // Check existing connections
+                const { data: existingConnections, error: checkError } = await supabase
+                    .from('flashcard_set_cards')
+                    .select('card_id')
+                    .eq('set_id', setId);
+                
+                if (checkError) {
+                    alert(`❌ Kapcsolat ellenőrzési hiba: ${checkError.message}`);
+                    return;
+                }
+                
+                const existingCardIds = existingConnections.map(conn => conn.card_id);
+                const newCards = cards.filter(card => !existingCardIds.includes(card.id));
+                
+                if (newCards.length === 0) {
+                    alert('ℹ️ Minden kártya már össze van kapcsolva!');
+                    return;
+                }
+                
+                // Insert new connections
+                const connections = newCards.map((card, index) => ({
+                    set_id: setId,
+                    card_id: card.id,
+                    position: existingConnections.length + index + 1
+                }));
+                
+                const { error: insertError } = await supabase
+                    .from('flashcard_set_cards')
+                    .insert(connections);
+                
+                if (insertError) {
+                    alert(`❌ Összekapcsolási hiba: ${insertError.message}`);
+                    return;
+                }
+                
+                alert(`✅ ${newCards.length} kártya sikeresen összekapcsolva!`);
+                loadData(); // Reload data
+                
+            } catch (error) {
+                alert(`❌ Általános hiba: ${error.message}`);
+            }
+        }
+        
+        // Auto-load on page load
+        loadData();
+    </script>
+</body>
+</html>
