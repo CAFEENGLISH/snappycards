@@ -3902,38 +3902,38 @@
                 // Use dedicated edit modal container with the SAME structure as addCardsModal
                 const editModalContainer = document.getElementById('editCardModalContainer');
                 
-                // Generate modal structure with SEPARATED buttons outside scroll area
+                // Generate modal structure and buttons COMPLETELY SEPARATE
                 editModalContainer.innerHTML = `
                     <div class="modal-overlay active" style="z-index: 20000;">
-                        <div class="modal" style="display: flex; flex-direction: column; max-height: 90vh;">
+                        <div class="modal" style="max-height: 85vh; overflow-y: auto; margin-bottom: 100px;">
                             <div class="modal-header">
                                 <h2 class="modal-title">Kártya szerkesztése</h2>
                                 <p class="modal-subtitle">Kártya szerkesztése a "${setData.title}" szettben (${languageA} → ${languageB})</p>
                             </div>
                             
-                            <div id="editCardFormContainer" style="flex: 1; overflow-y: auto;">
+                            <div id="editCardFormContainer">
                                 <!-- Form will be generated here -->
                             </div>
-                            
-                            <!-- Bottom Fixed Action Buttons - OUTSIDE scroll area -->
-                            <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; border-radius: 0 0 24px 24px; margin: 0 -40px -40px -40px;">
-                                <button type="button" 
-                                        onclick="saveEditedCard()" 
-                                        id="saveEditBtn"
-                                        style="padding: 16px 24px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; border: none; border-radius: 16px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3);"
-                                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 40px rgba(34, 197, 94, 0.4)'"
-                                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(34, 197, 94, 0.3)'">
-                                    💾 Mentés
-                                </button>
-                                <button type="button" 
-                                        onclick="closeEditCardModal()" 
-                                        style="padding: 16px 24px; background: rgba(156, 163, 175, 0.1); color: #6b7280; border: 2px solid rgba(156, 163, 175, 0.2); border-radius: 16px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
-                                        onmouseover="this.style.background='rgba(156, 163, 175, 0.15)'"
-                                        onmouseout="this.style.background='rgba(156, 163, 175, 0.1)'">
-                                    Mégse
-                                </button>
-                            </div>
                         </div>
+                    </div>
+                    
+                    <!-- COMPLETELY SEPARATE buttons - OUTSIDE modal -->
+                    <div style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; z-index: 22000; max-width: 1400px; width: 95%; border-radius: 24px 24px 0 0;">
+                        <button type="button" 
+                                onclick="saveEditedCard()" 
+                                id="saveEditBtn"
+                                style="padding: 16px 24px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; border: none; border-radius: 16px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3);"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 40px rgba(34, 197, 94, 0.4)'"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 32px rgba(34, 197, 94, 0.3)'">
+                            💾 Mentés
+                        </button>
+                        <button type="button" 
+                                onclick="closeEditCardModal()" 
+                                style="padding: 16px 24px; background: rgba(156, 163, 175, 0.1); color: #6b7280; border: 2px solid rgba(156, 163, 175, 0.2); border-radius: 16px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                onmouseover="this.style.background='rgba(156, 163, 175, 0.15)'"
+                                onmouseout="this.style.background='rgba(156, 163, 175, 0.1)'">
+                            Mégse
+                        </button>
                     </div>
                 `;
                 
