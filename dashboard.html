@@ -5067,9 +5067,32 @@
                 return;
             }
             
-            // Get last tag being typed (support comma separation)
+            // Process completed tags (before the last comma) in real-time
             const tags = value.split(',');
+            const completedTags = tags.slice(0, -1); // All except the last one
             const currentTag = tags[tags.length - 1].trim().toLowerCase();
+            
+            // Add completed tags to selectedTagsList if they're not already there
+            let tagsAdded = false;
+            for (const tag of completedTags) {
+                const trimmedTag = tag.trim();
+                if (trimmedTag && !selectedTagsList.includes(trimmedTag)) {
+                    selectedTagsList.push(trimmedTag);
+                    tagsAdded = true;
+                }
+            }
+            
+            // If we added new tags, update the display and input field
+            if (tagsAdded) {
+                displaySelectedTags();
+                updateCategoryPlaceholder();
+                
+                // Update input to show only the current (incomplete) tag
+                const input = document.getElementById('singleTags');
+                if (input && input.value !== currentTag) {
+                    input.value = tags[tags.length - 1]; // Keep original spacing
+                }
+            }
             
             if (currentTag.length < 1) {
                 suggestions.style.display = 'none';
