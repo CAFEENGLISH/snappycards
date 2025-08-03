@@ -366,6 +366,10 @@
             line-height: 1.3;
         }
 
+        .stats-row:first-child {
+            justify-content: space-evenly;
+        }
+
         .stats-time {
             font-weight: 600;
             color: #7c3aed;
@@ -2712,13 +2716,14 @@
                     actionButtons +
                     '<div class="set-mini-stats">' +
                         '<div class="stats-row">' + 
-                            '<span>✅ ' + (set.tudokCount || 0) + ' tudom  ⚠️ ' + (set.bizonytalanCount || 0) + ' bizonytalan</span>' +
-                            '<span>❌ ' + (set.nemTudomCount || 0) + ' nem tudom</span>' +
+                            '<span>✅ ' + (set.tudokCount || 0) + '</span>' +
+                            '<span>⚠️ ' + (set.bizonytalanCount || 0) + '</span>' +
+                            '<span>❌ ' + (set.nemTudomCount || 0) + '</span>' +
+                            '<span>' + (set.totalStudied || 0) + '/' + set.cardCount + '</span>' +
                             '<span class="stats-time">⏱️ ' + formatTime(set.totalTimeSpent || 0) + '</span>' +
                         '</div>' +
                         '<div class="stats-row">' + 
                             '<span>' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
-                            '<span>' + (set.totalStudied || 0) + '/' + set.cardCount + ' tanult</span>' +
                             '<span>' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</span>' +
                         '</div>' +
                     '</div>' +
