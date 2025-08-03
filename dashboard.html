@@ -3763,10 +3763,15 @@
             });
             
             if (!isAddModalOpen && !isEditModalOpen) {
+                console.log('🚫 Modal check FAILED - no modal open');
                 return;
             }
             
+            console.log('✅ Modal check PASSED - proceeding with paste');
+            
             const items = event.clipboardData.items;
+            console.log('📋 Clipboard items:', items, 'Length:', items.length);
+            
             // Use the appropriate status element based on which modal is open
             const statusElement = isEditModalOpen ? 
                 document.getElementById('editFileStatus') : 
@@ -3783,8 +3788,10 @@
                 return;
             }
             
+            console.log('🔄 Starting loop through', items.length, 'items');
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
+                console.log(`📄 Processing item ${i}:`, item.type, item);
                 
                 // Check if the item is an image
                 if (item.type.indexOf('image') !== -1) {
@@ -3821,12 +3828,16 @@
                             .from('media')
                             .getPublicUrl(filePath);
                         
+                        console.log('📤 Upload successful! Public URL:', publicURL.publicUrl);
+                        
                         statusElement.textContent = ' Vágólapról feltöltve: ' + fileName + '';
                         statusElement.style.color = '#16a34a';
                         
                         // Handle media storage differently for edit vs add modal
                         if (isEditModalOpen) {
-                            // Edit modal: update card data directly in database
+                            // Edit modal: update card data directly in database  
+                            console.log('🔄 Starting database update for card:', currentEditCardId);
+                            console.log('🎯 Card ID exists?', !!currentEditCardId, 'Value:', currentEditCardId);
                             try {
                                 const { error: updateError } = await supabase
                                     .from('cards')
@@ -3836,6 +3847,8 @@
                                     })
                                     .eq('id', currentEditCardId);
                                 
+                                console.log('💾 Database update result:', { updateError });
+                                
                                 if (updateError) {
                                     console.error('Error updating card media:', updateError);
                                     statusElement.textContent = '❌ Hiba a kép mentésekor!';
@@ -3844,10 +3857,17 @@
                                     statusElement.textContent = '✅ Kép sikeresen mentve!';
                                     statusElement.style.color = '#16a34a';
                                     
+                                    console.log('✅ Database update successful! Now updating input field...');
+                                    
                                     // Update the video URL input with the new image URL
                                     const videoInput = document.getElementById('singleVideoUrl');
+                                    console.log('🎯 Video input element:', videoInput, 'exists?', !!videoInput);
                                     if (videoInput) {
+                                        console.log('📝 Setting video input value to:', publicURL.publicUrl);
                                         videoInput.value = publicURL.publicUrl;
+                                        console.log('✅ Video input updated, new value:', videoInput.value);
+                                    } else {
+                                        console.error('❌ Video input not found!');
                                     }
                                 }
                             } catch (dbError) {
