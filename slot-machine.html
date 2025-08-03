@@ -651,6 +651,14 @@
                     </select>
                 </div>
 
+                <!-- Session Timer -->
+                <div class="control-group">
+                    <div class="control-label">Összidő</div>
+                    <div class="session-timer">
+                        <div class="session-timer-time" id="sessionTimerTime">00:00</div>
+                    </div>
+                </div>
+
                 <!-- Exit Button -->
                 <div class="control-group">
                     <div class="control-label">Kilépés</div>
@@ -661,14 +669,6 @@
                         </svg>
                         <span>Vissza</span>
                     </button>
-                </div>
-
-                <!-- Session Timer -->
-                <div class="control-group">
-                    <div class="control-label">Összidő</div>
-                    <div class="session-timer">
-                        <div class="session-timer-time" id="sessionTimerTime">00:00</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -762,6 +762,17 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             initSlotMachine();
+        });
+
+        // 💾 BIZTONSÁG: Mentés böngésző bezárása/elhagyás előtt
+        window.addEventListener('beforeunload', async (e) => {
+            console.log('⚠️ Böngésző bezárása/elhagyás - mentés...');
+            
+            // Session mentése
+            if (currentSetId) {
+                await saveStudyProgress();
+                console.log('✅ Session mentve böngésző esemény előtt');
+            }
         });
 
         function getUrlParameter(name) {
@@ -1410,7 +1421,9 @@
             // Itt implementálható a kártyák újraszűrése
         }
 
-        function exitToDashboard() {
+        async function exitToDashboard() {
+            console.log('🚪 Kilépés előkészítése...');
+            
             // Állítsuk le a stopwatch-ot
             if (isStopwatchRunning) {
                 stopStopwatch();
@@ -1421,7 +1434,11 @@
                 stopSessionTimer();
             }
             
-            console.log('🚪 Vissza a Dashboard-ra');
+            // 💾 KRITIKUS: Mentés kilépéskor - haladás ne vesszen el!
+            console.log('💾 Haladás mentése kilépés előtt...');
+            await saveStudyProgress();
+            
+            console.log('✅ Haladás mentve, átirányítás dashboard-ra');
             window.location.href = 'dashboard.html';
         }
 
