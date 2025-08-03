@@ -3617,9 +3617,15 @@
         // Handle video URL input
         function handleVideoUrlInput(url) {
             if (url.trim()) {
-                // Clear file upload if video URL is entered
-                document.getElementById('singleMediaFile').value = '';
-                document.getElementById('fileStatus').textContent = '';
+                // Clear file upload if video URL is entered  
+                const mediaFileInput = document.getElementById('singleMediaFile');
+                if (mediaFileInput) mediaFileInput.value = '';
+                
+                // Clear status in both modals (whichever exists)
+                const fileStatus = document.getElementById('fileStatus');
+                const editFileStatus = document.getElementById('editFileStatus');
+                if (fileStatus) fileStatus.textContent = '';
+                if (editFileStatus) editFileStatus.textContent = '';
                 
                 // Store video URL and detect type
                 window.currentMediaUrl = url.trim();
@@ -3736,12 +3742,22 @@
 
         // Handle paste from clipboard (images)
         async function handlePasteImage(event) {
+            console.log('🔥 handlePasteImage called!', event);
+            
             // Only handle paste when ANY card modal is open (add OR edit)
             const addModal = document.getElementById('addCardsModal');
             const editModal = document.getElementById('editCardModalContainer');
             
             const isAddModalOpen = addModal && addModal.classList.contains('active');
             const isEditModalOpen = editModal && editModal.style.display === 'block';
+            
+            console.log('🎯 Modal states:', {
+                isAddModalOpen,
+                isEditModalOpen,
+                addModal: addModal ? 'found' : 'missing',
+                editModal: editModal ? 'found' : 'missing',
+                editModalDisplay: editModal ? editModal.style.display : 'N/A'
+            });
             
             if (!isAddModalOpen && !isEditModalOpen) {
                 return;
@@ -3752,6 +3768,17 @@
             const statusElement = isEditModalOpen ? 
                 document.getElementById('editFileStatus') : 
                 document.getElementById('fileStatus');
+            
+            // Debug: Check if statusElement exists
+            if (!statusElement) {
+                console.error('❌ Status element not found!', {
+                    isEditModalOpen,
+                    isAddModalOpen,
+                    editFileStatus: document.getElementById('editFileStatus'),
+                    fileStatus: document.getElementById('fileStatus')
+                });
+                return;
+            }
             
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
@@ -3764,8 +3791,11 @@
                     if (!file) continue;
                     
                     try {
-                        // Clear video URL input when image is pasted
-                        document.getElementById('singleVideoUrl').value = '';
+                        // Clear video URL input when image is pasted (only in the active modal)
+                        const videoInput = isEditModalOpen ? 
+                            document.querySelector('#editCardModalContainer #singleVideoUrl') :
+                            document.querySelector('#addCardsModal #singleVideoUrl');
+                        if (videoInput) videoInput.value = '';
                         
                         statusElement.textContent = '⏳ Vágólapról feltöltés...';
                         statusElement.style.color = '#667eea';
