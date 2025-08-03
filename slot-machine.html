@@ -820,7 +820,7 @@
                 document.getElementById('cardsContainer').style.display = 'flex';
                 document.getElementById('statisticsSection').style.display = 'block';
                 
-                updateStatistics();
+                // updateStatistics(); // ❌ KIKOMMENTEZVE - felülírja az új direction-aware statisztikákat
                 
             } catch (error) {
                 console.error('Error initializing SlotMachine:', error);
@@ -940,8 +940,8 @@
                     window.userProgress = progressData;
                     console.log(`✅ User progress betöltve: ${progressData.length} kártya`);
                 
-                // ⚡ AZONNALI STATISZTIKA FRISSÍTÉS
-                updateProgressStats(progressData);
+                // ⚡ RÉGI STATISZTIKA FRISSÍTÉS ELTÁVOLÍTVA - direction-aware verzió használata
+                // updateProgressStats(progressData); // ❌ KIKOMMENTEZVE - felülírta az új direction-aware statisztikákat
                 } else {
                     console.log('📝 Nincs korábbi progress - új session');
                     window.userProgress = [];
@@ -1294,7 +1294,7 @@
             statistics[feedbackType]++;
             // Megjegyzés: totalViewed már nem használjuk, a learnedCards.size-al számolunk
             
-            updateStatistics();
+            // updateStatistics(); // ❌ KIKOMMENTEZVE - felülírja az új direction-aware statisztikákat
             
             // 💾 AZONNALI MENTÉS: Card interaction + direction-aware progress 
             await saveCardInteraction(clickedCard, feedbackType, reactionTime);
