@@ -9270,6 +9270,20 @@
             console.log('DEBUG: DOM loaded, calling initDashboard...');
             initDashboard();
         });
+
+        // 🔄 AUTO-REFRESH: Frissítés amikor visszatérnek a dashboard-ra
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('🔄 Dashboard újra aktív - frissítés...');
+                loadDashboardData();
+            }
+        });
+
+        // 🔄 FOCUS-REFRESH: Frissítés amikor az ablak fókuszba kerül
+        window.addEventListener('focus', () => {
+            console.log('🔄 Ablak fókuszba került - frissítés...');
+            loadDashboardData();
+        });
     </script>
 
     <!-- Modal Container -->

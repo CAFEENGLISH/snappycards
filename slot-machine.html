@@ -841,6 +841,11 @@
             // Update feedback
             feedback[cardIndex] = feedbackType;
             
+            // 🎯 Mentés: Tároljuk az egyedi kártya feedback-jét
+            if (clickedCard) {
+                clickedCard.userFeedback = feedbackType; // Minden kártyának egyedi feedback
+            }
+            
             // Update statistics
             statistics[feedbackType]++;
             // Megjegyzés: totalViewed már nem használjuk, a learnedCards.size-al számolunk
@@ -903,12 +908,23 @@
             }, 1500); // Match spinning animation duration
         }
 
-        function showSessionComplete() {
+        async function showSessionComplete() {
+            stopStopwatch(); // Stopper leállítása
+            
+            // 📊 SAVE PROGRESS: Mentés a Supabase-be
+            await saveStudyProgress();
+            
             const container = document.getElementById('cardsContainer');
             container.innerHTML = `
                 <div style="text-align: center; padding: 3rem; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);">
                     <h2 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">🎉 Szett befejezve!</h2>
-                    <p style="color: #64748b; margin-bottom: 2rem;">Összes kártya átnézve. Szuper munka!</p>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Összes kártya átnézve. Szuper munka!</p>
+                    <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 0.5rem; color: #15803d;">
+                        <p><strong>📈 Eredmények mentve a dashboard-ra!</strong></p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                            ${statistics.tudom} tudom • ${statistics.bizonytalan} bizonytalan • ${statistics.tanulandó} tanulandó
+                        </p>
+                    </div>
                     <button onclick="window.location.href='dashboard.html'" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                         Vissza a Dashboard-ra
                     </button>
@@ -957,6 +973,83 @@
             document.getElementById('statMegnezve').textContent = learnedCount;
             document.getElementById('statHatra').textContent = remainingCount;
             document.getElementById('statOsszesen').textContent = currentCards.length;
+        }
+
+        // 📊 SAVE PROGRESS: Tanulási eredmények mentése a Supabase-be  
+        async function saveStudyProgress() {
+            try {
+                console.log('💾 Tanulási eredmények mentése...');
+                
+                // Aktuális felhasználó lekérése
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) {
+                    console.error('❌ Nincs bejelentkezett felhasználó:', userError);
+                    return;
+                }
+
+                const userId = user.id;
+                const progressData = [];
+
+                // Minden tanult kártya progress bejegyzése
+                for (const cardId of learnedCards) {
+                    const card = currentCards.find(c => c.id === cardId);
+                    if (!card) continue;
+
+                    // Mastery szint kiszámítása a KÁRTYA-SPECIFIKUS feedback alapján
+                    let masteryLevel = 1; // alapértelmezett: tanulandó
+                    
+                    // Az egyedi kártya feedback-je alapján döntjük el a mastery level-t
+                    if (card.userFeedback === 'tudom') {
+                        masteryLevel = 3; // tudom
+                    } else if (card.userFeedback === 'bizonytalan') {
+                        masteryLevel = 2; // bizonytalan  
+                    } else if (card.userFeedback === 'tanulandó') {
+                        masteryLevel = 1; // tanulandó
+                    }
+
+                    progressData.push({
+                        user_id: userId,
+                        card_id: cardId,
+                        set_id: currentSetId,
+                        mastery_level: masteryLevel,
+                        last_studied: new Date().toISOString(),
+                        study_count: 1
+                    });
+                }
+
+                console.log(`💾 ${progressData.length} kártya eredményének mentése...`);
+
+                // Progress adatok mentése (upsert)
+                const { error: progressError } = await supabase
+                    .from('user_card_progress')
+                    .upsert(progressData, { 
+                        onConflict: 'user_id,card_id',
+                        ignoreDuplicates: false 
+                    });
+
+                if (progressError) {
+                    console.error('❌ Progress mentése sikertelen:', progressError);
+                    return;
+                }
+
+                // Set progress frissítése (lastStudied)
+                const { error: setError } = await supabase
+                    .from('user_set_progress')
+                    .upsert({
+                        user_id: userId,
+                        set_id: currentSetId,
+                        last_studied: new Date().toISOString()
+                    }, { onConflict: 'user_id,set_id' });
+
+                if (setError) {
+                    console.error('❌ Set progress frissítése sikertelen:', setError);
+                }
+
+                console.log('✅ Tanulási eredmények sikeresen mentve!');
+                
+            } catch (error) {
+                console.error('❌ Mentési hiba:', error);
+            }
         }
 
         function showError(message) {
