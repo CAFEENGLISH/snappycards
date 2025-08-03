@@ -930,8 +930,8 @@
                 
                 // Practice filter alapján döntés
                 if (practiceFilter === 'all') {
-                    // 'all': már tanult kártyák (mastery_level >= 1) ki vannak zárva
-                    return cardProgress.mastery_level === 0 || !cardProgress.mastery_level;
+                    // 'all': minden kártya elérhető (sem régi sem új kizárás)
+                    return true;
                 } else if (practiceFilter === 'uncertain') {
                     // 'uncertain': csak bizonytalan kártyák (mastery_level = 2)
                     return cardProgress.mastery_level === 2;
@@ -1168,8 +1168,8 @@
                 
                 // Practice filter alapján döntés
                 if (practiceFilter === 'all') {
-                    // 'all': már tanult kártyák (mastery_level >= 1) ki vannak zárva
-                    return cardProgress.mastery_level === 0 || !cardProgress.mastery_level;
+                    // 'all': minden kártya elérhető (sem régi sem új kizárás)
+                    return true;
                 } else if (practiceFilter === 'uncertain') {
                     // 'uncertain': csak bizonytalan kártyák (mastery_level = 2)
                     return cardProgress.mastery_level === 2;
