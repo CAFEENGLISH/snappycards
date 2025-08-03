@@ -1040,6 +1040,13 @@
                 }
 
                 console.log(`✅ Kártya mentve: ${card.title} (mastery: ${masteryLevel})`);
+                console.log(`📊 MENTETT ADATOK:`, {
+                    user_id: userId,
+                    card_id: card.id,
+                    set_id: currentSetId,
+                    mastery_level: masteryLevel,
+                    last_studied: currentTime
+                });
                 return true;
                 
             } catch (error) {

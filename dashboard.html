@@ -2007,13 +2007,17 @@
                     console.log('🔍 Cards count:', set.flashcard_set_cards?.length);
                     
                     // Get user progress for this set
-                    const { data: progressData } = await supabase
+                    console.log(`🔍 LEKÉRDEZÉS OWN: user_id=${currentUser.id}, set_id=${set.id}`);
+                    const { data: progressData, error: progressError } = await supabase
                         .from('user_card_progress')
-                        .select('mastery_level')
+                        .select('mastery_level, card_id, last_studied')
                         .eq('user_id', currentUser.id)
                         .eq('set_id', set.id);
                     
-                    console.log('🔍 Progress data for set:', set.title, progressData);
+                    if (progressError) {
+                        console.error('❌ OWN Progress lekérdezési hiba:', progressError);
+                    }
+                    console.log('🔍 OWN Progress data for set:', set.title, progressData);
                     
                     // 📊 RÉSZLETES STATISZTIKÁK: Feedback típusok szerint
                     const tudokCount = (progressData || []).filter(p => p.mastery_level === 3).length;
@@ -2057,13 +2061,17 @@
                     console.log('🔍 Joined Cards count:', set.flashcard_set_cards?.length);
                     
                     // Get user progress for this set
-                    const { data: progressData } = await supabase
+                    console.log(`🔍 LEKÉRDEZÉS JOINED: user_id=${currentUser.id}, set_id=${set.id}`);
+                    const { data: progressData, error: progressError } = await supabase
                         .from('user_card_progress')
-                        .select('mastery_level')
+                        .select('mastery_level, card_id, last_studied')
                         .eq('user_id', currentUser.id)
                         .eq('set_id', set.id);
                     
-                    console.log('🔍 Joined Progress data for set:', set.title, progressData);
+                    if (progressError) {
+                        console.error('❌ JOINED Progress lekérdezési hiba:', progressError);
+                    }
+                    console.log('🔍 JOINED Progress data for set:', set.title, progressData);
                     
                     // 📊 RÉSZLETES STATISZTIKÁK: Feedback típusok szerint (JOINED)
                     const tudokCount = (progressData || []).filter(p => p.mastery_level === 3).length;
