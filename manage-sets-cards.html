@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Szettek és Kártyák Kezelése</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
         .section { background: white; margin: 20px 0; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -135,7 +136,7 @@
                                 <span class="meta">ID: ${set.id} | Létrehozva: ${new Date(set.created_at).toLocaleString()}</span>
                             </div>
                             <div>
-                                ${!isCNN10 ? `<button onclick="deleteSet('${set.id}', '${set.title}')" class="delete-btn">🗑️ Törlés</button>` : '<span style="color: green;">🔒 Védett</span>'}
+                                ${!isCNN10 ? `<button onclick="deleteSet('${set.id}', '${set.title}')" class="delete-btn"><i data-lucide="trash" width="16" height="16"></i> Törlés</button>` : '<span style="color: green;">🔒 Védett</span>'}
                             </div>
                         </div>
                     </div>
@@ -417,6 +418,9 @@
         
         // Auto-load on page load
         loadData();
+        
+        // Initialize Lucide icons
+        lucide.createIcons();
     </script>
 </body>
 </html>
