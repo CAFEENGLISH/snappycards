@@ -814,17 +814,11 @@
             
             updateStatistics();
             
-            // Check if all cards have feedback
-            const cardsToShow = Math.min(3, currentCards.length - currentCardIndex);
-            const hasAllFeedback = Array.from({length: cardsToShow}).every((_, index) => 
-                feedback[index] !== undefined
-            );
-            
-            if (hasAllFeedback) {
-                setTimeout(() => {
-                    showNextCards();
-                }, 1000);
-            }
+            // 🎯 WORKFLOW: Elég 1 kártya feedback-je a továbblépéshez
+            // (Diák kiválaszt 1 kártyát, annak ad feedback-et, automatikusan jönnek új kártyák)
+            setTimeout(() => {
+                showNextCards();
+            }, 1000);
         }
 
         function showNextCards() {
