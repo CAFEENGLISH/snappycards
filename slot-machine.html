@@ -731,6 +731,7 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         // Global Variables
         let currentSetId = null;
+        let currentUserId = null;
         let currentCards = [];
         let currentCardIndex = 0;
         let flippedCards = new Set();
@@ -790,6 +791,15 @@
                     showError('Nincs szett ID megadva az URL-ben.');
                     return;
                 }
+
+                // 🔐 User authentication
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) {
+                    showError('Nincs bejelentkezett felhasználó. Kérlek jelentkezz be!');
+                    return;
+                }
+                currentUserId = user.id;
+                console.log(`✅ User betöltve: ${user.id}`);
 
                 await loadCards(currentSetId);
             
