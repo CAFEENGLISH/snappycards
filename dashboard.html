@@ -368,29 +368,50 @@
             background: rgba(100, 116, 139, 0.1);
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
+        /* Placeholder Card */
+        .placeholder-card {
+            opacity: 0.85;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border: 2px dashed rgba(139, 92, 246, 0.3) !important;
+            cursor: default !important;
         }
 
-        .empty-icon {
-            font-size: 64px;
-            color: #e2e8f0;
-            margin-bottom: 20px;
+        .placeholder-card:hover {
+            transform: none !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
         }
 
-        .empty-title {
-            font-size: 20px;
+        .placeholder-card .set-title {
+            color: #8b5cf6;
             font-weight: 600;
-            color: #64748b;
-            margin-bottom: 8px;
         }
 
-        .empty-description {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-bottom: 24px;
+        .placeholder-card .set-description {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .placeholder-progress {
+            background: linear-gradient(90deg, 
+                rgba(139, 92, 246, 0.3) 0%, 
+                rgba(139, 92, 246, 0.1) 30%, 
+                transparent 100%);
+            width: 25% !important;
+        }
+
+        .placeholder-actions {
+            margin: 16px 0;
+            padding: 12px;
+            background: rgba(139, 92, 246, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.15);
+        }
+
+        .placeholder-tip {
+            font-size: 13px;
+            color: #7c3aed;
+            font-weight: 500;
+            text-align: center;
         }
 
         /* Invitations */
@@ -2445,10 +2466,27 @@
             
             if (dashboardData.joinedSets.length === 0) {
                 grid.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">👥</div>
-                        <h3 class="empty-title">Nincs csatlakozott szett</h3>
-                        <p class="empty-description">Várj meghívóra vagy kérj hozzáférést egy tanártól!</p>
+                    <div class="flashcard-set placeholder-card">
+                        <div class="set-header">
+                            <div>
+                                <h3 class="set-title">🎯 Csatlakozz egy szetthez!</h3>
+                            </div>
+                        </div>
+                        <p class="set-description">Várj meghívóra egy tanártól, vagy kérj hozzáférést egy meglévő szetthez. Itt jelennek majd meg a szettek, amikhez csatlakoztál.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill placeholder-progress"></div>
+                        </div>
+                        <div class="placeholder-actions">
+                            <div class="placeholder-tip">💡 Tipp: Kérd meg a tanárod, hogy küldjön meghívót!</div>
+                        </div>
+                        <div class="set-meta">
+                            <div class="set-stats">
+                                <span style="color: #94a3b8;">0/0 kártya</span>
+                                <span style="color: #94a3b8;">0%</span>
+                                <span style="color: #94a3b8;">Várakozás...</span>
+                            </div>
+                            <span style="color: #94a3b8;">Még nincs csatlakozott szett</span>
+                        </div>
                     </div>
                 `;
                 return;
