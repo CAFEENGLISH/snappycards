@@ -17,6 +17,9 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="lib/i18n.js"></script>
     
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -9359,6 +9362,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DEBUG: DOM loaded, calling initDashboard...');
             initDashboard();
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+                console.log('✅ Lucide icons initialized');
+            }
         });
 
         // 🔄 AUTO-REFRESH: Frissítés amikor visszatérnek a dashboard-ra
