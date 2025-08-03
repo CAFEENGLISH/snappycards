@@ -3609,7 +3609,10 @@
             // Hide suggestions when clicking outside
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('#singleTags') && !e.target.closest('#tagSuggestions')) {
-                    document.getElementById('tagSuggestions').style.display = 'none';
+                    const tagSuggestions = document.getElementById('tagSuggestions');
+                    if (tagSuggestions) {
+                        tagSuggestions.style.display = 'none';
+                    }
                 }
             });
         }
@@ -4435,7 +4438,10 @@
             // Hide suggestions when clicking outside
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('#singleTags') && !e.target.closest('#tagSuggestions')) {
-                    document.getElementById('tagSuggestions').style.display = 'none';
+                    const tagSuggestions = document.getElementById('tagSuggestions');
+                    if (tagSuggestions) {
+                        tagSuggestions.style.display = 'none';
+                    }
                 }
             });
             
@@ -5109,7 +5115,10 @@
                     
                     // Clear input and update display
                     input.value = '';
-                    document.getElementById('tagSuggestions').style.display = 'none';
+                    const tagSuggestions = document.getElementById('tagSuggestions');
+                    if (tagSuggestions) {
+                        tagSuggestions.style.display = 'none';
+                    }
                     displaySelectedTags();
                     updatePreview();
                     updateCategoryPlaceholder();
