@@ -2019,6 +2019,17 @@
                     }
                     console.log('🔍 OWN Progress data for set:', set.title, progressData);
                     
+                    // Get total study time for this set
+                    const { data: setProgressData, error: setProgressError } = await supabase
+                        .from('user_set_progress')
+                        .select('total_time_spent')
+                        .eq('user_id', currentUser.id)
+                        .eq('set_id', set.id)
+                        .maybeSingle();
+                    
+                    const totalTimeSpent = setProgressData?.total_time_spent || 0;
+                    console.log('⏱️ OWN Total time spent for set:', set.title, totalTimeSpent, 'seconds');
+                    
                     // 📊 RÉSZLETES STATISZTIKÁK: Feedback típusok szerint
                     const tudokCount = (progressData || []).filter(p => p.mastery_level === 3).length;
                     const bizonytalanCount = (progressData || []).filter(p => p.mastery_level === 2).length;
@@ -2043,6 +2054,7 @@
                         bizonytalanCount: bizonytalanCount,
                         nemTudomCount: nemTudomCount,
                         totalStudied: (progressData || []).length,
+                        totalTimeSpent: totalTimeSpent, // ⏱️ Összidő
                     createdAt: new Date(set.created_at).toLocaleDateString('hu-HU'),
                     lastStudied: new Date().toLocaleDateString('hu-HU'),
                     language_a: set.language_a || 'English',
@@ -2073,6 +2085,17 @@
                     }
                     console.log('🔍 JOINED Progress data for set:', set.title, progressData);
                     
+                    // Get total study time for this set
+                    const { data: setProgressData, error: setProgressError } = await supabase
+                        .from('user_set_progress')
+                        .select('total_time_spent')
+                        .eq('user_id', currentUser.id)
+                        .eq('set_id', set.id)
+                        .maybeSingle();
+                    
+                    const totalTimeSpent = setProgressData?.total_time_spent || 0;
+                    console.log('⏱️ JOINED Total time spent for set:', set.title, totalTimeSpent, 'seconds');
+                    
                     // 📊 RÉSZLETES STATISZTIKÁK: Feedback típusok szerint (JOINED)
                     const tudokCount = (progressData || []).filter(p => p.mastery_level === 3).length;
                     const bizonytalanCount = (progressData || []).filter(p => p.mastery_level === 2).length;
@@ -2097,6 +2120,7 @@
                         bizonytalanCount: bizonytalanCount,
                         nemTudomCount: nemTudomCount,
                         totalStudied: (progressData || []).length,
+                        totalTimeSpent: totalTimeSpent, // ⏱️ Összidő
                     createdAt: new Date(set.created_at).toLocaleDateString('hu-HU'),
                     joinedAt: new Date(set.created_at).toLocaleDateString('hu-HU'),
                     language_a: set.language_a || 'English',
@@ -2615,6 +2639,14 @@
             list.innerHTML = dashboardData.invitations.map(createInvitationCard).join('');
         }
 
+        // Helper function to format time from seconds to MM:SS
+        function formatTime(seconds) {
+            if (!seconds || seconds === 0) return '00:00';
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
         // Create flashcard set card
         function createSetCard(set, type) {
             const progress = Math.round((set.masteredCount / set.cardCount) * 100);
@@ -2672,6 +2704,7 @@
                             '❌ ' + (set.nemTudomCount || 0) + ' nem tudom' +
                         '</span>' +
                         '<span>' + (set.totalStudied || 0) + '/' + set.cardCount + ' tanult</span>' +
+                        '<span>⏱️ ' + formatTime(set.totalTimeSpent || 0) + ' összidő</span>' +
                         '<span>' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
                     '</div>' +
                     '<div class="set-meta">' +
