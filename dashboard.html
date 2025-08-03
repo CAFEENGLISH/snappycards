@@ -3736,14 +3736,22 @@
 
         // Handle paste from clipboard (images)
         async function handlePasteImage(event) {
-            // Only handle paste when the add cards modal is open
-            const modal = document.getElementById('addCardsModal');
-            if (!modal || !modal.classList.contains('active')) {
+            // Only handle paste when ANY card modal is open (add OR edit)
+            const addModal = document.getElementById('addCardsModal');
+            const editModal = document.getElementById('editCardModalContainer');
+            
+            const isAddModalOpen = addModal && addModal.classList.contains('active');
+            const isEditModalOpen = editModal && editModal.style.display === 'block';
+            
+            if (!isAddModalOpen && !isEditModalOpen) {
                 return;
             }
             
             const items = event.clipboardData.items;
-            const statusElement = document.getElementById('fileStatus');
+            // Use the appropriate status element based on which modal is open
+            const statusElement = isEditModalOpen ? 
+                document.getElementById('editFileStatus') : 
+                document.getElementById('fileStatus');
             
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
@@ -4144,7 +4152,7 @@
                                                    value="${cardData.image_url || ''}">
                                         </div>
                                     </div>
-                                    <div id="fileStatus" style="margin-top: 12px; font-size: 14px; color: #6b7280; text-align: center;"></div>
+                                    <div id="editFileStatus" style="margin-top: 12px; font-size: 14px; color: #6b7280; text-align: center;"></div>
                                     <div style="margin-top: 8px; font-size: 12px; color: #9ca3af; text-align: center; font-style: italic;">
                                         💡 Tipp: Ctrl+V-vel is beilleszthetsz képet a vágólapról
                                     </div>
