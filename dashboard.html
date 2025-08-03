@@ -1588,7 +1588,7 @@
                                         id="searchTagFilter" 
                                         placeholder="Tag szűrő..."
                                         style="
-                                            padding: 8px 12px;
+                                            padding: 8px 32px 8px 12px;
                                             border: 1px solid #d1d5db;
                                             border-radius: 6px;
                                             font-size: 12px;
@@ -1604,6 +1604,12 @@
                                         oninput="handleTagFilterInput(this.value)"
                                         onkeydown="handleTagFilterKeydown(event)"
                                     >
+                                    <button class="tag-filter-clear" onclick="clearTagFilter()" style="display: none; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #9ca3af; cursor: pointer; padding: 2px; border-radius: 3px; transition: all 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#9ca3af'" title="Tag szűrő törlése">
+                                        <svg class="lucide-icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
+                                            <path d="M18 6 6 18"/>
+                                            <path d="m6 6 12 12"/>
+                                        </svg>
+                                    </button>
                                     <div id="tagFilterSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; max-height: 150px; overflow-y: auto; z-index: 1000; display: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
                                 </div>
                             </div>
@@ -6266,6 +6272,12 @@
         // Handle tag filter input with autocomplete
         async function handleTagFilterInput(value) {
             const suggestions = document.getElementById('tagFilterSuggestions');
+            const clearBtn = document.querySelector('.tag-filter-clear');
+            
+            // Show/hide clear button based on input value
+            if (clearBtn) {
+                clearBtn.style.display = value.trim() ? 'block' : 'none';
+            }
             
             if (!value.trim()) {
                 suggestions.style.display = 'none';
@@ -6471,6 +6483,28 @@
             // Re-run search without tag filters
             const searchValue = document.getElementById('ownSetsSearch').value;
             filterOwnSets(searchValue);
+        }
+
+        // Clear single tag filter input
+        function clearTagFilter() {
+            const tagFilterInput = document.getElementById('searchTagFilter');
+            const clearBtn = document.querySelector('.tag-filter-clear');
+            const suggestions = document.getElementById('tagFilterSuggestions');
+            
+            if (tagFilterInput) {
+                tagFilterInput.value = '';
+            }
+            if (clearBtn) {
+                clearBtn.style.display = 'none';
+            }
+            if (suggestions) {
+                suggestions.style.display = 'none';
+            }
+            
+            // Focus back to input after clearing
+            if (tagFilterInput) {
+                tagFilterInput.focus();
+            }
         }
 
         // Add tag to Create modal
