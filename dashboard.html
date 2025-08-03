@@ -3869,6 +3869,14 @@
                                     } else {
                                         console.error('❌ Video input not found!');
                                     }
+                                    
+                                    // Update preview in edit modal  
+                                    console.log('🖼️ Triggering preview update...');
+                                    // Set global variables for updatePreview to work
+                                    window.currentMediaUrl = publicURL.publicUrl;
+                                    window.currentMediaType = detectMediaTypeFromFile(file);
+                                    updatePreview();
+                                    console.log('✅ Preview updated!');
                                 }
                             } catch (dbError) {
                                 console.error('Database update error:', dbError);
