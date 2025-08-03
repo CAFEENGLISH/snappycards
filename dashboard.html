@@ -2001,6 +2001,11 @@
 
                 // Process own sets with mastery calculation
                 const ownSets = await Promise.all((ownSetsResponse.data || []).map(async set => {
+                    console.log(`🔍 DEBUG SZETT: ${set.title}`);
+                    console.log('🔍 Set data:', set);
+                    console.log('🔍 flashcard_set_cards:', set.flashcard_set_cards);
+                    console.log('🔍 Cards count:', set.flashcard_set_cards?.length);
+                    
                     // Get user progress for this set
                     const { data: progressData } = await supabase
                         .from('user_card_progress')
@@ -2008,7 +2013,9 @@
                         .eq('user_id', currentUser.id)
                         .eq('set_id', set.id);
                     
+                    console.log('🔍 Progress data for set:', set.title, progressData);
                     const masteredCount = (progressData || []).filter(p => p.mastery_level >= 3).length;
+                    console.log('🔍 Mastered count:', masteredCount);
                     
                     return {
                     id: set.id,
@@ -2028,6 +2035,11 @@
 
                 // Process public sets as "joined" sets with mastery calculation
                 const joinedSets = await Promise.all((publicSetsResponse.data || []).map(async set => {
+                    console.log(`🔍 DEBUG JOINED SZETT: ${set.title}`);
+                    console.log('🔍 Joined Set data:', set);
+                    console.log('🔍 Joined flashcard_set_cards:', set.flashcard_set_cards);
+                    console.log('🔍 Joined Cards count:', set.flashcard_set_cards?.length);
+                    
                     // Get user progress for this set
                     const { data: progressData } = await supabase
                         .from('user_card_progress')
@@ -2035,7 +2047,9 @@
                         .eq('user_id', currentUser.id)
                         .eq('set_id', set.id);
                     
+                    console.log('🔍 Joined Progress data for set:', set.title, progressData);
                     const masteredCount = (progressData || []).filter(p => p.mastery_level >= 3).length;
+                    console.log('🔍 Joined Mastered count:', masteredCount);
                     
                     return {
                     id: set.id,
@@ -9274,7 +9288,7 @@
         // 🔄 AUTO-REFRESH: Frissítés amikor visszatérnek a dashboard-ra
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
-                console.log('🔄 Dashboard újra aktív - frissítés...');
+                console.log('🔄🔄🔄 DASHBOARD ÚJRA AKTÍV - FRISSÍTÉS KEZDŐDIK! 🔄🔄🔄');
                 loadDashboardData();
             }
         });
