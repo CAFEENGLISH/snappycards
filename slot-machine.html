@@ -562,6 +562,8 @@
         let isStopwatchRunning = false;
         let stopwatchStartTime = 0;
         let stopwatchInterval = null;
+        let learnedCards = new Set(); // 🎯 Csak a TÉNYLEGESEN tanult kártyák ID-jei
+        let currentRoundCards = []; // Jelenlegi körben megjelenített kártyák
         let statistics = {
             tudom: 0,
             bizonytalan: 0,
@@ -654,7 +656,30 @@
             const container = document.getElementById('cardsContainer');
             container.innerHTML = '';
             
-            const cardsToShow = currentCards.slice(currentCardIndex, currentCardIndex + 3);
+            // 🎯 WORKFLOW FIX: Csak a NEM tanult kártyákból válasszon 3-at
+            const availableCards = currentCards.filter(card => !learnedCards.has(card.id));
+            
+            if (availableCards.length === 0) {
+                showSessionComplete();
+                return;
+            }
+            
+            // Random 3 kártya kiválasztása a rendelkezésre állókból
+            const cardsToShow = [];
+            const maxCards = Math.min(3, availableCards.length);
+            
+            // Shuffle és válassz ki 3-at (vagy amennyit lehet)
+            const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
+            cardsToShow.push(...shuffled.slice(0, maxCards));
+            
+            // Ha kevesebb mint 3 kártya van, ismételd néhányat (de ne a tanultakat)
+            while (cardsToShow.length < 3 && availableCards.length > 0) {
+                const randomCard = availableCards[Math.floor(Math.random() * availableCards.length)];
+                cardsToShow.push(randomCard);
+            }
+            
+            // Tárold el a jelenlegi kör kártyáit
+            currentRoundCards = cardsToShow;
             
             cardsToShow.forEach((card, index) => {
                 const cardElement = createStudyCard(card, index);
@@ -791,6 +816,14 @@
             // Stop stopwatch on any feedback
             stopStopwatch();
             
+            // 🎯 WORKFLOW FIX: Csak a KATTINTOTT kártya lesz "tanult"
+            const clickedCard = currentRoundCards[cardIndex];
+            if (clickedCard) {
+                learnedCards.add(clickedCard.id);
+                console.log(`✅ Kártya tanult: ${clickedCard.title} (ID: ${clickedCard.id})`);
+                console.log(`📊 Tanult kártyák száma: ${learnedCards.size}/${currentCards.length}`);
+            }
+            
             // Update visual feedback
             const feedbackSection = document.getElementById(`feedbackSection${cardIndex}`);
             if (feedbackSection) {
@@ -810,7 +843,7 @@
             
             // Update statistics
             statistics[feedbackType]++;
-            statistics.totalViewed++;
+            // Megjegyzés: totalViewed már nem használjuk, a learnedCards.size-al számolunk
             
             updateStatistics();
             
@@ -822,17 +855,18 @@
         }
 
         function showNextCards() {
-            currentCardIndex += 3;
+            // 🎯 WORKFLOW FIX: Ne használjunk currentCardIndex-et, hanem valid kártyák ellenőrzése
+            const availableCards = currentCards.filter(card => !learnedCards.has(card.id));
             
-            if (currentCardIndex >= currentCards.length) {
+            if (availableCards.length === 0) {
                 showSessionComplete();
                 return;
             }
             
             // 🎰 WORKFLOW: Mind a 3 kártya egyszerre megpördül
-            const cardsToSpin = Math.min(3, currentCards.length - (currentCardIndex - 3));
+            const cardsToSpin = currentRoundCards.length;
             
-            // Spin all 3 cards simultaneously
+            // Spin all current cards simultaneously
             for (let i = 0; i < cardsToSpin; i++) {
                 const cardInner = document.getElementById(`cardInner${i}`);
                 if (cardInner) {
@@ -859,7 +893,7 @@
                 flippedCards.clear();
                 feedback = {};
                 
-                // Show new cards (this will replace the spinning cards with new content)
+                // Show new cards (this will pick from available cards automatically)
                 showInitialCards();
                 
                 // 🎯 WORKFLOW: Restart stopwatch for continuous learning
@@ -915,8 +949,13 @@
             document.getElementById('statTudom').textContent = statistics.tudom;
             document.getElementById('statBizonytalan').textContent = statistics.bizonytalan;
             document.getElementById('statTanulandó').textContent = statistics.tanulandó;
-            document.getElementById('statMegnezve').textContent = statistics.totalViewed;
-            document.getElementById('statHatra').textContent = Math.max(0, currentCards.length - statistics.totalViewed);
+            
+            // 🎯 WORKFLOW FIX: Helyes statisztikák
+            const learnedCount = learnedCards.size;
+            const remainingCount = Math.max(0, currentCards.length - learnedCount);
+            
+            document.getElementById('statMegnezve').textContent = learnedCount;
+            document.getElementById('statHatra').textContent = remainingCount;
             document.getElementById('statOsszesen').textContent = currentCards.length;
         }
 
