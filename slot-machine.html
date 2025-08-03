@@ -1860,7 +1860,8 @@
                         set_id: currentSetId,
                         direction: currentDirection,
                         started_at: new Date().toISOString(),
-                        status: 'active'
+                        status: 'active',
+                        session_data: {}
                     })
                     .select()
                     .single();
