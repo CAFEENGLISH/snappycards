@@ -4472,17 +4472,26 @@
                     return;
                 }
                 
-                // Extract category names and set them in the input field
+                // Clear previous tags first
+                selectedTagsList = [];
+                
+                // Extract category names and set them in the input field AND selectedTagsList
                 if (cardCategories && cardCategories.length > 0) {
                     const categoryNames = cardCategories
                         .map(cc => cc.categories.name)
-                        .filter(name => name)
-                        .join(', ');
+                        .filter(name => name);
                     
+                    // Add to selectedTagsList for processing
+                    selectedTagsList = [...categoryNames];
+                    
+                    // Set input field with comma-separated values
                     const tagsInput = document.getElementById('singleTags');
                     if (tagsInput) {
-                        tagsInput.value = categoryNames;
+                        tagsInput.value = categoryNames.join(', ');
                     }
+                    
+                    // Display the tag chips
+                    displaySelectedTags();
                 }
                 
             } catch (error) {
