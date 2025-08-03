@@ -1220,14 +1220,16 @@
         // 💾 AZONNALI MENTÉS: Egyedi kártya feedback mentése minden kattintáskor
         async function saveCardProgress(card, feedbackType) {
             try {
-                console.log(`💾 Kártya mentése: ${card.title} - ${feedbackType}`);
+                console.log(`💾💾💾 MENTÉS KEZDÉS: ${card.title} - ${feedbackType}`);
                 
                 // Aktuális felhasználó lekérése
                 const { data: { user }, error: userError } = await supabase.auth.getUser();
                 if (userError || !user) {
-                    console.error('❌ Nincs bejelentkezett felhasználó:', userError);
+                    console.error('❌❌❌ NINCS USER ERROR:', userError);
+                    console.log('❌ Supabase state:', supabase);
                     return false;
                 }
+                console.log(`✅ USER OK: ${user.id}`);
 
                 const userId = user.id;
                 const currentTime = new Date().toISOString();
@@ -1275,7 +1277,7 @@
                     console.error('❌ Set progress frissítése sikertelen:', setError);
                 }
 
-                console.log(`✅ Kártya mentve: ${card.title} (mastery: ${masteryLevel})`);
+                console.log(`✅✅✅ KÁRTYA MENTVE: ${card.title} (mastery: ${masteryLevel})`);
                 console.log(`📊 MENTETT ADATOK:`, {
                     user_id: userId,
                     card_id: card.id,
