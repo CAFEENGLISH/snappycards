@@ -2014,8 +2014,19 @@
                         .eq('set_id', set.id);
                     
                     console.log('🔍 Progress data for set:', set.title, progressData);
-                    const masteredCount = (progressData || []).filter(p => p.mastery_level >= 3).length;
-                    console.log('🔍 Mastered count:', masteredCount);
+                    
+                    // 📊 RÉSZLETES STATISZTIKÁK: Feedback típusok szerint
+                    const tudokCount = (progressData || []).filter(p => p.mastery_level === 3).length;
+                    const bizonytalanCount = (progressData || []).filter(p => p.mastery_level === 2).length;
+                    const nemTudomCount = (progressData || []).filter(p => p.mastery_level === 1).length;
+                    const masteredCount = tudokCount; // backward compatibility
+                    
+                    console.log('🔍 RÉSZLETES STATS:', {
+                        tudom: tudokCount,
+                        bizonytalan: bizonytalanCount, 
+                        nemTudom: nemTudomCount,
+                        osszesen: (progressData || []).length
+                    });
                     
                     return {
                     id: set.id,
@@ -2023,6 +2034,11 @@
                     description: set.description || 'Nincs leírás',
                     cardCount: set.flashcard_set_cards?.length || 0,
                         masteredCount: masteredCount,
+                        // 📊 RÉSZLETES STATISZTIKÁK a szett kártyához
+                        tudokCount: tudokCount,
+                        bizonytalanCount: bizonytalanCount,
+                        nemTudomCount: nemTudomCount,
+                        totalStudied: (progressData || []).length,
                     createdAt: new Date(set.created_at).toLocaleDateString('hu-HU'),
                     lastStudied: new Date().toLocaleDateString('hu-HU'),
                     language_a: set.language_a || 'English',
@@ -2048,8 +2064,19 @@
                         .eq('set_id', set.id);
                     
                     console.log('🔍 Joined Progress data for set:', set.title, progressData);
-                    const masteredCount = (progressData || []).filter(p => p.mastery_level >= 3).length;
-                    console.log('🔍 Joined Mastered count:', masteredCount);
+                    
+                    // 📊 RÉSZLETES STATISZTIKÁK: Feedback típusok szerint (JOINED)
+                    const tudokCount = (progressData || []).filter(p => p.mastery_level === 3).length;
+                    const bizonytalanCount = (progressData || []).filter(p => p.mastery_level === 2).length;
+                    const nemTudomCount = (progressData || []).filter(p => p.mastery_level === 1).length;
+                    const masteredCount = tudokCount; // backward compatibility
+                    
+                    console.log('🔍 JOINED RÉSZLETES STATS:', {
+                        tudom: tudokCount,
+                        bizonytalan: bizonytalanCount, 
+                        nemTudom: nemTudomCount,
+                        osszesen: (progressData || []).length
+                    });
                     
                     return {
                     id: set.id,
@@ -2057,6 +2084,11 @@
                     description: set.description || 'Nincs leírás',
                     cardCount: set.flashcard_set_cards?.length || 0,
                         masteredCount: masteredCount,
+                        // 📊 RÉSZLETES STATISZTIKÁK a szett kártyához (JOINED)
+                        tudokCount: tudokCount,
+                        bizonytalanCount: bizonytalanCount,
+                        nemTudomCount: nemTudomCount,
+                        totalStudied: (progressData || []).length,
                     createdAt: new Date(set.created_at).toLocaleDateString('hu-HU'),
                     joinedAt: new Date(set.created_at).toLocaleDateString('hu-HU'),
                     language_a: set.language_a || 'English',
@@ -2546,8 +2578,8 @@
                             <div class="placeholder-tip">💡 Tipp: Kérd meg a tanárod, hogy küldjön meghívót!</div>
                         </div>
                         <div class="set-mini-stats">
-                            <span style="color: #94a3b8;">0/0 kártya</span>
-                            <span style="color: #94a3b8;">0%</span>
+                            <span style="color: #94a3b8;">✅ 0 tudom  ⚠️ 0 bizonytalan  ❌ 0 nem tudom</span>
+                            <span style="color: #94a3b8;">0/0 tanult</span>
                             <span style="color: #94a3b8;">Várakozás...</span>
                         </div>
                         <div class="set-meta">
@@ -2626,8 +2658,12 @@
                     '</div>' +
                     actionButtons +
                     '<div class="set-mini-stats">' +
-                        '<span>' + set.masteredCount + '/' + set.cardCount + ' kártya</span>' +
-                        '<span>' + progress + '%</span>' +
+                        '<span>' + 
+                            '✅ ' + (set.tudokCount || 0) + ' tudom  ' +
+                            '⚠️ ' + (set.bizonytalanCount || 0) + ' bizonytalan  ' +
+                            '❌ ' + (set.nemTudomCount || 0) + ' nem tudom' +
+                        '</span>' +
+                        '<span>' + (set.totalStudied || 0) + '/' + set.cardCount + ' tanult</span>' +
                         '<span>' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
                     '</div>' +
                     '<div class="set-meta">' +
