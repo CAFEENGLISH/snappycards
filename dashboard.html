@@ -638,6 +638,13 @@
             overflow-y: auto;
         }
 
+        /* Edit card modal - same constraints as add cards modal */
+        #editCardModalContainer .modal {
+            max-width: 1400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
         .modal-overlay.active .modal {
             transform: scale(1);
         }
@@ -4133,7 +4140,7 @@
                     </div>
                     
                     <!-- Bottom Fixed Action Buttons -->
-                    <div style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; z-index: 21000; max-width: 1400px; width: 95%; border-radius: 24px 24px 0 0;">
+                    <div style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; z-index: 21500; max-width: 1400px; width: 95%; border-radius: 24px 24px 0 0;">
                         <button type="button" 
                                 onclick="saveEditedCard()" 
                                 id="saveEditBtn"
