@@ -4450,6 +4450,44 @@
                     saveBtn.disabled = false;
                 }
             }, 100);
+            
+            // Load existing categories for this card
+            loadCardCategories(cardData.id);
+        }
+        
+        // Load and display existing categories for card editing
+        async function loadCardCategories(cardId) {
+            try {
+                const { data: cardCategories, error } = await supabase
+                    .from('card_categories')
+                    .select(`
+                        categories (
+                            name
+                        )
+                    `)
+                    .eq('card_id', cardId);
+                
+                if (error) {
+                    console.error('Error loading card categories:', error);
+                    return;
+                }
+                
+                // Extract category names and set them in the input field
+                if (cardCategories && cardCategories.length > 0) {
+                    const categoryNames = cardCategories
+                        .map(cc => cc.categories.name)
+                        .filter(name => name)
+                        .join(', ');
+                    
+                    const tagsInput = document.getElementById('singleTags');
+                    if (tagsInput) {
+                        tagsInput.value = categoryNames;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading card categories:', error);
+            }
         }
 
 
@@ -4460,6 +4498,7 @@
             const titleA = document.getElementById('singleWordA').innerHTML.trim();
             const titleB = document.getElementById('singleWordB').innerHTML.trim();
             const videoUrl = document.getElementById('singleVideoUrl').value.trim();
+            const tagsInput = document.getElementById('singleTags').value.trim();
             
             if (!titleA || !titleB) {
                 showErrorMessage('❌ Kérlek töltsd ki mindkét nyelvi mezőt!');
@@ -4473,7 +4512,7 @@
                     .update({
                         title: titleA,
                         english_title: titleB,
-                        image_url: videoUrl || ''
+                        media_url: videoUrl || null
                     })
                     .eq('id', currentEditCardId);
                 
@@ -4482,6 +4521,9 @@
                     showErrorMessage('❌ Hiba a kártya mentése során!');
                     return;
                 }
+                
+                // Handle categories/tags update
+                await updateCardCategories(currentEditCardId, tagsInput);
                 
                 showSuccessMessage('✅ Kártya sikeresen frissítve!');
                 
@@ -5024,9 +5066,9 @@
                 return;
             }
             
-            // Get last tag being typed
-            // Single tag input only (no comma separation)
-            const currentTag = value.trim().toLowerCase();
+            // Get last tag being typed (support comma separation)
+            const tags = value.split(',');
+            const currentTag = tags[tags.length - 1].trim().toLowerCase();
             
             if (currentTag.length < 1) {
                 suggestions.style.display = 'none';
@@ -5222,6 +5264,17 @@
             const wordBFormatted = getRichTextContent('singleWordB');
             const mediaType = window.currentMediaType || null;
             const mediaUrl = window.currentMediaUrl || null;
+            const tagsInput = document.getElementById('singleTags').value.trim();
+            
+            // Parse comma-separated tags and add them to selectedTagsList
+            if (tagsInput) {
+                const tagNames = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+                for (const tagName of tagNames) {
+                    if (!selectedTagsList.includes(tagName)) {
+                        selectedTagsList.push(tagName);
+                    }
+                }
+            }
             
             if (!wordA || !wordB) {
                 showErrorMessage('Mindkét nyelvi mező kitöltése kötelező!');
@@ -5373,6 +5426,54 @@
             }
             
             return newCategory.id;
+        }
+        
+        // Update card categories - delete old ones and add new ones
+        async function updateCardCategories(cardId, tagsInput) {
+            try {
+                // Parse comma-separated tags
+                const tagNames = tagsInput ? 
+                    tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : 
+                    [];
+                
+                // Delete existing card-category relationships
+                const { error: deleteError } = await supabase
+                    .from('card_categories')
+                    .delete()
+                    .eq('card_id', cardId);
+                
+                if (deleteError) {
+                    console.error('Error deleting old categories:', deleteError);
+                    // Don't throw - continue with adding new ones
+                }
+                
+                // Add new categories if any
+                if (tagNames.length > 0) {
+                    const cardCategories = [];
+                    for (const tagName of tagNames) {
+                        // Get or create category
+                        const categoryId = await getOrCreateCategory(tagName);
+                        cardCategories.push({
+                            card_id: cardId,
+                            category_id: categoryId
+                        });
+                    }
+                    
+                    // Insert all card-category relationships
+                    const { error: insertError } = await supabase
+                        .from('card_categories')
+                        .insert(cardCategories);
+                    
+                    if (insertError) {
+                        console.error('Error adding new categories:', insertError);
+                        // Don't throw - the card was updated successfully
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error updating card categories:', error);
+                // Don't throw - the card update was successful
+            }
         }
 
         // Clear form
