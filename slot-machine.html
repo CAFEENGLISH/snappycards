@@ -969,24 +969,32 @@
             // Random 3 kártya kiválasztása a rendelkezésre állókból
             const cardsToShow = [];
             const maxCards = Math.min(3, availableCards.length);
+            console.log(`🎲 KÁRTYA KIVÁLASZTÁS: maxCards=${maxCards}, availableCards.length=${availableCards.length}`);
             
             // Shuffle és válassz ki 3-at (vagy amennyit lehet)
             const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
             cardsToShow.push(...shuffled.slice(0, maxCards));
+            console.log(`🎯 KIVÁLASZTOTT KÁRTYÁK:`, cardsToShow.map(c => c.title));
             
             // Ha kevesebb mint 3 kártya van, ismételd néhányat (de ne a tanultakat)
             while (cardsToShow.length < 3 && availableCards.length > 0) {
                 const randomCard = availableCards[Math.floor(Math.random() * availableCards.length)];
                 cardsToShow.push(randomCard);
+                console.log(`🔄 ISMÉTELT KÁRTYA: ${randomCard.title}`);
             }
+            
+            console.log(`📝 VÉGSŐ KÁRTYA LISTA (${cardsToShow.length}):`, cardsToShow.map(c => c.title));
             
             // Tárold el a jelenlegi kör kártyáit
             currentRoundCards = cardsToShow;
             
+            console.log(`🎨 KÁRTYÁK LÉTREHOZÁSA...`);
             cardsToShow.forEach((card, index) => {
+                console.log(`🎨 Kártya ${index}: ${card.title}`);
                 const cardElement = createStudyCard(card, index);
                 container.appendChild(cardElement);
             });
+            console.log(`✅ KÁRTYÁK HOZZÁADVA A KONTÉNERHEZ`);
         }
 
         function createStudyCard(card, index) {
