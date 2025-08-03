@@ -2754,19 +2754,42 @@
             }
 
             return '<div class="flashcard-set" onclick="openSet(\'' + set.id + '\', \'' + type + '\')">' +
-                    '<div class="set-header">' +
-                        '<div>' +
-                            '<h3 class="set-title">' + set.title + '</h3>' +
-                        '</div>' +
-                    '</div>' +
+                    '<h3 class="set-title">' + set.title + '</h3>' +
                     '<p class="set-description">' + set.description + '</p>' +
                     '<div class="progress-bar">' +
                         '<div class="progress-fill" style="width: ' + progress + '%"></div>' +
                     '</div>' +
                     actionButtons +
-                    '<div class="set-stats-2row">' +
-                        '<div class="row1">✅ ' + (set.tudokCount || 0) + ' ⚠️ ' + (set.bizonytalanCount || 0) + ' ❌ ' + (set.nemTudomCount || 0) + ' ' + (set.totalStudied || 0) + '/' + set.cardCount + ' ⏱️ ' + formatTime(set.totalTimeSpent || 0) + '</div>' +
-                        '<div class="row2">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + ' • ' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</div>' +
+                    '<div class="set-stats-container">' +
+                        '<div class="status-indicator">' +
+                            '<div class="status-icon success">' +
+                                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' +
+                            '</div>' +
+                            '<span class="status-value success">' + (set.tudokCount || 0) + '</span>' +
+                        '</div>' +
+                        '<div class="status-indicator">' +
+                            '<div class="status-icon warning">' +
+                                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="m12 17 .01 0"/></svg>' +
+                            '</div>' +
+                            '<span class="status-value warning">' + (set.bizonytalanCount || 0) + '</span>' +
+                        '</div>' +
+                        '<div class="status-indicator">' +
+                            '<div class="status-icon error">' +
+                                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>' +
+                            '</div>' +
+                            '<span class="status-value error">' + (set.nemTudomCount || 0) + '</span>' +
+                        '</div>' +
+                        '<span style="color: #64748b; margin-left: 32px;">' + (set.totalStudied || 0) + '/' + set.cardCount + '</span>' +
+                        '<div style="display: flex; align-items: center; margin-left: 32px; color: #64748b;">' +
+                            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>' +
+                            '<span>' + formatTime(set.totalTimeSpent || 0) + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="set-meta-row">' +
+                        '<button class="language-toggle" onclick="event.stopPropagation();">' +
+                            translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) +
+                        '</button>' +
+                        ' • ' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) +
                     '</div>' +
                 '</div>';
         }
