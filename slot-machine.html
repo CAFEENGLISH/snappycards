@@ -1941,7 +1941,7 @@
             statistics.bizonytalan = bizonytalanCount;
             statistics.tanulandó = tanulandoCount;
             
-            // UI frissítése
+            // UI frissítése - Tudom/Bizonytalan/Tanulandó
             const statTudom = document.getElementById('statTudom');
             const statBizonytalan = document.getElementById('statBizonytalan');
             const statTanulandó = document.getElementById('statTanulandó');
@@ -1950,7 +1950,20 @@
             if (statBizonytalan) statBizonytalan.textContent = bizonytalanCount;
             if (statTanulandó) statTanulandó.textContent = tanulandoCount;
             
-            console.log(`📊 ${currentDirection} stats: ${tudokCount}/${bizonytalanCount}/${tanulandoCount}`);
+            // 🆕 MEGNÉZVE/HÁTRA VAN/ÖSSZESEN statisztikák frissítése
+            const totalCards = currentCards.length || 0;
+            const totalStudied = directionProgress.length;
+            const hatraVan = totalCards - totalStudied;
+            
+            const statMegnezve = document.getElementById('statMegnezve');
+            const statHatra = document.getElementById('statHatra');
+            const statOsszesen = document.getElementById('statOsszesen');
+            
+            if (statMegnezve) statMegnezve.textContent = totalStudied;
+            if (statHatra) statHatra.textContent = Math.max(0, hatraVan);
+            if (statOsszesen) statOsszesen.textContent = totalCards;
+            
+            console.log(`📊 ${currentDirection} stats: ${tudokCount}/${bizonytalanCount}/${tanulandoCount} | Megnézve: ${totalStudied}/${totalCards}`);
         }
         
         // 🆕 Card interaction mentése reaction time-mal
