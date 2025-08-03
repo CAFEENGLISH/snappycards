@@ -2191,6 +2191,9 @@
             }
 
             grid.innerHTML = setsToShow.map(set => createSetCard(set, 'own')).join('');
+            
+            // Initialize Lucide icons for dynamically added content
+            lucide.createIcons();
         }
 
         // Debounce timer for search
@@ -2634,6 +2637,9 @@
             }
 
             grid.innerHTML = dashboardData.joinedSets.map(set => createSetCard(set, 'joined')).join('');
+            
+            // Initialize Lucide icons for dynamically added content
+            lucide.createIcons();
         }
 
         // Load invitations
@@ -2648,6 +2654,9 @@
 
             section.style.display = 'block';
             list.innerHTML = dashboardData.invitations.map(createInvitationCard).join('');
+            
+            // Initialize Lucide icons for dynamically added content
+            lucide.createIcons();
         }
 
         // Helper function to format time from seconds to MM:SS
@@ -5973,6 +5982,9 @@
                 
                 tagsList.innerHTML = tagsHTML;
                 
+                // Initialize Lucide icons for dynamically added content
+                lucide.createIcons();
+                
             } catch (error) {
                 console.error('Error loading tags:', error);
                 tagsList.innerHTML = '<div style="text-align: center; color: #ef4444; padding: 20px;">❌ Hiba a TAG-ek betöltése során</div>';
@@ -7716,6 +7728,9 @@
                 </div>
             `;
             document.getElementById('modalContainer').style.display = 'flex';
+            
+            // Initialize Lucide icons for dynamically added content
+            lucide.createIcons();
             
             } catch (error) {
                 console.error('Error in showCardsListModal:', error);
