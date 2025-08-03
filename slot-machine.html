@@ -817,6 +817,19 @@
         let totalStudyTime = 0; // Összesített tanulási idő másodpercekben (betöltött az adatbázisból)
         console.log(`🔍 DEBUG: totalStudyTime inicializálva:`, totalStudyTime);
         
+        // ⚡ GLOBAL DEBUG OBJEKTUM - konzolból is elérhető
+        window.debugTime = {
+            get totalStudyTime() { return totalStudyTime; },
+            get sessionStartTime() { return sessionStartTime; },
+            get isSessionTimerRunning() { return isSessionTimerRunning; },
+            get currentTime() { return Date.now(); },
+            get sessionElapsed() { return isSessionTimerRunning ? Math.floor((Date.now() - sessionStartTime) / 1000) : 0; },
+            get calculatedTotal() { return totalStudyTime + (isSessionTimerRunning ? Math.floor((Date.now() - sessionStartTime) / 1000) : 0); },
+            refreshDisplay() { updateSessionTimer(); },
+            forceLoad() { loadTotalStudyTime(currentSetId, 'test-user-id'); }
+        };
+        console.log(`🔍 DEBUG: window.debugTime objektum létrehozva - használd: debugTime.totalStudyTime`);
+        
         // 🕐 ÖSSZESÍTETT IDŐ BETÖLTÉSE az adatbázisból
         async function loadTotalStudyTime(setId, userId) {
             console.log(`🔍 DEBUG: loadTotalStudyTime KEZDÉS`);
