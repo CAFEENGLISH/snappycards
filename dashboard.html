@@ -3840,11 +3840,7 @@
                                     statusElement.textContent = '✅ Kép sikeresen mentve!';
                                     statusElement.style.color = '#16a34a';
                                     
-                                    // Update the video URL input with the new image URL
-                                    const videoInput = document.getElementById('singleVideoUrl');
-                                    if (videoInput) {
-                                        videoInput.value = publicURL.publicUrl;
-                                    }
+                                    // Note: Video URL field stays empty for images (only used for YouTube videos)
                                     
                                     // Update preview in edit modal
                                     // Set global variables for updatePreview to work
