@@ -1098,28 +1098,38 @@
         function createStudyCard(card, index) {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'study-card';
+            
+            // Dynamic language direction handling
+            const isHungarianToEnglish = currentDirection === 'AtoB'; // Magyar → English
+            const frontTitle = isHungarianToEnglish ? (card.title || 'Kártya') : (card.english_title || 'Card');
+            const backTitle = isHungarianToEnglish ? (card.english_title || 'Card') : (card.title || 'Kártya');
+            const frontLang = isHungarianToEnglish ? 'HU' : 'EN';
+            const backLang = isHungarianToEnglish ? 'EN' : 'HU';
+            const frontComment = isHungarianToEnglish ? 'Hungarian' : 'English';
+            const backComment = isHungarianToEnglish ? 'English' : 'Hungarian';
+            
             cardDiv.innerHTML = `
                 <div class="card-inner" id="cardInner${index}">
-                    <!-- Front Side (Hungarian) -->
+                    <!-- Front Side (${frontComment}) -->
                     <div class="card-face">
                         <div class="card-image-container">
-                            <img class="card-image" src="${card.media_url || '/images/placeholder.jpg'}" alt="${card.title}" onerror="this.src='/images/placeholder.jpg'">
+                            <img class="card-image" src="${card.media_url || '/images/placeholder.jpg'}" alt="${frontTitle}" onerror="this.src='/images/placeholder.jpg'">
                         </div>
                         <div class="card-divider"></div>
                         <div class="card-text-section">
-                            <div class="card-title">${card.title || 'Kártya'}</div>
+                            <div class="card-title">${frontTitle}</div>
                         </div>
                     </div>
                     
-                    <!-- Back Side (English) -->
+                    <!-- Back Side (${backComment}) -->
                     <div class="card-face card-back">
                         <div class="card-image-container">
-                            <img class="card-image" src="${card.media_url || '/images/placeholder.jpg'}" alt="${card.english_title}" onerror="this.src='/images/placeholder.jpg'">
-                            <div class="en-badge">EN</div>
+                            <img class="card-image" src="${card.media_url || '/images/placeholder.jpg'}" alt="${backTitle}" onerror="this.src='/images/placeholder.jpg'">
+                            <div class="en-badge">${backLang}</div>
                         </div>
                         <div class="card-divider"></div>
                         <div class="card-text-section">
-                            <div class="card-title">${card.english_title || 'Card'}</div>
+                            <div class="card-title">${backTitle}</div>
                         </div>
                         <div class="feedback-section" id="feedbackSection${index}">
                             <div class="snappy-feedback-container">
@@ -1794,13 +1804,15 @@
             
             console.log(`🔄 Irány váltás: ${currentDirection}`);
             
-            // Itt újra kell tölteni a kártyákat az új irány szerint
-            // Egyelőre csak console log, később implementálható
+            // Kártyák újra megjelenítése az új irány szerint
             if (currentDirection === 'BtoA') {
                 console.log('📚 Kártyák: English → Magyar irányban');
             } else {
                 console.log('📚 Kártyák: Magyar → English irányban');
             }
+            
+            // Újra megjelenítjük a kártyákat az új nyelvi irány szerint
+            showInitialCards();
         }
 
         function changePracticeFilter() {
