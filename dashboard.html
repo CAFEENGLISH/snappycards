@@ -4584,7 +4584,8 @@
         let cardsToAdd = []; // Legacy - not used in new system
 
         let currentTagsData = []; // Store available tags
-        let selectedTagsList = []; // Currently selected tags
+        // Global variable for currently selected tags (no let/const = global scope)
+        selectedTagsList = [];
 
         // LEGACY FUNCTIONS - NOT USED IN NEW SYSTEM
         // These are kept for compatibility but redirected to new system
@@ -4594,7 +4595,7 @@
         // Initialize tag system - categories are now loaded dynamically from database
         async function initializeTagSystem() {
             // No initialization needed - categories are loaded on-demand via autocomplete
-            selectedTagsList = [];
+            // Don't clear selectedTagsList here - it breaks tag processing in new cards
         }
 
         // Rich Text Editor Functions
