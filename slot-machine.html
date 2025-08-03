@@ -757,6 +757,11 @@
         let audioEnabled = true;
         let currentDirection = 'AtoB'; // 'AtoB' = Magyar → English, 'BtoA' = English → Magyar
         let practiceFilter = 'all'; // 'all', 'uncertain', 'unknown'
+        
+        // 🆕 Session Management
+        let currentSessionId = null;
+        let sessionStartTime = null;
+        let cardInteractionStartTime = null; // Reakcióidő méréshez
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -765,12 +770,12 @@
 
         // 💾 BIZTONSÁG: Mentés böngésző bezárása/elhagyás előtt
         window.addEventListener('beforeunload', async (e) => {
-            console.log('⚠️ Böngésző bezárása/elhagyás - mentés...');
+            console.log('⚠️ Böngésző bezárása/elhagyás - session lezárás...');
             
-            // Session mentése
-            if (currentSetId) {
-                await saveStudyProgress();
-                console.log('✅ Session mentve böngésző esemény előtt');
+            // Session lezárása
+            if (currentSessionId) {
+                await endCurrentSession();
+                console.log('✅ Session lezárva böngésző esemény előtt');
             }
         });
 
@@ -787,11 +792,14 @@
                     return;
                 }
 
-                            await loadCards(currentSetId);
+                await loadCards(currentSetId);
             
-            console.log(`🔍 DEBUG: initSlotMachine hívja loadUserProgress-et...`);
-            await loadUserProgress(currentSetId);
-            console.log(`🔍 DEBUG: loadUserProgress befejezve, totalStudyTime végül:`, totalStudyTime);
+                // 🆕 Session indítása a jelenlegi direction-nel
+                await startNewSession();
+                
+                // 🆕 Direction-specific progress betöltése
+                await loadDirectionProgress();
+                
                 showInitialCards();
                 // Stopper NEM indul automatikusan - csak első kártya kattintáskor
                 
@@ -996,8 +1004,10 @@
                     return false;
                 }
                 
-                // User progress alapján szűrés
-                const cardProgress = (window.userProgress || []).find(p => p.card_id === card.id);
+                // User progress alapján szűrés (direction-aware)
+                const cardProgress = (window.userProgress || []).find(p => 
+                    p.card_id === card.id && p.direction === currentDirection
+                );
                 
                 if (!cardProgress) {
                     // Nincs korábbi progress - új kártya, minden filter esetén elérhető
@@ -1060,6 +1070,9 @@
                 const cardElement = createStudyCard(card, index);
                 container.appendChild(cardElement);
             });
+            
+            // 🕐 Reakcióidő mérés indítása
+            cardInteractionStartTime = Date.now();
             
 
         }
@@ -1234,11 +1247,15 @@
             // Stop stopwatch on any feedback
             stopStopwatch();
             
+            // 🕐 Reakcióidő számítása
+            const reactionTime = cardInteractionStartTime ? 
+                Date.now() - cardInteractionStartTime : null;
+            
             // 🎯 WORKFLOW FIX: Csak a KATTINTOTT kártya lesz "tanult"
             const clickedCard = currentRoundCards[cardIndex];
             if (clickedCard) {
                 learnedCards.add(clickedCard.id);
-                console.log(`✅ Kártya tanult: ${clickedCard.title} (ID: ${clickedCard.id})`);
+                console.log(`✅ Kártya tanult: ${clickedCard.title} (ID: ${clickedCard.id}), reakcióidő: ${reactionTime}ms`);
                 console.log(`📊 Tanult kártyák száma: ${learnedCards.size}/${currentCards.length}`);
             }
             
@@ -1270,11 +1287,9 @@
             
             updateStatistics();
             
-            // 💾 AZONNALI MENTÉS: Minden feedback után mentés 
-            await saveCardProgress(clickedCard, feedbackType);
-            
-            // 📊 RÉSZLETES LOG: Minden kattintás idővel együtt mentésre kerül
-            await saveDetailedStudyLog(clickedCard, feedbackType);
+            // 💾 AZONNALI MENTÉS: Card interaction + direction-aware progress 
+            await saveCardInteraction(clickedCard, feedbackType, reactionTime);
+            await saveDirectionAwareProgress(clickedCard, feedbackType);
             
             // 🎯 WORKFLOW: Elég 1 kártya feedback-je a továbblépéshez
             // (Diák kiválaszt 1 kártyát, annak ad feedback-et, automatikusan jönnek új kártyák)
@@ -1292,8 +1307,10 @@
                     return false;
                 }
                 
-                // User progress alapján szűrés
-                const cardProgress = (window.userProgress || []).find(p => p.card_id === card.id);
+                // User progress alapján szűrés (direction-aware)
+                const cardProgress = (window.userProgress || []).find(p => 
+                    p.card_id === card.id && p.direction === currentDirection
+                );
                 
                 if (!cardProgress) {
                     // Nincs korábbi progress - új kártya, minden filter esetén elérhető
@@ -1798,21 +1815,212 @@
             console.log(`🔊 Hang: ${audioEnabled ? 'BE' : 'KI'}`);
         }
 
-        function changeDirection() {
+        async function changeDirection() {
             const select = document.getElementById('directionSelect');
-            currentDirection = select.value;
+            const newDirection = select.value;
             
-            console.log(`🔄 Irány váltás: ${currentDirection}`);
-            
-            // Kártyák újra megjelenítése az új irány szerint
-            if (currentDirection === 'BtoA') {
-                console.log('📚 Kártyák: English → Magyar irányban');
-            } else {
-                console.log('📚 Kártyák: Magyar → English irányban');
+            if (currentDirection !== newDirection) {
+                console.log(`🔄 Direction váltás: ${currentDirection} → ${newDirection}`);
+                
+                // 1. Jelenlegi session lezárása
+                await endCurrentSession();
+                
+                // 2. Direction frissítése
+                currentDirection = newDirection;
+                
+                // 3. Új session indítása az új direction-nel  
+                await startNewSession();
+                
+                // 4. Progress betöltése az új direction szerint
+                await loadDirectionProgress();
+                
+                // 5. UI frissítése
+                showInitialCards();
+                
+                console.log(`✅ Direction váltás kész: ${currentDirection}`);
             }
+        }
+        
+        // 🆕 Session kezelő függvények
+        async function startNewSession() {
+            try {
+                const { data: newSession, error } = await supabase
+                    .from('study_sessions')
+                    .insert({
+                        user_id: currentUserId,
+                        set_id: currentSetId,
+                        direction: currentDirection,
+                        started_at: new Date().toISOString(),
+                        status: 'active'
+                    })
+                    .select()
+                    .single();
+                    
+                if (error) throw error;
+                
+                currentSessionId = newSession.id;
+                sessionStartTime = Date.now();
+                console.log(`🆕 Új session indítva: ${currentSessionId} (${currentDirection})`);
+                
+            } catch (error) {
+                console.error('Session start hiba:', error);
+            }
+        }
+
+        async function endCurrentSession() {
+            if (!currentSessionId) return;
             
-            // Újra megjelenítjük a kártyákat az új nyelvi irány szerint
-            showInitialCards();
+            try {
+                const sessionDuration = sessionStartTime ? 
+                    Math.floor((Date.now() - sessionStartTime) / 1000) : 0;
+                    
+                const { error } = await supabase
+                    .from('study_sessions')
+                    .update({
+                        ended_at: new Date().toISOString(),
+                        status: 'completed',
+                        total_time: sessionDuration
+                    })
+                    .eq('id', currentSessionId);
+                    
+                if (error) throw error;
+                console.log(`✅ Session lezárva: ${currentSessionId} (${sessionDuration}s)`);
+                
+                currentSessionId = null;
+                sessionStartTime = null;
+                
+            } catch (error) {
+                console.error('Session end hiba:', error);
+            }
+        }
+        
+        async function loadDirectionProgress() {
+            try {
+                // User progress betöltése az adott irányhoz és sethez
+                const { data: progress, error } = await supabase
+                    .from('user_card_progress')
+                    .select('*')
+                    .eq('user_id', currentUserId)
+                    .eq('set_id', currentSetId)
+                    .eq('direction', currentDirection);
+                    
+                if (error) throw error;
+                
+                // Global változóba tárolás
+                window.userProgress = progress || [];
+                
+                // Statistics frissítése direction szerint
+                updateDirectionStatistics();
+                
+                console.log(`📊 ${currentDirection} progress betöltve: ${progress?.length || 0} kártya`);
+                
+            } catch (error) {
+                console.error('Direction progress betöltési hiba:', error);
+                window.userProgress = [];
+            }
+        }
+
+        function updateDirectionStatistics() {
+            const directionProgress = window.userProgress || [];
+            
+            const tudokCount = directionProgress.filter(p => p.mastery_level === 3).length;
+            const bizonytalanCount = directionProgress.filter(p => p.mastery_level === 2).length;
+            const tanulandoCount = directionProgress.filter(p => p.mastery_level === 1).length;
+            
+            // Statistics objektum frissítése
+            statistics.tudom = tudokCount;
+            statistics.bizonytalan = bizonytalanCount;
+            statistics.tanulandó = tanulandoCount;
+            
+            // UI frissítése
+            const statTudom = document.getElementById('statTudom');
+            const statBizonytalan = document.getElementById('statBizonytalan');
+            const statTanulandó = document.getElementById('statTanulandó');
+            
+            if (statTudom) statTudom.textContent = tudokCount;
+            if (statBizonytalan) statBizonytalan.textContent = bizonytalanCount;
+            if (statTanulandó) statTanulandó.textContent = tanulandoCount;
+            
+            console.log(`📊 ${currentDirection} stats: ${tudokCount}/${bizonytalanCount}/${tanulandoCount}`);
+        }
+        
+        // 🆕 Card interaction mentése reaction time-mal
+        async function saveCardInteraction(card, feedbackType, reactionTime) {
+            if (!currentSessionId || !card) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('card_interactions')
+                    .insert({
+                        session_id: currentSessionId,
+                        card_id: card.id,
+                        direction: currentDirection,
+                        reaction_time: reactionTime,
+                        feedback: feedbackType
+                    });
+                    
+                if (error) throw error;
+                console.log(`💾 Card interaction mentve: ${card.title} - ${feedbackType} (${reactionTime}ms, ${currentDirection})`);
+                
+            } catch (error) {
+                console.error('Card interaction mentési hiba:', error);
+            }
+        }
+        
+        // 🆕 Direction-aware progress mentése
+        async function saveDirectionAwareProgress(card, feedbackType) {
+            if (!card) return;
+            
+            try {
+                const masteryLevel = feedbackType === 'tudom' ? 3 : 
+                                   feedbackType === 'bizonytalan' ? 2 : 1;
+                                   
+                const { error } = await supabase
+                    .from('user_card_progress')
+                    .upsert({
+                        user_id: currentUserId,
+                        card_id: card.id,
+                        set_id: currentSetId,
+                        direction: currentDirection,
+                        mastery_level: masteryLevel,
+                        last_session_id: currentSessionId,
+                        last_reviewed: new Date().toISOString(),
+                        review_count: 1, // TODO: increment existing count
+                        correct_count: feedbackType === 'tudom' ? 1 : 0
+                    }, {
+                        onConflict: 'user_id,card_id,direction', 
+                        ignoreDuplicates: false
+                    });
+                    
+                if (error) throw error;
+                console.log(`💾 Progress mentve: ${card.title} - ${feedbackType} (${currentDirection})`);
+                
+                // Local progress frissítése is
+                if (!window.userProgress) window.userProgress = [];
+                const existingProgress = window.userProgress.find(p => 
+                    p.card_id === card.id && p.direction === currentDirection
+                );
+                
+                if (existingProgress) {
+                    existingProgress.mastery_level = masteryLevel;
+                    existingProgress.last_reviewed = new Date().toISOString();
+                } else {
+                    window.userProgress.push({
+                        user_id: currentUserId,
+                        card_id: card.id,
+                        set_id: currentSetId,
+                        direction: currentDirection,
+                        mastery_level: masteryLevel,
+                        last_reviewed: new Date().toISOString()
+                    });
+                }
+                
+                // Statistics frissítése
+                updateDirectionStatistics();
+                
+            } catch (error) {
+                console.error('Direction-aware progress mentési hiba:', error);
+            }
         }
 
         function changePracticeFilter() {
