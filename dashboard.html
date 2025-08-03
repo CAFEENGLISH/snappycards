@@ -1612,6 +1612,33 @@
                                     </button>
                                     <div id="tagFilterSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; max-height: 150px; overflow-y: auto; z-index: 1000; display: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
                                 </div>
+                                <button id="clearAllFiltersBtn" onclick="clearAllFilters()" style="
+                                    padding: 8px 12px;
+                                    border: 1px solid #d1d5db;
+                                    border-radius: 6px;
+                                    font-size: 12px;
+                                    background: white;
+                                    color: #9ca3af;
+                                    cursor: pointer;
+                                    outline: none;
+                                    transition: all 0.2s;
+                                    white-space: nowrap;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                " 
+                                onmouseover="updateClearAllFiltersBtn(true)" 
+                                onmouseout="updateClearAllFiltersBtn(false)" 
+                                title="Minden szűrés törlése">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
+                                        <path d="M3 6h18"/>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c0-1-1-2-2-2V6"/>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2"/>
+                                        <path d="M10 11v6"/>
+                                        <path d="M14 11v6"/>
+                                    </svg>
+                                    Minden törlése
+                                </button>
                             </div>
                             
                             <!-- Második sor: Kiválasztott tag-ek (csak ha vannak) -->
@@ -2074,6 +2101,8 @@
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 filterOwnSets(query);
+                // Update clear all filters button state
+                updateClearAllFiltersBtn();
             }, 300); // 300ms delay
         }
 
@@ -2095,6 +2124,9 @@
                     searchInput.placeholder = '📝 Keresés kártyákban...';
                     break;
             }
+            
+            // Update clear all filters button state
+            updateClearAllFiltersBtn();
             
             // Re-run search if there's a query
             if (currentQuery.trim()) {
@@ -2455,6 +2487,9 @@
             
             searchInput.value = '';
             clearBtn.style.display = 'none';
+            
+            // Update clear all filters button state
+            updateClearAllFiltersBtn();
             
             // If we have tag filters, keep them and show filtered results
             if (selectedTagFiltersList.length > 0) {
@@ -6279,6 +6314,9 @@
                 clearBtn.style.display = value.trim() ? 'block' : 'none';
             }
             
+            // Update clear all filters button state
+            updateClearAllFiltersBtn();
+            
             if (!value.trim()) {
                 suggestions.style.display = 'none';
                 return;
@@ -6480,6 +6518,9 @@
             if (clearAllBtn) clearAllBtn.style.display = 'none';
             if (mainSearchRow) mainSearchRow.style.marginBottom = '0';
             
+            // Update clear all filters button state
+            updateClearAllFiltersBtn();
+            
             // Re-run search without tag filters
             const searchValue = document.getElementById('ownSetsSearch').value;
             filterOwnSets(searchValue);
@@ -6501,10 +6542,116 @@
                 suggestions.style.display = 'none';
             }
             
+            // Update clear all filters button state
+            updateClearAllFiltersBtn();
+            
             // Focus back to input after clearing
             if (tagFilterInput) {
                 tagFilterInput.focus();
             }
+        }
+
+        // Clear all filters (search, dropdown, tags)
+        function clearAllFilters() {
+            // Clear search input
+            const searchInput = document.getElementById('ownSetsSearch');
+            const searchClearBtn = searchInput?.parentElement.querySelector('.search-clear');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            if (searchClearBtn) {
+                searchClearBtn.style.display = 'none';
+            }
+            
+            // Reset dropdown to default
+            const dropdown = document.getElementById('searchModeSelect');
+            if (dropdown) {
+                dropdown.value = 'all';
+            }
+            
+            // Clear tag filter input
+            const tagFilterInput = document.getElementById('searchTagFilter');
+            const tagClearBtn = document.querySelector('.tag-filter-clear');
+            const suggestions = document.getElementById('tagFilterSuggestions');
+            if (tagFilterInput) {
+                tagFilterInput.value = '';
+            }
+            if (tagClearBtn) {
+                tagClearBtn.style.display = 'none';
+            }
+            if (suggestions) {
+                suggestions.style.display = 'none';
+            }
+            
+            // Clear selected tags
+            selectedTagFiltersList = [];
+            const selectedTagsContainer = document.getElementById('selectedTagFilters');
+            if (selectedTagsContainer) {
+                selectedTagsContainer.innerHTML = '';
+            }
+            
+            // Hide second row and clear all tags button
+            const selectedTagsRow = document.getElementById('selectedTagsRow');
+            const clearAllTagsBtn = document.getElementById('clearAllTagsBtn');
+            const mainSearchRow = document.getElementById('mainSearchRow');
+            if (selectedTagsRow) selectedTagsRow.style.display = 'none';
+            if (clearAllTagsBtn) clearAllTagsBtn.style.display = 'none';
+            if (mainSearchRow) mainSearchRow.style.marginBottom = '0';
+            
+            // Update clear all filters button state
+            updateClearAllFiltersBtn();
+            
+            // Reload all sets without any filters
+            loadOwnSets();
+        }
+
+        // Update clear all filters button appearance
+        function updateClearAllFiltersBtn(isHover = false) {
+            const btn = document.getElementById('clearAllFiltersBtn');
+            if (!btn) return;
+            
+            const hasActiveFilters = checkFiltersState();
+            
+            if (hasActiveFilters) {
+                // Active state - colorful
+                btn.style.color = isHover ? '#dc2626' : '#ef4444';
+                btn.style.borderColor = isHover ? '#dc2626' : '#ef4444';
+                btn.style.background = isHover ? 'rgba(239, 68, 68, 0.05)' : 'white';
+            } else {
+                // Inactive state - gray
+                btn.style.color = isHover ? '#6b7280' : '#9ca3af';
+                btn.style.borderColor = '#d1d5db';
+                btn.style.background = 'white';
+            }
+        }
+
+        // Check if any filters are active
+        function checkFiltersState() {
+            const searchInput = document.getElementById('ownSetsSearch');
+            const dropdown = document.getElementById('searchModeSelect');
+            const tagFilterInput = document.getElementById('searchTagFilter');
+            
+            // Check search input
+            if (searchInput && searchInput.value.trim()) {
+                return true;
+            }
+            
+            // Check dropdown (not default)
+            if (dropdown && dropdown.value !== 'all') {
+                return true;
+            }
+            
+            // Check tag filter input
+            if (tagFilterInput && tagFilterInput.value.trim()) {
+                return true;
+            }
+            
+            // Check selected tags
+            if (selectedTagFiltersList && selectedTagFiltersList.length > 0) {
+                return true;
+            }
+            
+            return false;
         }
 
         // Add tag to Create modal
