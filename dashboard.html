@@ -350,23 +350,66 @@
             gap: 16px;
         }
 
-        /* 🎯 PONTOSAN 2 SOR statisztika */
+        /* 🎯 PONTOSAN 2 SOR statisztika - Figma design alapján */
         .set-stats-2row {
-            font-size: 11px;
-            color: #64748b;
             margin-top: 8px;
             margin-bottom: 5px;
-            opacity: 0.8;
             line-height: 1.3;
         }
 
         .row1 {
-            text-align: center;
-            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
         }
 
         .row2 {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13.6px;
+            color: #64748b;
+        }
+
+        /* Status indicators - színes háttérrel */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 6px;
+            border-radius: 6px;
+            font-size: 13.6px;
+            font-weight: 500;
+        }
+
+        .status-indicator.green {
+            background-color: rgb(220, 252, 231); /* green-100 */
+            color: rgb(22, 163, 74); /* green-600 */
+        }
+
+        .status-indicator.yellow {
+            background-color: rgb(254, 249, 195); /* yellow-100 */
+            color: rgb(202, 138, 4); /* yellow-600 */
+        }
+
+        .status-indicator.red {
+            background-color: rgb(254, 226, 226); /* red-100 */
+            color: rgb(220, 38, 38); /* red-600 */
+        }
+
+        .progress-text, .study-date, .language-pair {
+            font-size: 13.6px;
+            color: #64748b;
+        }
+
+        .time-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13.6px;
+            color: #64748b;
         }
 
 
@@ -2718,8 +2761,17 @@
                     '</div>' +
                     actionButtons +
                     '<div class="set-stats-2row">' +
-                        '<div class="row1">✅ ' + (set.tudokCount || 0) + ' ⚠️ ' + (set.bizonytalanCount || 0) + ' ❌ ' + (set.nemTudomCount || 0) + ' ' + (set.totalStudied || 0) + '/' + set.cardCount + ' ⏱️ ' + formatTime(set.totalTimeSpent || 0) + '</div>' +
-                        '<div class="row2">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + ' • ' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</div>' +
+                        '<div class="row1">' +
+                            '<div class="status-indicator green"><i data-lucide="check" width="16" height="16"></i>' + (set.tudokCount || 0) + '</div>' +
+                            '<div class="status-indicator yellow"><i data-lucide="alert-triangle" width="16" height="16"></i>' + (set.bizonytalanCount || 0) + '</div>' +
+                            '<div class="status-indicator red"><i data-lucide="x" width="16" height="16"></i>' + (set.nemTudomCount || 0) + '</div>' +
+                            '<span class="progress-text">' + (set.totalStudied || 0) + '/' + set.cardCount + '</span>' +
+                            '<div class="time-indicator"><i data-lucide="clock" width="18" height="18"></i>' + formatTime(set.totalTimeSpent || 0) + '</div>' +
+                        '</div>' +
+                        '<div class="row2">' +
+                            '<span class="language-pair">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
+                            '<span class="study-date">' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</span>' +
+                        '</div>' +
                     '</div>' +
                 '</div>';
         }
