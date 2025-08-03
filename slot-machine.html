@@ -812,7 +812,7 @@
             }
         }
 
-        function handleFeedback(cardIndex, feedbackType) {
+        async function handleFeedback(cardIndex, feedbackType) {
             // Stop stopwatch on any feedback
             stopStopwatch();
             
@@ -851,6 +851,12 @@
             // Megjegyzés: totalViewed már nem használjuk, a learnedCards.size-al számolunk
             
             updateStatistics();
+            
+            // 💾 AZONNALI MENTÉS: Minden feedback után mentés 
+            await saveCardProgress(clickedCard, feedbackType);
+            
+            // 📊 RÉSZLETES LOG: Minden kattintás idővel együtt mentésre kerül
+            await saveDetailedStudyLog(clickedCard, feedbackType);
             
             // 🎯 WORKFLOW: Elég 1 kártya feedback-je a továbblépéshez
             // (Diák kiválaszt 1 kártyát, annak ad feedback-et, automatikusan jönnek új kártyák)
@@ -975,61 +981,49 @@
             document.getElementById('statOsszesen').textContent = currentCards.length;
         }
 
-        // 📊 SAVE PROGRESS: Tanulási eredmények mentése a Supabase-be  
-        async function saveStudyProgress() {
+        // 💾 AZONNALI MENTÉS: Egyedi kártya feedback mentése minden kattintáskor
+        async function saveCardProgress(card, feedbackType) {
             try {
-                console.log('💾 Tanulási eredmények mentése...');
+                console.log(`💾 Kártya mentése: ${card.title} - ${feedbackType}`);
                 
                 // Aktuális felhasználó lekérése
                 const { data: { user }, error: userError } = await supabase.auth.getUser();
                 if (userError || !user) {
                     console.error('❌ Nincs bejelentkezett felhasználó:', userError);
-                    return;
+                    return false;
                 }
 
                 const userId = user.id;
-                const progressData = [];
+                const currentTime = new Date().toISOString();
 
-                // Minden tanult kártya progress bejegyzése
-                for (const cardId of learnedCards) {
-                    const card = currentCards.find(c => c.id === cardId);
-                    if (!card) continue;
-
-                    // Mastery szint kiszámítása a KÁRTYA-SPECIFIKUS feedback alapján
-                    let masteryLevel = 1; // alapértelmezett: tanulandó
-                    
-                    // Az egyedi kártya feedback-je alapján döntjük el a mastery level-t
-                    if (card.userFeedback === 'tudom') {
-                        masteryLevel = 3; // tudom
-                    } else if (card.userFeedback === 'bizonytalan') {
-                        masteryLevel = 2; // bizonytalan  
-                    } else if (card.userFeedback === 'tanulandó') {
-                        masteryLevel = 1; // tanulandó
-                    }
-
-                    progressData.push({
-                        user_id: userId,
-                        card_id: cardId,
-                        set_id: currentSetId,
-                        mastery_level: masteryLevel,
-                        last_studied: new Date().toISOString(),
-                        study_count: 1
-                    });
+                // Mastery szint kiszámítása feedback alapján
+                let masteryLevel = 1; // alapértelmezett: tanulandó
+                if (feedbackType === 'tudom') {
+                    masteryLevel = 3;
+                } else if (feedbackType === 'bizonytalan') {
+                    masteryLevel = 2;
+                } else if (feedbackType === 'tanulandó') {
+                    masteryLevel = 1;
                 }
 
-                console.log(`💾 ${progressData.length} kártya eredményének mentése...`);
-
-                // Progress adatok mentése (upsert)
+                // Kártya progress mentése (upsert)
                 const { error: progressError } = await supabase
                     .from('user_card_progress')
-                    .upsert(progressData, { 
+                    .upsert({
+                        user_id: userId,
+                        card_id: card.id,
+                        set_id: currentSetId,
+                        mastery_level: masteryLevel,
+                        last_studied: currentTime,
+                        study_count: 1
+                    }, { 
                         onConflict: 'user_id,card_id',
                         ignoreDuplicates: false 
                     });
 
                 if (progressError) {
-                    console.error('❌ Progress mentése sikertelen:', progressError);
-                    return;
+                    console.error('❌ Kártya progress mentése sikertelen:', progressError);
+                    return false;
                 }
 
                 // Set progress frissítése (lastStudied)
@@ -1038,17 +1032,83 @@
                     .upsert({
                         user_id: userId,
                         set_id: currentSetId,
-                        last_studied: new Date().toISOString()
+                        last_studied: currentTime
                     }, { onConflict: 'user_id,set_id' });
 
                 if (setError) {
                     console.error('❌ Set progress frissítése sikertelen:', setError);
                 }
 
-                console.log('✅ Tanulási eredmények sikeresen mentve!');
+                console.log(`✅ Kártya mentve: ${card.title} (mastery: ${masteryLevel})`);
+                return true;
                 
             } catch (error) {
-                console.error('❌ Mentési hiba:', error);
+                console.error('❌ Kártya mentési hiba:', error);
+                return false;
+            }
+        }
+
+        // 📊 SESSION COMPLETE: Csak befejezéskor hívódik meg
+        async function saveStudyProgress() {
+            console.log('🎯 Session befejezve - set progress frissítés...');
+            
+            try {
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) return;
+
+                // Csak a set utolsó tanulási idő frissítése
+                await supabase
+                    .from('user_set_progress')
+                    .upsert({
+                        user_id: user.id,
+                        set_id: currentSetId,
+                        last_studied: new Date().toISOString()
+                    }, { onConflict: 'user_id,set_id' });
+
+                console.log('✅ Set progress frissítve');
+            } catch (error) {
+                console.error('❌ Set progress hiba:', error);
+            }
+        }
+
+        // 📊 RÉSZLETES TANULÁSI LOG: Minden kattintás precíz idővel mentésre kerül
+        async function saveDetailedStudyLog(card, feedbackType) {
+            try {
+                console.log(`📝 Study log mentése: ${card.title} - ${feedbackType}`);
+                
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) {
+                    console.error('❌ Nincs user a log mentéshez');
+                    return false;
+                }
+
+                const currentTime = new Date().toISOString();
+                
+                // Részletes log mentése az analitikához
+                const { error: logError } = await supabase
+                    .from('study_logs')
+                    .insert({
+                        user_id: user.id,
+                        card_id: card.id,
+                        set_id: currentSetId,
+                        feedback_type: feedbackType,
+                        study_time: currentTime,
+                        session_duration: stopwatchStartTime ? Date.now() - stopwatchStartTime : 0,
+                        device_type: 'web',
+                        created_at: currentTime
+                    });
+
+                if (logError) {
+                    console.error('❌ Study log mentése sikertelen:', logError);
+                    return false;
+                }
+
+                console.log(`✅ Study log mentve: ${card.title} - ${feedbackType} - ${currentTime}`);
+                return true;
+
+            } catch (error) {
+                console.error('❌ Study log mentési hiba:', error);
+                return false;
             }
         }
 
