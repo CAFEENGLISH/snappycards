@@ -789,6 +789,7 @@
                 }
 
                 await loadCards(currentSetId);
+                await loadUserProgress(currentSetId);
                 showInitialCards();
                 // Stopper NEM indul automatikusan - csak első kártya kattintáskor
                 
@@ -805,6 +806,60 @@
             } catch (error) {
                 console.error('Error initializing SlotMachine:', error);
                 showError('Hiba történt a kártyák betöltése során.');
+            }
+        }
+
+        // 📊 USER PROGRESS BETÖLTÉSE: Meglévő tanulási állapot az adatbázisból
+        async function loadUserProgress(setId) {
+            try {
+                // Aktuális felhasználó lekérése
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) {
+                    console.warn('⚠️ Nincs bejelentkezett user - guest mode?');
+                    return;
+                }
+
+                console.log(`📊 User progress betöltése: setId=${setId}, userId=${user.id}`);
+
+                // Meglévő progress lekérése
+                const { data: progressData, error: progressError } = await supabase
+                    .from('user_card_progress')
+                    .select('card_id, mastery_level, last_reviewed')
+                    .eq('user_id', user.id)
+                    .eq('set_id', setId);
+
+                if (progressError) {
+                    console.error('❌ Progress betöltési hiba:', progressError);
+                    return;
+                }
+
+                console.log(`📊 Betöltött progress:`, progressData);
+
+                // Practice filter alapján döntjük el melyik kártyákat tekintjük "tanultnak"
+                if (progressData && progressData.length > 0) {
+                    progressData.forEach(progress => {
+                        // Ha 'all' filter van: minden mastery_level >= 1 tanultnak számít
+                        // Ha 'uncertain' filter: csak mastery_level = 3 (tudom) számít tanultnak
+                        // Ha 'unknown' filter: mastery_level = 2,3 (bizonytalan,tudom) tanultnak számít
+                        
+                        // Egyelőre minden tanult kártyát hozzáadunk (filter majd dinamikusan fog működni)
+                        if (progress.mastery_level >= 1) {
+                            // Ne add hozzá a learnedCards-hoz, hanem külön tároljuk
+                            // A szűrést majd a showInitialCards-ban végezzük el
+                        }
+                    });
+                    
+                    // Tároljuk el a progress adatokat későbbi használatra
+                    window.userProgress = progressData;
+                    console.log(`✅ User progress betöltve: ${progressData.length} kártya`);
+                } else {
+                    console.log('📝 Nincs korábbi progress - új session');
+                    window.userProgress = [];
+                }
+
+            } catch (error) {
+                console.error('❌ Progress betöltési hiba:', error);
+                window.userProgress = [];
             }
         }
 
@@ -858,8 +913,35 @@
             const container = document.getElementById('cardsContainer');
             container.innerHTML = '';
             
-            // 🎯 WORKFLOW FIX: Csak a NEM tanult kártyákból válasszon 3-at
-            const availableCards = currentCards.filter(card => !learnedCards.has(card.id));
+            // 🎯 DINAMIKUS SZŰRÉS: Practice filter és user progress alapján
+            const availableCards = currentCards.filter(card => {
+                // Aktuális session során tanult kártyák kizárása
+                if (learnedCards.has(card.id)) {
+                    return false;
+                }
+                
+                // User progress alapján szűrés
+                const cardProgress = (window.userProgress || []).find(p => p.card_id === card.id);
+                
+                if (!cardProgress) {
+                    // Nincs korábbi progress - új kártya, minden filter esetén elérhető
+                    return true;
+                }
+                
+                // Practice filter alapján döntés
+                if (practiceFilter === 'all') {
+                    // 'all': már tanult kártyák (mastery_level >= 1) ki vannak zárva
+                    return cardProgress.mastery_level === 0 || !cardProgress.mastery_level;
+                } else if (practiceFilter === 'uncertain') {
+                    // 'uncertain': csak bizonytalan kártyák (mastery_level = 2)
+                    return cardProgress.mastery_level === 2;
+                } else if (practiceFilter === 'unknown') {
+                    // 'unknown': csak nem tudom kártyák (mastery_level = 1)
+                    return cardProgress.mastery_level === 1;
+                }
+                
+                return true;
+            });
             
             if (availableCards.length === 0) {
                 showSessionComplete();
@@ -1409,16 +1491,17 @@
             
             console.log(`🎯 Gyakorlás szűrő: ${practiceFilter}`);
             
-            // Itt újra kell szűrni a kártyákat a kiválasztott szűrő szerint
+            // Practice filter változásakor frissítjük a kártyákat
             if (practiceFilter === 'uncertain') {
                 console.log('⚠️ Csak bizonytalan kártyák');
             } else if (practiceFilter === 'unknown') {
                 console.log('❌ Csak nem tudom kártyák');
             } else {
-                console.log('📚 Minden kártya');
+                console.log('📚 Minden (nem tanult) kártya');
             }
             
-            // Itt implementálható a kártyák újraszűrése
+            // 🔄 Kártyák újraszűrése és megjelenítése
+            showInitialCards();
         }
 
         async function exitToDashboard() {
