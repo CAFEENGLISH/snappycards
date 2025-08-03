@@ -347,6 +347,17 @@
             gap: 16px;
         }
 
+        /* 🎯 Apró statisztika a szett kártyák alján */
+        .set-mini-stats {
+            display: flex;
+            gap: 8px;
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            opacity: 0.8;
+        }
+
 
 
         .set-options {
@@ -2520,12 +2531,12 @@
                         <div class="placeholder-actions">
                             <div class="placeholder-tip">💡 Tipp: Kérd meg a tanárod, hogy küldjön meghívót!</div>
                         </div>
+                        <div class="set-mini-stats">
+                            <span style="color: #94a3b8;">0/0 kártya</span>
+                            <span style="color: #94a3b8;">0%</span>
+                            <span style="color: #94a3b8;">Várakozás...</span>
+                        </div>
                         <div class="set-meta">
-                            <div class="set-stats">
-                                <span style="color: #94a3b8;">0/0 kártya</span>
-                                <span style="color: #94a3b8;">0%</span>
-                                <span style="color: #94a3b8;">Várakozás...</span>
-                            </div>
                             <span style="color: #94a3b8;">Még nincs csatlakozott szett</span>
                         </div>
                     </div>
@@ -2600,12 +2611,12 @@
                         '<div class="progress-fill" style="width: ' + progress + '%"></div>' +
                     '</div>' +
                     actionButtons +
+                    '<div class="set-mini-stats">' +
+                        '<span>' + set.masteredCount + '/' + set.cardCount + ' kártya</span>' +
+                        '<span>' + progress + '%</span>' +
+                        '<span>' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
+                    '</div>' +
                     '<div class="set-meta">' +
-                        '<div class="set-stats">' +
-                            '<span>' + set.masteredCount + '/' + set.cardCount + ' kártya</span>' +
-                            '<span>' + progress + '%</span>' +
-                            '<span style="color: #64748b;">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
-                        '</div>' +
                         '<span>' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</span>' +
                     '</div>' +
                 '</div>';
