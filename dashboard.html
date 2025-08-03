@@ -2859,6 +2859,22 @@
                     
                 if (error) throw error;
                 
+                // Get direction-specific total study time
+                const { data: sessionData, error: sessionError } = await supabase
+                    .from('study_sessions')
+                    .select('total_duration')
+                    .eq('user_id', currentUser.id)
+                    .eq('set_id', setId)
+                    .eq('direction', direction)
+                    .not('total_duration', 'is', null);
+                    
+                if (sessionError) {
+                    console.error('Session time lekérdezési hiba:', sessionError);
+                }
+                
+                // Calculate total study time for this direction
+                const totalTimeSpent = (sessionData || []).reduce((sum, session) => sum + (session.total_duration || 0), 0);
+                
                 // Calculate stats
                 const tudokCount = progressData?.filter(p => p.mastery_level === 3).length || 0;
                 const bizonytalanCount = progressData?.filter(p => p.mastery_level === 2).length || 0;
@@ -2875,11 +2891,13 @@
                 const redIndicator = setCard.querySelector('.status-indicator.red');
                 const progressText = setCard.querySelector('.progress-text');
                 const progressBar = setCard.querySelector('.progress-fill');
+                const timeIndicator = setCard.querySelector('.time-indicator');
                 
                 if (greenIndicator) greenIndicator.innerHTML = '<i data-lucide="check" width="16" height="16"></i>' + tudokCount;
                 if (yellowIndicator) yellowIndicator.innerHTML = '<i data-lucide="alert-triangle" width="16" height="16"></i>' + bizonytalanCount;
                 if (redIndicator) redIndicator.innerHTML = '<i data-lucide="x" width="16" height="16"></i>' + nemTudomCount;
                 if (progressText) progressText.textContent = totalStudied + '/' + totalCards;
+                if (timeIndicator) timeIndicator.innerHTML = '<i data-lucide="clock" width="18" height="18"></i>' + formatTime(totalTimeSpent);
                 
                 // Update progress bar
                 const progress = totalCards > 0 ? Math.round((tudokCount / totalCards) * 100) : 0;
@@ -2888,7 +2906,7 @@
                 // Re-initialize Lucide icons
                 lucide.createIcons();
                 
-                console.log(`📊 Direction ${direction} stats: ${tudokCount}/${bizonytalanCount}/${nemTudomCount} (${totalStudied}/${totalCards})`);
+                console.log(`📊 Direction ${direction} stats: ${tudokCount}/${bizonytalanCount}/${nemTudomCount} (${totalStudied}/${totalCards}) ⏱️${totalTimeSpent}s`);
                 
             } catch (error) {
                 console.error('Direction stats betöltési hiba:', error);
