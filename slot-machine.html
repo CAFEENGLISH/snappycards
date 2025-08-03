@@ -745,6 +745,7 @@
         let isSessionTimerRunning = false;
         let sessionStartTime = 0;
         let sessionTimerInterval = null;
+        let timeSaveInterval = null; // Folyamatos mentés interval
         let learnedCards = new Set(); // 🎯 Csak a TÉNYLEGESEN tanult kártyák ID-jei
         let currentRoundCards = []; // Jelenlegi körben megjelenített kártyák
         let statistics = {
@@ -809,6 +810,36 @@
             }
         }
 
+        // 🕐 ÖSSZESÍTETT IDŐ VÁLTOZÓK
+        let totalStudyTime = 0; // Összesített tanulási idő másodpercekben (betöltött az adatbázisból)
+        
+        // 🕐 ÖSSZESÍTETT IDŐ BETÖLTÉSE az adatbázisból
+        async function loadTotalStudyTime(setId, userId) {
+            try {
+                const { data: setProgressData, error: setProgressError } = await supabase
+                    .from('user_set_progress')
+                    .select('total_time_spent')
+                    .eq('user_id', userId)
+                    .eq('set_id', setId)
+                    .single();
+                
+                if (setProgressError && setProgressError.code !== 'PGRST116') {
+                    console.error('❌ Set progress betöltési hiba:', setProgressError);
+                    return 0;
+                }
+                
+                const savedTime = setProgressData?.total_time_spent || 0;
+                totalStudyTime = savedTime;
+                
+                console.log(`🕐 Betöltött összesített idő: ${savedTime}s (${formatTime(savedTime)})`);
+                return savedTime;
+                
+            } catch (error) {
+                console.error('❌ Összesített idő betöltési hiba:', error);
+                return 0;
+            }
+        }
+
         // 📊 USER PROGRESS BETÖLTÉSE: Meglévő tanulási állapot az adatbázisból
         async function loadUserProgress(setId) {
             try {
@@ -820,6 +851,9 @@
                 }
 
                 console.log(`📊 User progress betöltése: setId=${setId}, userId=${user.id}`);
+                
+                // 🕐 ÖSSZESÍTETT TANULÁSI IDŐ BETÖLTÉSE
+                await loadTotalStudyTime(setId, user.id);
 
                 // Meglévő progress lekérése
                 const { data: progressData, error: progressError } = await supabase
@@ -1335,36 +1369,85 @@
             document.getElementById('stopwatchTime').textContent = timeString;
         }
 
+        // ⏰ IDŐ FORMÁZÁS FÜGGVÉNY
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // 🕐 FOLYAMATOS IDŐ MENTÉS (minden percben)
+        async function saveTimeProgress() {
+            if (!isSessionTimerRunning) return;
+            
+            try {
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) return;
+                
+                const sessionTimeSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+                const newTotalTime = totalStudyTime + sessionTimeSeconds;
+                
+                await supabase
+                    .from('user_set_progress')
+                    .upsert({
+                        user_id: user.id,
+                        set_id: currentSetId,
+                        last_studied: new Date().toISOString(),
+                        total_time_spent: newTotalTime
+                    }, { onConflict: 'user_id,set_id' });
+                
+                console.log(`🕐 Folyamatos mentés: ${newTotalTime}s (${formatTime(newTotalTime)})`);
+                
+            } catch (error) {
+                console.error('❌ Folyamatos mentés hiba:', error);
+            }
+        }
+
         // Session Timer Functions
         function startSessionTimer() {
             if (!isSessionTimerRunning) {
                 isSessionTimerRunning = true;
                 sessionStartTime = Date.now();
                 sessionTimerInterval = setInterval(updateSessionTimer, 1000);
-                console.log('🕐 Session Timer indítva');
+                
+                // Folyamatos mentés indítása (60 másodpercenként)
+                timeSaveInterval = setInterval(saveTimeProgress, 60000);
+                
+                console.log('🕐 Session Timer és folyamatos mentés indítva');
             }
         }
 
         function stopSessionTimer() {
             if (isSessionTimerRunning) {
                 isSessionTimerRunning = false;
+                
                 if (sessionTimerInterval) {
                     clearInterval(sessionTimerInterval);
                     sessionTimerInterval = null;
                 }
+                
+                if (timeSaveInterval) {
+                    clearInterval(timeSaveInterval);
+                    timeSaveInterval = null;
+                }
+                
                 const totalSessionTime = Date.now() - sessionStartTime;
-                console.log(`🕐 Session Timer leállítva. Teljes idő: ${Math.round(totalSessionTime / 1000)}s`);
+                console.log(`🕐 Session Timer és folyamatos mentés leállítva. Session idő: ${Math.round(totalSessionTime / 1000)}s`);
             }
         }
 
         function updateSessionTimer() {
             if (!isSessionTimerRunning) return;
             
-            const elapsed = Date.now() - sessionStartTime;
-            const minutes = Math.floor(elapsed / 60000);
-            const seconds = Math.floor((elapsed % 60000) / 1000);
+            // Jelenlegi session idő másodpercekben
+            const sessionElapsedMs = Date.now() - sessionStartTime;
+            const sessionElapsedSeconds = Math.floor(sessionElapsedMs / 1000);
             
-            const timeString = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            // Összesített idő = betöltött idő + jelenlegi session idő
+            const totalSeconds = totalStudyTime + sessionElapsedSeconds;
+            
+            // Formázás és megjelenítés
+            const timeString = formatTime(totalSeconds);
             document.getElementById('sessionTimerTime').textContent = timeString;
         }
 
@@ -1464,16 +1547,29 @@
                 const { data: { user }, error: userError } = await supabase.auth.getUser();
                 if (userError || !user) return;
 
-                // Csak a set utolsó tanulási idő frissítése
+                // Jelenlegi session idő kiszámítása
+                const sessionTimeSeconds = isSessionTimerRunning ? 
+                    Math.floor((Date.now() - sessionStartTime) / 1000) : 0;
+                
+                // Új összesített idő = régi idő + jelenlegi session idő
+                const newTotalTime = totalStudyTime + sessionTimeSeconds;
+                
+                console.log(`🕐 Session idő mentése: ${sessionTimeSeconds}s, Új összesített: ${newTotalTime}s`);
+
+                // Set progress és összesített idő frissítése
                 await supabase
                     .from('user_set_progress')
                     .upsert({
                         user_id: user.id,
                         set_id: currentSetId,
-                        last_studied: new Date().toISOString()
+                        last_studied: new Date().toISOString(),
+                        total_time_spent: newTotalTime
                     }, { onConflict: 'user_id,set_id' });
 
-                console.log('✅ Set progress frissítve');
+                // Frissítjük a local változót is
+                totalStudyTime = newTotalTime;
+
+                console.log('✅ Set progress és összesített idő frissítve');
             } catch (error) {
                 console.error('❌ Set progress hiba:', error);
             }
