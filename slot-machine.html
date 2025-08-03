@@ -911,6 +911,11 @@
 
         function showInitialCards() {
             const container = document.getElementById('cardsContainer');
+            console.log(`📦 KONTÉNER ELLENŐRZÉS:`, {
+                container: container,
+                containerExists: !!container,
+                containerHTML: container ? container.outerHTML.substring(0, 200) : 'NULL'
+            });
             container.innerHTML = '';
             
             console.log(`🎯 SZŰRÉSI DEBUG:`, {
@@ -992,9 +997,15 @@
             cardsToShow.forEach((card, index) => {
                 console.log(`🎨 Kártya ${index}: ${card.title}`);
                 const cardElement = createStudyCard(card, index);
+                console.log(`🎨 Created element:`, cardElement);
                 container.appendChild(cardElement);
+                console.log(`🎨 Element added to container, container children count: ${container.children.length}`);
             });
             console.log(`✅ KÁRTYÁK HOZZÁADVA A KONTÉNERHEZ`);
+            console.log(`📊 VÉGSŐ KONTÉNER ÁLLAPOT:`, {
+                childrenCount: container.children.length,
+                innerHTML: container.innerHTML.substring(0, 500)
+            });
         }
 
         function createStudyCard(card, index) {
