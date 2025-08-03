@@ -175,6 +175,23 @@
             height: 14px;
         }
 
+        .session-timer {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .session-timer-time {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e40af;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+        }
+
         .exit-button:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
@@ -634,6 +651,14 @@
                     </select>
                 </div>
 
+                <!-- Session Timer -->
+                <div class="control-group">
+                    <div class="control-label">Összidő</div>
+                    <div class="session-timer">
+                        <div class="session-timer-time" id="sessionTimerTime">00:00</div>
+                    </div>
+                </div>
+
                 <!-- Exit Button -->
                 <div class="control-group">
                     <div class="control-label">Kilépés</div>
@@ -715,6 +740,11 @@
         let isStopwatchRunning = false;
         let stopwatchStartTime = 0;
         let stopwatchInterval = null;
+        
+        // Session Timer (teljes tanulási session)
+        let isSessionTimerRunning = false;
+        let sessionStartTime = 0;
+        let sessionTimerInterval = null;
         let learnedCards = new Set(); // 🎯 Csak a TÉNYLEGESEN tanult kártyák ID-jei
         let currentRoundCards = []; // Jelenlegi körben megjelenített kártyák
         let statistics = {
@@ -750,6 +780,9 @@
                 await loadCards(currentSetId);
                 showInitialCards();
                 // Stopper NEM indul automatikusan - csak első kártya kattintáskor
+                
+                // 🕐 Session Timer indítása (teljes tanulási session)
+                startSessionTimer();
                 
                 // Hide loading, show content
                 document.getElementById('loadingState').style.display = 'none';
@@ -1074,6 +1107,7 @@
 
         async function showSessionComplete() {
             stopStopwatch(); // Stopper leállítása
+            stopSessionTimer(); // 🕐 Session Timer leállítása
             
             // 📊 SAVE PROGRESS: Mentés a Supabase-be
             await saveStudyProgress();
@@ -1123,6 +1157,39 @@
             
             const timeString = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
             document.getElementById('stopwatchTime').textContent = timeString;
+        }
+
+        // Session Timer Functions
+        function startSessionTimer() {
+            if (!isSessionTimerRunning) {
+                isSessionTimerRunning = true;
+                sessionStartTime = Date.now();
+                sessionTimerInterval = setInterval(updateSessionTimer, 1000);
+                console.log('🕐 Session Timer indítva');
+            }
+        }
+
+        function stopSessionTimer() {
+            if (isSessionTimerRunning) {
+                isSessionTimerRunning = false;
+                if (sessionTimerInterval) {
+                    clearInterval(sessionTimerInterval);
+                    sessionTimerInterval = null;
+                }
+                const totalSessionTime = Date.now() - sessionStartTime;
+                console.log(`🕐 Session Timer leállítva. Teljes idő: ${Math.round(totalSessionTime / 1000)}s`);
+            }
+        }
+
+        function updateSessionTimer() {
+            if (!isSessionTimerRunning) return;
+            
+            const elapsed = Date.now() - sessionStartTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            const timeString = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            document.getElementById('sessionTimerTime').textContent = timeString;
         }
 
         function updateStatistics() {
@@ -1347,6 +1414,11 @@
             // Állítsuk le a stopwatch-ot
             if (isStopwatchRunning) {
                 stopStopwatch();
+            }
+            
+            // 🕐 Session Timer leállítása kilépéskor
+            if (isSessionTimerRunning) {
+                stopSessionTimer();
             }
             
             console.log('🚪 Vissza a Dashboard-ra');
