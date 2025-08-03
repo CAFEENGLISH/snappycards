@@ -403,6 +403,20 @@
             font-size: 13.6px;
             color: #64748b;
         }
+        
+        .language-pair.clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            padding: 2px 6px;
+            margin: -2px -6px;
+        }
+        
+        .language-pair.clickable:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            transform: scale(1.05);
+        }
 
         .time-indicator {
             display: flex;
@@ -2777,7 +2791,7 @@
                     '</div>';
             }
 
-            return '<div class="flashcard-set" onclick="openSet(\'' + set.id + '\', \'' + type + '\')">' +
+            return '<div class="flashcard-set" data-set-id="' + set.id + '" data-direction="AtoB" onclick="openSet(\'' + set.id + '\', \'' + type + '\')">' +
                     '<div class="set-header">' +
                         '<div>' +
                             '<h3 class="set-title">' + set.title + '</h3>' +
@@ -2797,11 +2811,88 @@
                             '<div class="time-indicator"><i data-lucide="clock" width="18" height="18"></i>' + formatTime(set.totalTimeSpent || 0) + '</div>' +
                         '</div>' +
                         '<div class="row2">' +
-                            '<span class="language-pair">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
+                            '<span class="language-pair clickable" onclick="event.stopPropagation(); toggleSetDirection(\'' + set.id + '\')" title="Irány váltása">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
                             '<span class="study-date">' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</span>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
+        }
+
+        // 🔄 Toggle direction on set card and refresh statistics  
+        async function toggleSetDirection(setId) {
+            const setCard = document.querySelector(`[data-set-id="${setId}"]`);
+            if (!setCard) return;
+            
+            const currentDirection = setCard.getAttribute('data-direction');
+            const newDirection = currentDirection === 'AtoB' ? 'BtoA' : 'AtoB';
+            
+            // Update data attribute
+            setCard.setAttribute('data-direction', newDirection);
+            
+            // Get language pair element and set info
+            const languagePair = setCard.querySelector('.language-pair');
+            const setData = [...(dashboardData.ownSets || []), ...(dashboardData.joinedSets || [])].find(s => s.id === setId);
+            
+            if (languagePair && setData) {
+                // Update language pair text
+                if (newDirection === 'AtoB') {
+                    languagePair.textContent = translateLanguageName(setData.language_a) + ' → ' + translateLanguageName(setData.language_b);
+                } else {
+                    languagePair.textContent = translateLanguageName(setData.language_b) + ' → ' + translateLanguageName(setData.language_a);
+                }
+                
+                // Load direction-specific statistics
+                await loadDirectionSpecificStats(setId, newDirection, setCard);
+            }
+        }
+        
+        // 📊 Load statistics for specific direction
+        async function loadDirectionSpecificStats(setId, direction, setCard) {
+            try {
+                // Get direction-specific progress
+                const { data: progressData, error } = await supabase
+                    .from('user_card_progress')
+                    .select('mastery_level, last_reviewed')
+                    .eq('user_id', currentUser.id)
+                    .eq('set_id', setId)
+                    .eq('direction', direction);
+                    
+                if (error) throw error;
+                
+                // Calculate stats
+                const tudokCount = progressData?.filter(p => p.mastery_level === 3).length || 0;
+                const bizonytalanCount = progressData?.filter(p => p.mastery_level === 2).length || 0;
+                const nemTudomCount = progressData?.filter(p => p.mastery_level === 1).length || 0;
+                const totalStudied = progressData?.length || 0;
+                
+                // Get set card count
+                const setData = [...(dashboardData.ownSets || []), ...(dashboardData.joinedSets || [])].find(s => s.id === setId);
+                const totalCards = setData?.cardCount || 0;
+                
+                // Update UI elements
+                const greenIndicator = setCard.querySelector('.status-indicator.green');
+                const yellowIndicator = setCard.querySelector('.status-indicator.yellow');
+                const redIndicator = setCard.querySelector('.status-indicator.red');
+                const progressText = setCard.querySelector('.progress-text');
+                const progressBar = setCard.querySelector('.progress-fill');
+                
+                if (greenIndicator) greenIndicator.innerHTML = '<i data-lucide="check" width="16" height="16"></i>' + tudokCount;
+                if (yellowIndicator) yellowIndicator.innerHTML = '<i data-lucide="alert-triangle" width="16" height="16"></i>' + bizonytalanCount;
+                if (redIndicator) redIndicator.innerHTML = '<i data-lucide="x" width="16" height="16"></i>' + nemTudomCount;
+                if (progressText) progressText.textContent = totalStudied + '/' + totalCards;
+                
+                // Update progress bar
+                const progress = totalCards > 0 ? Math.round((tudokCount / totalCards) * 100) : 0;
+                if (progressBar) progressBar.style.width = progress + '%';
+                
+                // Re-initialize Lucide icons
+                lucide.createIcons();
+                
+                console.log(`📊 Direction ${direction} stats: ${tudokCount}/${bizonytalanCount}/${nemTudomCount} (${totalStudied}/${totalCards})`);
+                
+            } catch (error) {
+                console.error('Direction stats betöltési hiba:', error);
+            }
         }
 
         // Create invitation card
