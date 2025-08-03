@@ -852,6 +852,9 @@
                     // Tároljuk el a progress adatokat későbbi használatra
                     window.userProgress = progressData;
                     console.log(`✅ User progress betöltve: ${progressData.length} kártya`);
+                
+                // ⚡ AZONNALI STATISZTIKA FRISSÍTÉS
+                updateProgressStats(progressData);
                 } else {
                     console.log('📝 Nincs korábbi progress - új session');
                     window.userProgress = [];
@@ -1032,6 +1035,71 @@
                     });
                 }
             }, 100);  // 100ms késleltetéssel, hogy biztosan renderelődött
+        }
+
+        // ⚡ STATISZTIKA FRISSÍTŐ FÜGGVÉNY - Korábbi tanulási állapot megjelenítése
+        function updateProgressStats(progressData) {
+            console.log(`📊 Statisztika frissítése: ${progressData.length} progress rekord`);
+            
+            // Számítások a mastery level alapján
+            const tudokCount = progressData.filter(p => p.mastery_level === 3).length;
+            const bizonytalanCount = progressData.filter(p => p.mastery_level === 2).length; 
+            const tanulandoCount = progressData.filter(p => p.mastery_level === 1).length;
+            const totalStudied = progressData.length;
+            const totalCards = 20; // Összes kártya a szettben
+            const hatraVan = totalCards - totalStudied;
+            
+            console.log(`📊 SZÁMÍTOTT STATISZTIKÁK:`, {
+                tudom: tudokCount,
+                bizonytalan: bizonytalanCount,
+                tanulandó: tanulandoCount,
+                megnezve: totalStudied,
+                hatraVan: hatraVan,
+                osszesen: totalCards
+            });
+            
+            // 🎯 FRISSÍTJÜK A FELÜLET ELEMEIT - HELYES ID-kkel
+            const statTudom = document.getElementById('statTudom');
+            const statBizonytalan = document.getElementById('statBizonytalan'); 
+            const statTanulandó = document.getElementById('statTanulandó');
+            const statMegnezve = document.getElementById('statMegnezve');
+            const statHatra = document.getElementById('statHatra');
+            const statOsszesen = document.getElementById('statOsszesen');
+            
+            if (statTudom) {
+                statTudom.textContent = tudokCount;
+                console.log(`📊 Tudom frissítve: ${tudokCount}`);
+            }
+            
+            if (statBizonytalan) {
+                statBizonytalan.textContent = bizonytalanCount;
+                console.log(`📊 Bizonytalan frissítve: ${bizonytalanCount}`);
+            }
+            
+            if (statTanulandó) {
+                statTanulandó.textContent = tanulandoCount;
+                console.log(`📊 Tanulandó frissítve: ${tanulandoCount}`);
+            }
+            
+            if (statMegnezve) {
+                statMegnezve.textContent = totalStudied;
+                console.log(`📊 Megnézve frissítve: ${totalStudied}`);
+            }
+            
+            if (statHatra) {
+                statHatra.textContent = hatraVan;
+                console.log(`📊 Hátra van frissítve: ${hatraVan}`);
+            }
+            
+            if (statOsszesen) {
+                statOsszesen.textContent = totalCards;
+                console.log(`📊 Összesen frissítve: ${totalCards}`);
+            }
+            
+            // 🎯 FRISSÍTJÜK AZ INTERNAL STATISTICS OBJEKTUMOT IS
+            statistics.tudom = tudokCount;
+            statistics.bizonytalan = bizonytalanCount;
+            statistics.tanulandó = tanulandoCount;
         }
 
         function createStudyCard(card, index) {
