@@ -72,6 +72,97 @@
             letter-spacing: 0.05em;
         }
 
+        /* Study Controls */
+        .study-controls {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 1rem auto 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            max-width: 800px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .control-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 100px;
+        }
+
+        .control-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .control-button.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .control-select {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(203, 213, 225, 0.6);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: #334155;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .control-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .exit-button {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exit-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
         /* Cards Section - Updated for Figma Design */
         .cards-container {
             display: flex;
@@ -493,6 +584,44 @@
                 <div class="stopwatch-time" id="stopwatchTime">00:00</div>
                 <div class="stopwatch-label">Tanulási idő</div>
             </div>
+
+            <!-- Study Controls -->
+            <div class="study-controls">
+                <!-- Audio Toggle -->
+                <div class="control-group">
+                    <div class="control-label">Hang</div>
+                    <button id="audioToggle" class="control-button" onclick="toggleAudio()">
+                        🔊 Be
+                    </button>
+                </div>
+
+                <!-- Direction Selector -->
+                <div class="control-group">
+                    <div class="control-label">Irány</div>
+                    <select id="directionSelect" class="control-select" onchange="changeDirection()">
+                        <option value="AtoB">Magyar → English</option>
+                        <option value="BtoA">English → Magyar</option>
+                    </select>
+                </div>
+
+                <!-- Practice Filter -->
+                <div class="control-group">
+                    <div class="control-label">Gyakorlás</div>
+                    <select id="practiceFilter" class="control-select" onchange="changePracticeFilter()">
+                        <option value="all">Minden kártya</option>
+                        <option value="uncertain">Csak bizonytalan</option>
+                        <option value="unknown">Csak nem tudom</option>
+                    </select>
+                </div>
+
+                <!-- Exit Button -->
+                <div class="control-group">
+                    <div class="control-label">Kilépés</div>
+                    <button class="exit-button" onclick="exitToDashboard()">
+                        ← Vissza
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Loading State -->
@@ -570,6 +699,11 @@
             tanulandó: 0,
             totalViewed: 0
         };
+
+        // Study Controls
+        let audioEnabled = true;
+        let currentDirection = 'AtoB'; // 'AtoB' = Magyar → English, 'BtoA' = English → Magyar
+        let practiceFilter = 'all'; // 'all', 'uncertain', 'unknown'
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -1116,6 +1250,85 @@
             } catch (error) {
                 console.error('❌ Study log mentési hiba:', error);
                 return false;
+            }
+        }
+
+        // Study Controls Functions
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const button = document.getElementById('audioToggle');
+            
+            if (audioEnabled) {
+                button.textContent = '🔊 Be';
+                button.classList.remove('active');
+            } else {
+                button.textContent = '🔇 Ki';
+                button.classList.add('active');
+            }
+            
+            console.log(`🔊 Hang: ${audioEnabled ? 'BE' : 'KI'}`);
+        }
+
+        function changeDirection() {
+            const select = document.getElementById('directionSelect');
+            currentDirection = select.value;
+            
+            console.log(`🔄 Irány váltás: ${currentDirection}`);
+            
+            // Itt újra kell tölteni a kártyákat az új irány szerint
+            // Egyelőre csak console log, később implementálható
+            if (currentDirection === 'BtoA') {
+                console.log('📚 Kártyák: English → Magyar irányban');
+            } else {
+                console.log('📚 Kártyák: Magyar → English irányban');
+            }
+        }
+
+        function changePracticeFilter() {
+            const select = document.getElementById('practiceFilter');
+            practiceFilter = select.value;
+            
+            console.log(`🎯 Gyakorlás szűrő: ${practiceFilter}`);
+            
+            // Itt újra kell szűrni a kártyákat a kiválasztott szűrő szerint
+            if (practiceFilter === 'uncertain') {
+                console.log('⚠️ Csak bizonytalan kártyák');
+            } else if (practiceFilter === 'unknown') {
+                console.log('❌ Csak nem tudom kártyák');
+            } else {
+                console.log('📚 Minden kártya');
+            }
+            
+            // Itt implementálható a kártyák újraszűrése
+        }
+
+        function exitToDashboard() {
+            // Állítsuk le a stopwatch-ot
+            if (isStopwatchRunning) {
+                stopStopwatch();
+            }
+            
+            console.log('🚪 Vissza a Dashboard-ra');
+            window.location.href = 'dashboard.html';
+        }
+
+        // Text-to-Speech function (for future audio implementation)
+        function speakText(text, language = 'hu-HU') {
+            if (!audioEnabled || !window.speechSynthesis) {
+                return;
+            }
+            
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = language;
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                utterance.volume = 0.8;
+                
+                window.speechSynthesis.speak(utterance);
+                console.log(`🗣️ Kimondva: "${text}" (${language})`);
+            } catch (error) {
+                console.log('❌ Hang hiba:', error);
             }
         }
 
