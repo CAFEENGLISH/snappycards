@@ -3788,15 +3788,42 @@
                             .from('media')
                             .getPublicUrl(filePath);
                         
-                        // Store media data in global variables
-                        window.currentMediaUrl = publicURL.publicUrl;
-                        window.currentMediaType = detectMediaTypeFromFile(file);
-                        
                         statusElement.textContent = ' Vágólapról feltöltve: ' + fileName + '';
                         statusElement.style.color = '#16a34a';
                         
-                        // Update preview
-                        updatePreview();
+                        // Handle media storage differently for edit vs add modal
+                        if (isEditModalOpen) {
+                            // Edit modal: update card data directly in database
+                            try {
+                                const { error: updateError } = await supabase
+                                    .from('cards')
+                                    .update({
+                                        image_url: publicURL.publicUrl,
+                                        media_type: detectMediaTypeFromFile(file)
+                                    })
+                                    .eq('id', currentEditCardId);
+                                
+                                if (updateError) {
+                                    console.error('Error updating card media:', updateError);
+                                    statusElement.textContent = '❌ Hiba a kép mentésekor!';
+                                    statusElement.style.color = '#ef4444';
+                                } else {
+                                    // Refresh the edit modal with updated data
+                                    await openEditCardModal(currentEditCardId);
+                                }
+                            } catch (dbError) {
+                                console.error('Database update error:', dbError);
+                                statusElement.textContent = '❌ Adatbázis hiba!';
+                                statusElement.style.color = '#ef4444';
+                            }
+                        } else {
+                            // Add modal: store in global variables (existing behavior)
+                            window.currentMediaUrl = publicURL.publicUrl;
+                            window.currentMediaType = detectMediaTypeFromFile(file);
+                            
+                            // Update preview
+                            updatePreview();
+                        }
                         
                         // Show delete button
                         // Button is now part of the media container
