@@ -913,10 +913,18 @@
             const container = document.getElementById('cardsContainer');
             container.innerHTML = '';
             
+            console.log(`🎯 SZŰRÉSI DEBUG:`, {
+                currentCardsCount: currentCards.length,
+                practiceFilter: practiceFilter,
+                learnedCardsCount: learnedCards.size,
+                userProgressCount: (window.userProgress || []).length
+            });
+            
             // 🎯 DINAMIKUS SZŰRÉS: Practice filter és user progress alapján
             const availableCards = currentCards.filter(card => {
                 // Aktuális session során tanult kártyák kizárása
                 if (learnedCards.has(card.id)) {
+                    console.log(`❌ KIZÁRVA (session tanult): ${card.title}`);
                     return false;
                 }
                 
@@ -925,23 +933,33 @@
                 
                 if (!cardProgress) {
                     // Nincs korábbi progress - új kártya, minden filter esetén elérhető
+                    console.log(`✅ ÚJ KÁRTYA: ${card.title}`);
                     return true;
                 }
+                
+                console.log(`🔍 PROGRESS KÁRTYA: ${card.title}, mastery: ${cardProgress.mastery_level}`);
                 
                 // Practice filter alapján döntés
                 if (practiceFilter === 'all') {
                     // 'all': minden kártya elérhető (sem régi sem új kizárás)
+                    console.log(`✅ ALL FILTER: ${card.title} - minden kártya OK`);
                     return true;
                 } else if (practiceFilter === 'uncertain') {
                     // 'uncertain': csak bizonytalan kártyák (mastery_level = 2)
-                    return cardProgress.mastery_level === 2;
+                    const result = cardProgress.mastery_level === 2;
+                    console.log(`⚠️ UNCERTAIN FILTER: ${card.title} - ${result ? 'MEGFELEL' : 'NEM FELEL MEG'}`);
+                    return result;
                 } else if (practiceFilter === 'unknown') {
                     // 'unknown': csak nem tudom kártyák (mastery_level = 1)
-                    return cardProgress.mastery_level === 1;
+                    const result = cardProgress.mastery_level === 1;
+                    console.log(`❌ UNKNOWN FILTER: ${card.title} - ${result ? 'MEGFELEL' : 'NEM FELEL MEG'}`);
+                    return result;
                 }
                 
                 return true;
             });
+            
+            console.log(`🎯 SZŰRÉS EREDMÉNY: ${availableCards.length} / ${currentCards.length} kártya elérhető`);
             
             if (availableCards.length === 0) {
                 showSessionComplete();
