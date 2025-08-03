@@ -1953,8 +1953,8 @@
             
             // 🆕 MEGNÉZVE/HÁTRA VAN/ÖSSZESEN statisztikák frissítése
             const totalCards = currentCards.length || 0;
-            const totalStudied = tudokCount; // ✅ ÚJ LOGIKA: Megnézve = MEGTANULT kártyák (mastery_level = 3)
-            const hatraVan = totalCards - tudokCount; // ✅ Hátra van = Összesen - Megtanult
+            const totalStudied = directionProgress.length; // ✅ HELYES: Megnézve = MINDEN amit láttál (tudom+bizonytalan+tanulandó)
+            const hatraVan = totalCards - tudokCount; // ✅ Hátra van = Összesen - Megtanult (TUDOM), nem köze a pörgetésekhez
             
             const statMegnezve = document.getElementById('statMegnezve');
             const statHatra = document.getElementById('statHatra');

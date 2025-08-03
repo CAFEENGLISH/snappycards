@@ -2879,7 +2879,7 @@
                 const tudokCount = progressData?.filter(p => p.mastery_level === 3).length || 0;
                 const bizonytalanCount = progressData?.filter(p => p.mastery_level === 2).length || 0;
                 const nemTudomCount = progressData?.filter(p => p.mastery_level === 1).length || 0;
-                const totalStudied = tudokCount; // ✅ ÚJ LOGIKA: Megnézve = MEGTANULT kártyák (mastery_level = 3)
+                const totalStudied = progressData?.length || 0; // ✅ HELYES: Megnézve = MINDEN amit láttál (tudom+bizonytalan+tanulandó)
                 
                 // Get set card count
                 const setData = [...(dashboardData.ownSets || []), ...(dashboardData.joinedSets || [])].find(s => s.id === setId);
