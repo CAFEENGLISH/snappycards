@@ -789,8 +789,11 @@
                     return;
                 }
 
-                await loadCards(currentSetId);
-                await loadUserProgress(currentSetId);
+                            await loadCards(currentSetId);
+            
+            console.log(`🔍 DEBUG: initSlotMachine hívja loadUserProgress-et...`);
+            await loadUserProgress(currentSetId);
+            console.log(`🔍 DEBUG: loadUserProgress befejezve, totalStudyTime végül:`, totalStudyTime);
                 showInitialCards();
                 // Stopper NEM indul automatikusan - csak első kártya kattintáskor
                 
@@ -812,10 +815,17 @@
 
         // 🕐 ÖSSZESÍTETT IDŐ VÁLTOZÓK
         let totalStudyTime = 0; // Összesített tanulási idő másodpercekben (betöltött az adatbázisból)
+        console.log(`🔍 DEBUG: totalStudyTime inicializálva:`, totalStudyTime);
         
         // 🕐 ÖSSZESÍTETT IDŐ BETÖLTÉSE az adatbázisból
         async function loadTotalStudyTime(setId, userId) {
+            console.log(`🔍 DEBUG: loadTotalStudyTime KEZDÉS`);
+            console.log(`🔍 DEBUG: setId = ${setId}`);
+            console.log(`🔍 DEBUG: userId = ${userId}`);
+            
             try {
+                console.log(`🔍 DEBUG: Supabase lekérdezés indítása...`);
+                
                 const { data: setProgressData, error: setProgressError } = await supabase
                     .from('user_set_progress')
                     .select('total_time_spent')
@@ -823,19 +833,32 @@
                     .eq('set_id', setId)
                     .single();
                 
+                console.log(`🔍 DEBUG: Supabase válasz:`, {
+                    data: setProgressData,
+                    error: setProgressError,
+                    errorCode: setProgressError?.code
+                });
+                
                 if (setProgressError && setProgressError.code !== 'PGRST116') {
                     console.error('❌ Set progress betöltési hiba:', setProgressError);
+                    console.log(`🔍 DEBUG: Hiba miatt return 0`);
                     return 0;
                 }
                 
                 const savedTime = setProgressData?.total_time_spent || 0;
+                console.log(`🔍 DEBUG: setProgressData?.total_time_spent =`, setProgressData?.total_time_spent);
+                console.log(`🔍 DEBUG: savedTime (after || 0) =`, savedTime);
+                
                 totalStudyTime = savedTime;
+                console.log(`🔍 DEBUG: totalStudyTime set to:`, totalStudyTime);
                 
                 console.log(`🕐 Betöltött összesített idő: ${savedTime}s (${formatTime(savedTime)})`);
+                console.log(`🔍 DEBUG: loadTotalStudyTime BEFEJEZÉS`);
                 return savedTime;
                 
             } catch (error) {
                 console.error('❌ Összesített idő betöltési hiba:', error);
+                console.log(`🔍 DEBUG: Catch error, return 0`);
                 return 0;
             }
         }
@@ -853,7 +876,9 @@
                 console.log(`📊 User progress betöltése: setId=${setId}, userId=${user.id}`);
                 
                 // 🕐 ÖSSZESÍTETT TANULÁSI IDŐ BETÖLTÉSE
+                console.log(`🔍 DEBUG: loadUserProgress hívja loadTotalStudyTime-ot...`);
                 await loadTotalStudyTime(setId, user.id);
+                console.log(`🔍 DEBUG: loadTotalStudyTime befejezve, totalStudyTime most:`, totalStudyTime);
 
                 // Meglévő progress lekérése
                 const { data: progressData, error: progressError } = await supabase
@@ -1378,16 +1403,44 @@
 
         // 🕐 FOLYAMATOS IDŐ MENTÉS (minden percben)
         async function saveTimeProgress() {
-            if (!isSessionTimerRunning) return;
+            console.log(`🔍 DEBUG: saveTimeProgress KEZDÉS`);
+            
+            if (!isSessionTimerRunning) {
+                console.log(`🔍 DEBUG: Session timer not running, return`);
+                return;
+            }
             
             try {
+                console.log(`🔍 DEBUG: User lekérése...`);
                 const { data: { user }, error: userError } = await supabase.auth.getUser();
-                if (userError || !user) return;
+                
+                console.log(`🔍 DEBUG: User result:`, { user: user?.id, error: userError });
+                
+                if (userError || !user) {
+                    console.log(`🔍 DEBUG: No user or error, return`);
+                    return;
+                }
                 
                 const sessionTimeSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
                 const newTotalTime = totalStudyTime + sessionTimeSeconds;
                 
-                await supabase
+                console.log(`🔍 DEBUG: saveTimeProgress számítások:`, {
+                    sessionStartTime: sessionStartTime,
+                    currentTime: Date.now(),
+                    sessionTimeSeconds: sessionTimeSeconds,
+                    totalStudyTime: totalStudyTime,
+                    newTotalTime: newTotalTime,
+                    currentSetId: currentSetId
+                });
+                
+                console.log(`🔍 DEBUG: Upsert adatok:`, {
+                    user_id: user.id,
+                    set_id: currentSetId,
+                    last_studied: new Date().toISOString(),
+                    total_time_spent: newTotalTime
+                });
+                
+                const { data: upsertData, error: upsertError } = await supabase
                     .from('user_set_progress')
                     .upsert({
                         user_id: user.id,
@@ -1396,15 +1449,29 @@
                         total_time_spent: newTotalTime
                     }, { onConflict: 'user_id,set_id' });
                 
-                console.log(`🕐 Folyamatos mentés: ${newTotalTime}s (${formatTime(newTotalTime)})`);
+                console.log(`🔍 DEBUG: Upsert eredmény:`, {
+                    data: upsertData,
+                    error: upsertError
+                });
+                
+                if (upsertError) {
+                    console.error('❌ Folyamatos mentés hiba:', upsertError);
+                } else {
+                    console.log(`🕐 Folyamatos mentés: ${newTotalTime}s (${formatTime(newTotalTime)})`);
+                }
                 
             } catch (error) {
                 console.error('❌ Folyamatos mentés hiba:', error);
+                console.log(`🔍 DEBUG: Catch error:`, error);
             }
         }
 
         // Session Timer Functions
         function startSessionTimer() {
+            console.log(`🔍 DEBUG: startSessionTimer hívva`);
+            console.log(`🔍 DEBUG: isSessionTimerRunning:`, isSessionTimerRunning);
+            console.log(`🔍 DEBUG: totalStudyTime az indításkor:`, totalStudyTime);
+            
             if (!isSessionTimerRunning) {
                 isSessionTimerRunning = true;
                 sessionStartTime = Date.now();
@@ -1413,7 +1480,17 @@
                 // Folyamatos mentés indítása (60 másodpercenként)
                 timeSaveInterval = setInterval(saveTimeProgress, 60000);
                 
+                console.log(`🔍 DEBUG: Timer indítva:`, {
+                    isSessionTimerRunning: isSessionTimerRunning,
+                    sessionStartTime: sessionStartTime,
+                    totalStudyTime: totalStudyTime,
+                    sessionTimerInterval: !!sessionTimerInterval,
+                    timeSaveInterval: !!timeSaveInterval
+                });
+                
                 console.log('🕐 Session Timer és folyamatos mentés indítva');
+            } else {
+                console.log(`🔍 DEBUG: Timer már fut, skip`);
             }
         }
 
@@ -1437,18 +1514,41 @@
         }
 
         function updateSessionTimer() {
-            if (!isSessionTimerRunning) return;
+            if (!isSessionTimerRunning) {
+                console.log(`🔍 DEBUG: updateSessionTimer - not running, return`);
+                return;
+            }
             
             // Jelenlegi session idő másodpercekben
             const sessionElapsedMs = Date.now() - sessionStartTime;
             const sessionElapsedSeconds = Math.floor(sessionElapsedMs / 1000);
             
+            console.log(`🔍 DEBUG: updateSessionTimer:`, {
+                sessionStartTime: sessionStartTime,
+                currentTime: Date.now(),
+                sessionElapsedMs: sessionElapsedMs,
+                sessionElapsedSeconds: sessionElapsedSeconds,
+                totalStudyTime: totalStudyTime
+            });
+            
             // Összesített idő = betöltött idő + jelenlegi session idő
             const totalSeconds = totalStudyTime + sessionElapsedSeconds;
             
+            console.log(`🔍 DEBUG: Számított totalSeconds = ${totalStudyTime} + ${sessionElapsedSeconds} = ${totalSeconds}`);
+            
             // Formázás és megjelenítés
             const timeString = formatTime(totalSeconds);
-            document.getElementById('sessionTimerTime').textContent = timeString;
+            console.log(`🔍 DEBUG: Formázott idő string: "${timeString}"`);
+            
+            const timerElement = document.getElementById('sessionTimerTime');
+            console.log(`🔍 DEBUG: Timer element:`, timerElement);
+            
+            if (timerElement) {
+                timerElement.textContent = timeString;
+                console.log(`🔍 DEBUG: Timer element frissítve: "${timeString}"`);
+            } else {
+                console.error(`🔍 DEBUG: Timer element NOT FOUND!`);
+            }
         }
 
         function updateStatistics() {
@@ -1541,11 +1641,17 @@
 
         // 📊 SESSION COMPLETE: Csak befejezéskor hívódik meg
         async function saveStudyProgress() {
+            console.log('🔍 DEBUG: saveStudyProgress KEZDÉS');
             console.log('🎯 Session befejezve - set progress frissítés...');
             
             try {
                 const { data: { user }, error: userError } = await supabase.auth.getUser();
-                if (userError || !user) return;
+                console.log(`🔍 DEBUG: User result:`, { user: user?.id, error: userError });
+                
+                if (userError || !user) {
+                    console.log(`🔍 DEBUG: No user or error, return`);
+                    return;
+                }
 
                 // Jelenlegi session idő kiszámítása
                 const sessionTimeSeconds = isSessionTimerRunning ? 
@@ -1554,10 +1660,27 @@
                 // Új összesített idő = régi idő + jelenlegi session idő
                 const newTotalTime = totalStudyTime + sessionTimeSeconds;
                 
+                console.log(`🔍 DEBUG: saveStudyProgress számítások:`, {
+                    isSessionTimerRunning: isSessionTimerRunning,
+                    sessionStartTime: sessionStartTime,
+                    currentTime: Date.now(),
+                    sessionTimeSeconds: sessionTimeSeconds,
+                    totalStudyTime: totalStudyTime,
+                    newTotalTime: newTotalTime,
+                    currentSetId: currentSetId
+                });
+                
                 console.log(`🕐 Session idő mentése: ${sessionTimeSeconds}s, Új összesített: ${newTotalTime}s`);
 
+                console.log(`🔍 DEBUG: Final upsert adatok:`, {
+                    user_id: user.id,
+                    set_id: currentSetId,
+                    last_studied: new Date().toISOString(),
+                    total_time_spent: newTotalTime
+                });
+
                 // Set progress és összesített idő frissítése
-                await supabase
+                const { data: finalUpsertData, error: finalUpsertError } = await supabase
                     .from('user_set_progress')
                     .upsert({
                         user_id: user.id,
@@ -1566,12 +1689,20 @@
                         total_time_spent: newTotalTime
                     }, { onConflict: 'user_id,set_id' });
 
+                console.log(`🔍 DEBUG: Final upsert eredmény:`, {
+                    data: finalUpsertData,
+                    error: finalUpsertError
+                });
+
                 // Frissítjük a local változót is
                 totalStudyTime = newTotalTime;
+                console.log(`🔍 DEBUG: totalStudyTime frissítve:`, totalStudyTime);
 
                 console.log('✅ Set progress és összesített idő frissítve');
+                console.log('🔍 DEBUG: saveStudyProgress BEFEJEZÉS');
             } catch (error) {
                 console.error('❌ Set progress hiba:', error);
+                console.log(`🔍 DEBUG: Catch error:`, error);
             }
         }
 
