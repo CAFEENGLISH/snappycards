@@ -914,25 +914,15 @@
 
         function showInitialCards() {
             const container = document.getElementById('cardsContainer');
-            console.log(`📦 KONTÉNER ELLENŐRZÉS:`, {
-                container: container,
-                containerExists: !!container,
-                containerHTML: container ? container.outerHTML.substring(0, 200) : 'NULL'
-            });
             container.innerHTML = '';
             
-            console.log(`🎯 SZŰRÉSI DEBUG:`, {
-                currentCardsCount: currentCards.length,
-                practiceFilter: practiceFilter,
-                learnedCardsCount: learnedCards.size,
-                userProgressCount: (window.userProgress || []).length
-            });
+
             
             // 🎯 DINAMIKUS SZŰRÉS: Practice filter és user progress alapján
             const availableCards = currentCards.filter(card => {
                 // Aktuális session során tanult kártyák kizárása
                 if (learnedCards.has(card.id)) {
-                    console.log(`❌ KIZÁRVA (session tanult): ${card.title}`);
+
                     return false;
                 }
                 
@@ -941,26 +931,26 @@
                 
                 if (!cardProgress) {
                     // Nincs korábbi progress - új kártya, minden filter esetén elérhető
-                    console.log(`✅ ÚJ KÁRTYA: ${card.title}`);
+
                     return true;
                 }
                 
-                console.log(`🔍 PROGRESS KÁRTYA: ${card.title}, mastery: ${cardProgress.mastery_level}`);
+
                 
                 // Practice filter alapján döntés
                 if (practiceFilter === 'all') {
-                    // 'all': minden kártya elérhető (sem régi sem új kizárás)
-                    console.log(`✅ ALL FILTER: ${card.title} - minden kártya OK`);
-                    return true;
+                    // 'all': csak azok amik még nincsenek teljesen megtanulva (mastery_level < 3)
+                    // Ez magában foglalja: tanulandó (1), bizonytalan (2), de kizárja a tudom (3)
+                    return cardProgress.mastery_level < 3;
                 } else if (practiceFilter === 'uncertain') {
                     // 'uncertain': csak bizonytalan kártyák (mastery_level = 2)
                     const result = cardProgress.mastery_level === 2;
-                    console.log(`⚠️ UNCERTAIN FILTER: ${card.title} - ${result ? 'MEGFELEL' : 'NEM FELEL MEG'}`);
+
                     return result;
                 } else if (practiceFilter === 'unknown') {
                     // 'unknown': csak nem tudom kártyák (mastery_level = 1)
                     const result = cardProgress.mastery_level === 1;
-                    console.log(`❌ UNKNOWN FILTER: ${card.title} - ${result ? 'MEGFELEL' : 'NEM FELEL MEG'}`);
+
                     return result;
                 }
                 
@@ -996,45 +986,12 @@
             // Tárold el a jelenlegi kör kártyáit
             currentRoundCards = cardsToShow;
             
-            console.log(`🎨 KÁRTYÁK LÉTREHOZÁSA...`);
             cardsToShow.forEach((card, index) => {
-                console.log(`🎨 Kártya ${index}: ${card.title}`);
                 const cardElement = createStudyCard(card, index);
-                console.log(`🎨 Created element:`, cardElement);
                 container.appendChild(cardElement);
-                console.log(`🎨 Element added to container, container children count: ${container.children.length}`);
-            });
-            console.log(`✅ KÁRTYÁK HOZZÁADVA A KONTÉNERHEZ`);
-            console.log(`📊 VÉGSŐ KONTÉNER ÁLLAPOT:`, {
-                childrenCount: container.children.length,
-                innerHTML: container.innerHTML.substring(0, 500)
             });
             
-            // 🔍 ADDITIONAL DEBUG: Kártya elemek részletes vizsgálata
-            setTimeout(() => {
-                console.log(`🔍 KONTÉNER ELEM RÉSZLETEK:`, {
-                    containerDisplay: getComputedStyle(container).display,
-                    containerVisibility: getComputedStyle(container).visibility,
-                    containerOpacity: getComputedStyle(container).opacity,
-                    containerHeight: getComputedStyle(container).height,
-                    containerWidth: getComputedStyle(container).width,
-                    containerPosition: getComputedStyle(container).position
-                });
-                
-                for (let i = 0; i < container.children.length; i++) {
-                    const card = container.children[i];
-                    console.log(`🔍 KÁRTYA ${i} RÉSZLETEK:`, {
-                        className: card.className,
-                        display: getComputedStyle(card).display,
-                        visibility: getComputedStyle(card).visibility,
-                        opacity: getComputedStyle(card).opacity,
-                        height: getComputedStyle(card).height,
-                        width: getComputedStyle(card).width,
-                        position: getComputedStyle(card).position,
-                        zIndex: getComputedStyle(card).zIndex
-                    });
-                }
-            }, 100);  // 100ms késleltetéssel, hogy biztosan renderelődött
+
         }
 
         // ⚡ STATISZTIKA FRISSÍTŐ FÜGGVÉNY - Korábbi tanulási állapot megjelenítése
