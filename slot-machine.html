@@ -1006,6 +1006,32 @@
                 childrenCount: container.children.length,
                 innerHTML: container.innerHTML.substring(0, 500)
             });
+            
+            // 🔍 ADDITIONAL DEBUG: Kártya elemek részletes vizsgálata
+            setTimeout(() => {
+                console.log(`🔍 KONTÉNER ELEM RÉSZLETEK:`, {
+                    containerDisplay: getComputedStyle(container).display,
+                    containerVisibility: getComputedStyle(container).visibility,
+                    containerOpacity: getComputedStyle(container).opacity,
+                    containerHeight: getComputedStyle(container).height,
+                    containerWidth: getComputedStyle(container).width,
+                    containerPosition: getComputedStyle(container).position
+                });
+                
+                for (let i = 0; i < container.children.length; i++) {
+                    const card = container.children[i];
+                    console.log(`🔍 KÁRTYA ${i} RÉSZLETEK:`, {
+                        className: card.className,
+                        display: getComputedStyle(card).display,
+                        visibility: getComputedStyle(card).visibility,
+                        opacity: getComputedStyle(card).opacity,
+                        height: getComputedStyle(card).height,
+                        width: getComputedStyle(card).width,
+                        position: getComputedStyle(card).position,
+                        zIndex: getComputedStyle(card).zIndex
+                    });
+                }
+            }, 100);  // 100ms késleltetéssel, hogy biztosan renderelődött
         }
 
         function createStudyCard(card, index) {
