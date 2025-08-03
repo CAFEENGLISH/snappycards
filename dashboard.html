@@ -2010,7 +2010,7 @@
                     console.log(`🔍 LEKÉRDEZÉS OWN: user_id=${currentUser.id}, set_id=${set.id}`);
                     const { data: progressData, error: progressError } = await supabase
                         .from('user_card_progress')
-                        .select('mastery_level, card_id, last_studied')
+                        .select('mastery_level, card_id, last_reviewed')
                         .eq('user_id', currentUser.id)
                         .eq('set_id', set.id);
                     
@@ -2064,7 +2064,7 @@
                     console.log(`🔍 LEKÉRDEZÉS JOINED: user_id=${currentUser.id}, set_id=${set.id}`);
                     const { data: progressData, error: progressError } = await supabase
                         .from('user_card_progress')
-                        .select('mastery_level, card_id, last_studied')
+                        .select('mastery_level, card_id, last_reviewed')
                         .eq('user_id', currentUser.id)
                         .eq('set_id', set.id);
                     
