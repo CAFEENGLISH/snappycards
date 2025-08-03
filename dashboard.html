@@ -3808,8 +3808,14 @@
                                     statusElement.textContent = '❌ Hiba a kép mentésekor!';
                                     statusElement.style.color = '#ef4444';
                                 } else {
-                                    // Refresh the edit modal with updated data
-                                    await openEditCardModal(currentEditCardId);
+                                    statusElement.textContent = '✅ Kép sikeresen mentve!';
+                                    statusElement.style.color = '#16a34a';
+                                    
+                                    // Update the video URL input with the new image URL
+                                    const videoInput = document.getElementById('singleVideoUrl');
+                                    if (videoInput) {
+                                        videoInput.value = publicURL.publicUrl;
+                                    }
                                 }
                             } catch (dbError) {
                                 console.error('Database update error:', dbError);
