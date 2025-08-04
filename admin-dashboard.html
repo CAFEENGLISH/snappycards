@@ -563,104 +563,7 @@
             color: #6b7280;
         }
 
-        /* Mock Mode Toggle Styles */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-            cursor: pointer;
-        }
 
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #cbd5e1;
-            border-radius: 30px;
-            transition: 0.3s;
-            border: 2px solid #e2e8f0;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            border-radius: 50%;
-            transition: 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input:checked + .toggle-slider {
-            background-color: #f59e0b;
-            border-color: #f59e0b;
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(30px);
-        }
-
-        .mock-status-indicator {
-            display: flex;
-            align-items: center;
-            margin-top: 12px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            background: #ecfdf5;
-            color: #047857;
-            border: 1px solid #d1fae5;
-        }
-
-        .mock-status-indicator.mock-active {
-            background: #fef3c7;
-            color: #92400e;
-            border-color: #fde68a;
-        }
-
-        /* Global Mock Mode Banner */
-        .mock-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            padding: 12px 0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-            z-index: 9999;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        .mock-banner.active {
-            display: block;
-        }
-
-        .mock-banner i {
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        /* Adjust body padding when mock banner is active */
-        body.mock-mode-active {
-            padding-top: 50px;
-        }
 
         /* Modal buttons should stay at bottom */
         .modal-buttons {
@@ -709,11 +612,7 @@
     </style>
 </head>
 <body>
-    <!-- Mock Mode Banner -->
-    <div id="mockBanner" class="mock-banner">
-        <i data-lucide="database"></i>
-        <span>🎭 DEMO ÜZEMMÓD AKTÍV - Csak bemutató adatok láthatóak</span>
-    </div>
+
 
     <!-- Header -->
     <div class="header">
@@ -2342,30 +2241,7 @@
                 <input type="tel" class="form-input" id="adminPhone" value="+36 1 234 5678">
             </div>
             
-            <!-- Mock Mode Toggle -->
-            <div class="form-group" style="border-top: 2px solid #e2e8f0; padding-top: 20px; margin-top: 20px;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <label class="form-label" style="margin-bottom: 4px; font-weight: 600; color: #374151;">
-                            <i data-lucide="database" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle; color: #6366f1;"></i>
-                            Rendszer üzemmód
-                        </label>
-                        <p style="font-size: 14px; color: #6b7280; margin: 0; line-height: 1.4;">
-                            Mock üzemmódban csak demo adatok látszanak, az éles adatok védettek maradnak.
-                        </p>
-                    </div>
-                    <div style="margin-left: 20px;">
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="mockModeToggle" onchange="toggleMockMode()">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <div id="mockModeStatus" class="mock-status-indicator">
-                    <i data-lucide="shield-check" style="width: 16px; height: 16px; margin-right: 6px;"></i>
-                    <span id="mockModeText">Éles üzemmód</span>
-                </div>
-            </div>
+
             
             <div class="modal-buttons">
                 <button class="btn btn-secondary" onclick="closeSchoolSettings()">
@@ -2762,136 +2638,24 @@
 
     <script>
         // =============================================================================
-        // GLOBAL MOCK MODE SYSTEM
+        // DATA ACCESS FUNCTIONS  
         // =============================================================================
         
-        // Global Mock Mode State
-        let isMockMode = localStorage.getItem('snappyCards_mockMode') === 'true';
-        
-        // Mock Mode Functions
-        function toggleMockMode() {
-            isMockMode = !isMockMode;
-            localStorage.setItem('snappyCards_mockMode', isMockMode.toString());
-            updateMockModeUI();
-            
-            // Show confirmation toast
-            if (isMockMode) {
-                showWarning(
-                    'Demo üzemmód bekapcsolva', 
-                    'Mostantól csak bemutató adatok láthatóak. Az éles adatok védettek.'
-                );
-            } else {
-                showSuccess(
-                    'Éles üzemmód visszaállítva', 
-                    'Mostantól az éles adatok láthatóak és szerkeszthetőek.'
-                );
-            }
-            
-            // Reload data with new mode
-            setTimeout(() => {
-                reloadAllData();
-            }, 1000);
-        }
-        
-        function updateMockModeUI() {
-            const toggle = document.getElementById('mockModeToggle');
-            const statusIndicator = document.getElementById('mockModeStatus');
-            const statusText = document.getElementById('mockModeText');
-            const mockBanner = document.getElementById('mockBanner');
-            const body = document.body;
-            
-            if (toggle) toggle.checked = isMockMode;
-            
-            if (statusIndicator) {
-                if (isMockMode) {
-                    statusIndicator.classList.add('mock-active');
-                    statusText.textContent = 'Demo üzemmód';
-                    statusIndicator.querySelector('i').setAttribute('data-lucide', 'database');
-                } else {
-                    statusIndicator.classList.remove('mock-active');
-                    statusText.textContent = 'Éles üzemmód';
-                    statusIndicator.querySelector('i').setAttribute('data-lucide', 'shield-check');
-                }
-                lucide.createIcons(statusIndicator);
-            }
-            
-            // Show/hide mock banner
-            if (mockBanner) {
-                if (isMockMode) {
-                    mockBanner.classList.add('active');
-                    body.classList.add('mock-mode-active');
-                } else {
-                    mockBanner.classList.remove('active');
-                    body.classList.remove('mock-mode-active');
-                }
-                lucide.createIcons(mockBanner);
-            }
-        }
-        
-        function reloadAllData() {
-            // Reload all data with current mock mode
-            if (typeof loadTeachers === 'function') loadTeachers();
-            if (typeof loadClassrooms === 'function') loadClassrooms();
-            if (typeof loadSets === 'function') loadSets();
-            
-            console.log(`🔄 Adatok újratöltve - ${isMockMode ? 'Mock' : 'Éles'} üzemmód`);
-        }
-        
-        function getMockPrefix() {
-            return isMockMode ? 'mock_' : '';
-        }
-        
-        function getDataSource(liveData, mockData) {
-            return isMockMode ? mockData : liveData;
-        }
-        
-        // Initialize Mock Mode on page load
-        function initializeMockMode() {
-            updateMockModeUI();
-            console.log(`🎭 Mock Mode initialized: ${isMockMode ? 'ACTIVE' : 'DISABLED'}`);
-        }
-        
-        // Call initialization when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeMockMode();
-        });
-        
-        // =============================================================================
-        // MOCK DATA SETS
-        // =============================================================================
-        
-        // Live data (current data arrays stay as they are)
-        // const teachers = [...]; // Keep existing
-        // const classrooms = [...]; // Keep existing  
-        // const sets = [...]; // Keep existing
-        
-        // Empty mock data - Mock mode will use the LIVE data above as "mock"
-        const mockTeachers = [];
-        
-        const mockClassrooms = [];
-        
-        const mockSets = [];
-        
-        const mockTeacherAssignments = [];
-        
-        // =============================================================================
-        // DATA ACCESS FUNCTIONS
-        // =============================================================================
-        
+        // Simple data access - always use the current arrays
         function getCurrentTeachers() {
-            return isMockMode ? teachers : []; // Mock mode shows live data, Live mode shows empty
+            return teachers;
         }
         
         function getCurrentClassrooms() {
-            return isMockMode ? classrooms : [];
+            return classrooms;
         }
         
         function getCurrentSets() {
-            return isMockMode ? sets : [];
+            return sets;
         }
         
         function getCurrentTeacherAssignments() {
-            return isMockMode ? teacherAssignments : [];
+            return teacherAssignments;
         }
         
     </script>
