@@ -282,15 +282,10 @@
         }
 
         .teacher-note {
-            color: #1e40af;
+            color: #374151;
             font-size: 14px;
             font-style: italic;
-            font-weight: 500;
             margin-top: 4px;
-            background: #eff6ff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border-left: 3px solid #3b82f6;
         }
 
         .teacher-status {
@@ -1490,7 +1485,7 @@
             try {
                 const { data: teacherData, error } = await supabase
                     .from('user_profiles')
-                    .select('id, first_name, last_name, user_role, created_at, is_mock')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock, note')
                     .eq('id', id)
                     .single();
                 
@@ -1506,9 +1501,7 @@
                     name: `${teacherData.first_name || ''} ${teacherData.last_name || ''}`.trim(),
                     email: `${teacherData.first_name?.toLowerCase() || 'teacher'}.${teacherData.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
                     status: teacherData.first_name === 'Sarah' ? 'archived' : 'active',
-                    note: teacherData.first_name === 'Sarah' ? 'IELTS examiner (visszatérés szabadság után)' : 
-                          teacherData.first_name === 'Rebecca' ? 'Native English speaker, Cambridge CELTA qualified' :
-                          teacherData.first_name === 'Michael' ? 'Business English specialist, TESOL certified' : '',
+                    note: teacherData.note || '',
                     password: 'Teaching123' // Mock password for demo
                 };
                 
