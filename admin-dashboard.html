@@ -43,7 +43,7 @@
         }
         .actions {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
         .action-btn {
@@ -89,9 +89,69 @@
             <h1 style="margin: 0; color: #7c3aed;">🏫 Budapest Központi Gimnázium</h1>
             <p style="margin: 0; color: #64748b;">Iskola Admin Dashboard</p>
         </div>
-        <div style="text-align: right;">
-            <div style="font-weight: 600;" id="userName">Zsolt</div>
-            <div style="color: #64748b;">Iskola Admin</div>
+        <div style="text-align: right; position: relative;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div>
+                    <div style="font-weight: 600;" id="userName">Zsolt</div>
+                    <div style="color: #64748b;">Iskola Admin</div>
+                </div>
+                <div class="user-avatar" onclick="toggleUserMenu()" style="cursor: pointer;">
+                    <div style="
+                        width: 48px; 
+                        height: 48px; 
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        border-radius: 50%; 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        color: white; 
+                        font-weight: bold; 
+                        font-size: 18px;
+                    " id="userAvatar">Z</div>
+                </div>
+            </div>
+            
+            <!-- User Menu Dropdown -->
+            <div id="userMenu" style="
+                position: absolute;
+                top: 60px;
+                right: 0;
+                background: rgba(255,255,255,0.95);
+                backdrop-filter: blur(12px);
+                border-radius: 16px;
+                padding: 10px;
+                min-width: 200px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+                border: 1px solid rgba(255,255,255,0.2);
+                display: none;
+                z-index: 1000;
+            ">
+                <div class="menu-item" onclick="openSchoolSettings()" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                " onmouseover="this.style.background='rgba(102,126,234,0.1)'" onmouseout="this.style.background='transparent'">
+                    <i data-lucide="settings" style="width: 18px; height: 18px;"></i>
+                    <span>Iskola Beállítások</span>
+                </div>
+                <div class="menu-item" onclick="logout()" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                    color: #dc2626;
+                " onmouseover="this.style.background='rgba(220,38,38,0.1)'" onmouseout="this.style.background='transparent'">
+                    <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+                    <span>Kijelentkezés</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -130,10 +190,6 @@
             <i data-lucide="bar-chart"></i>
             Jelentések
         </button>
-        <button class="action-btn">
-            <i data-lucide="settings"></i>
-            Iskola Beállítások
-        </button>
     </div>
 
     <script>
@@ -152,12 +208,51 @@
             if (user) {
                 console.log('✅ User logged in:', user.email);
                 console.log('✅ User role:', user.user_metadata?.user_role);
-                document.getElementById('userName').textContent = user.user_metadata?.first_name || 'Admin';
+                const firstName = user.user_metadata?.first_name || 'Admin';
+                document.getElementById('userName').textContent = firstName;
+                document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
             } else {
                 console.log('❌ No user - but NOT redirecting!');
                 document.getElementById('userName').textContent = 'Guest';
+                document.getElementById('userAvatar').textContent = 'G';
             }
         }
+        
+        // Toggle user menu
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+        
+        // Open school settings
+        function openSchoolSettings() {
+            alert('Iskola beállítások megnyitása - Itt lesznek az iskola konfigurációk');
+            toggleUserMenu();
+        }
+        
+        // Logout function
+        async function logout() {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error('Logout error:', error);
+            } else {
+                window.location.href = '/login.html';
+            }
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const avatar = document.querySelector('.user-avatar');
+            
+            if (!avatar.contains(event.target) && !menu.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        });
         
         checkAuth();
     </script>
