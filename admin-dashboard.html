@@ -685,19 +685,19 @@
     <!-- Statistics -->
     <div class="stats">
         <div class="stat-card">
-            <div class="stat-number">12</div>
+            <div class="stat-number">8</div>
             <div>Tanárok</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">8</div>
-            <div>Osztályok</div>
+            <div class="stat-number">15</div>
+            <div>Csoportok</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">247</div>
+            <div class="stat-number">156</div>
             <div>Diákok</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">89</div>
+            <div class="stat-number">42</div>
             <div>Szettek</div>
         </div>
     </div>
@@ -711,7 +711,7 @@
         </button>
         <button class="action-btn" onclick="openClassroomsModal()">
             <i data-lucide="school"></i>
-            Osztályok
+            Csoportok
         </button>
         <button class="action-btn" onclick="openSetsModal()">
             <i data-lucide="layers"></i>
@@ -819,26 +819,26 @@
         let teachers = [
             {
                 id: 1,
-                name: 'Dr. Nagy Péter',
-                email: 'nagy.peter@iskola.hu',
+                name: 'Smith Rebecca',
+                email: 'rebecca.smith@cafeenglish.eu',
                 status: 'active',
-                note: 'Matematika és fizika tanár',
+                note: 'Native English speaker, Cambridge CELTA qualified',
                 createdAt: '2024-01-15'
             },
             {
                 id: 2,
-                name: 'Kis Anna',
-                email: 'kis.anna@iskola.hu',
+                name: 'Johnson Michael',
+                email: 'michael.johnson@cafeenglish.eu',
                 status: 'active',
-                note: 'Magyar irodalom és nyelvtan',
+                note: 'Business English specialist, TESOL certified',
                 createdAt: '2024-02-01'
             },
             {
                 id: 3,
-                name: 'Varga József',
-                email: 'varga.jozsef@iskola.hu',
+                name: 'Taylor Sarah',
+                email: 'sarah.taylor@cafeenglish.eu',
                 status: 'archived',
-                note: 'Történelem tanár (nyugdíjazott)',
+                note: 'IELTS examiner (visszatérés szabadság után)',
                 createdAt: '2023-09-01'
             }
         ];
@@ -1188,31 +1188,31 @@
         let classrooms = [
             {
                 id: 1,
-                name: '9.A',
-                grade: '9',
-                subject: 'Matematika',
-                size: 28,
-                description: 'Emelt szintű matematika osztály',
+                name: 'Advanced English B2',
+                grade: '11-12',
+                subject: 'Angol nyelv',
+                size: 18,
+                description: 'Középfokú angol nyelvvizsga felkészítő (B2 szint)',
                 status: 'active',
                 createdAt: '2024-01-15'
             },
             {
                 id: 2,
-                name: '10.B',
-                grade: '10',
-                subject: 'Fizika',
-                size: 24,
-                description: 'Fizika tagozatos osztály',
+                name: 'Business English',
+                grade: 'adult',
+                subject: 'Szakmai angol',
+                size: 12,
+                description: 'Üzleti angol felnőtt csoportoknak',
                 status: 'active',
                 createdAt: '2024-02-01'
             },
             {
                 id: 3,
-                name: 'Nyelvtani alapok',
-                grade: 'other',
-                subject: 'Magyar',
+                name: 'Elementary A1-A2',
+                grade: 'mixed',
+                subject: 'Angol alapok',
                 size: 15,
-                description: 'Vegyes korosztályú nyelvtani felzárkóztató',
+                description: 'Kezdő angol nyelvi alapok vegyes korosztály',
                 status: 'archived',
                 createdAt: '2023-09-01'
             }
@@ -1226,7 +1226,7 @@
                 teacherId: 1, // Dr. Nagy Péter
                 startDate: '2024-01-15',
                 endDate: null, // Still active
-                note: 'Emelt szintű matematika tanítása',
+                note: 'B2 szintű angol nyelvvizsga felkészítés',
                 status: 'active'
             },
             {
@@ -1235,7 +1235,7 @@
                 teacherId: 2, // Kis Anna
                 startDate: '2024-01-10',
                 endDate: '2024-06-15', // Ended
-                note: 'Fizika alapok és gyakorlatok',
+                note: 'Üzleti angol alapok és szaknyelv',
                 status: 'ended'
             },
             {
@@ -1244,7 +1244,7 @@
                 teacherId: 1, // Dr. Nagy Péter (took over from Kis Anna)
                 startDate: '2024-06-16',
                 endDate: null, // Currently active
-                note: 'Fizika haladó szint',
+                note: 'Haladó üzleti angol és prezentációs készségek',
                 status: 'active'
             },
             {
@@ -1253,7 +1253,7 @@
                 teacherId: 2, // Kis Anna
                 startDate: '2023-12-20',
                 endDate: '2024-05-30',
-                note: 'Magyar nyelvtan és irodalom',
+                note: 'Alapfokú angol (A1-A2) conversational practice',
                 status: 'ended'
             }
         ];
@@ -1435,34 +1435,34 @@
         let sets = [
             {
                 id: 1,
-                name: 'Matematikai alapfogalmak',
-                subject: 'Matematika',
-                difficulty: 'beginner',
-                description: 'Alapvető matematikai fogalmak és műveletek',
+                name: 'Business English Vocabulary',
+                subject: 'Business English',
+                difficulty: 'intermediate',
+                description: 'Essential business terms, presentations, and negotiations',
                 isPublic: false,
-                cardCount: 45,
+                cardCount: 85,
                 status: 'active',
                 createdAt: '2024-01-15'
             },
             {
                 id: 2,
-                name: 'Fizikai törvények',
-                subject: 'Fizika',
-                difficulty: 'intermediate',
-                description: 'Newton törvényei és mechanika alapjai',
-                isPublic: true,
-                cardCount: 32,
+                name: 'IELTS Academic Writing',
+                subject: 'IELTS Preparation',
+                difficulty: 'advanced',
+                description: 'Task 1 & 2 phrases, linking words, and structures',
+                isPublic: false,
+                cardCount: 62,
                 status: 'active',
                 createdAt: '2024-02-01'
             },
             {
                 id: 3,
-                name: 'Magyar irodalom klasszikusok',
-                subject: 'Magyar',
-                difficulty: 'advanced',
-                description: 'XIX. századi magyar írók és műveik',
+                name: 'Elementary Grammar A1-A2',
+                subject: 'Grammar Basics',
+                difficulty: 'beginner',
+                description: 'Present simple, past simple, basic prepositions',
                 isPublic: false,
-                cardCount: 28,
+                cardCount: 48,
                 status: 'archived',
                 createdAt: '2023-11-15'
             }
@@ -2093,12 +2093,12 @@
             
             <div class="form-group">
                 <label class="form-label">Iskola neve</label>
-                <input type="text" class="form-input" id="schoolName" value="Budapest Központi Gimnázium">
+                <input type="text" class="form-input" id="schoolName" value="Cafe English Language Academy">
             </div>
             
             <div class="form-group">
                 <label class="form-label">Iskola címe</label>
-                <input type="text" class="form-input" id="schoolAddress" value="1051 Budapest, József Attila u. 15.">
+                <input type="text" class="form-input" id="schoolAddress" value="1051 Budapest, Vörösmarty tér 7-8.">
             </div>
             
             <div class="form-group">
