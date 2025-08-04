@@ -855,6 +855,16 @@
         
         // Open school settings
         function openSchoolSettings() {
+            // Populate with current user and school data
+            if (currentUser) {
+                document.getElementById('adminEmail').value = currentUser.email;
+                document.getElementById('adminName').value = currentUser.user_metadata?.first_name || 'Admin';
+            }
+            
+            if (currentSchool) {
+                document.getElementById('schoolName').value = currentSchool.name;
+            }
+            
             const modal = document.getElementById('schoolSettingsModal');
             modal.style.display = 'flex';
             toggleUserMenu();
