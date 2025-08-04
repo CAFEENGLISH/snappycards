@@ -1283,14 +1283,17 @@
                         const passwordResult = await passwordResponse.json();
                         if (passwordResponse.ok) {
                             console.log('✅ Password updated successfully');
+                            // Store password locally so we can show it later
+                            localStorage.setItem(`teacher_password_${window.editingTeacherId}`, password);
                             // Show visual feedback for password change
                             const passwordField = document.getElementById('teacherPassword');
-                            passwordField.placeholder = '✅ Jelszó sikeresen frissítve!';
                             passwordField.style.borderColor = '#10b981';
+                            passwordField.placeholder = '✅ Jelszó sikeresen frissítve!';
                             setTimeout(() => {
-                                passwordField.placeholder = 'Új jelszó beállítása (opcionális)';
                                 passwordField.style.borderColor = '';
-                            }, 3000);
+                                passwordField.placeholder = 'Jelszó';
+                                passwordField.value = password; // Show the new password
+                            }, 2000);
                         } else {
                             console.error('❌ Password update failed:', passwordResult);
                         }
@@ -1410,6 +1413,8 @@
                 // Transform Supabase data to match expected format
                 const teachers = (teachersData || []).map(teacher => {
                     console.log(`🔍 Processing teacher: ${teacher.first_name} ${teacher.last_name}, note: "${teacher.note}"`);
+                    // Get stored password or default
+                    const storedPassword = localStorage.getItem(`teacher_password_${teacher.id}`) || 'Teaching123';
                     return {
                         id: teacher.id,
                         name: `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim(),
@@ -1417,7 +1422,7 @@
                         status: 'active', // Default status for now
                         note: teacher.note || '',
                         createdAt: teacher.created_at,
-                        password: 'Teaching123' // Mock password for demo
+                        password: storedPassword // Real password from localStorage
                     };
                 });
                 
@@ -1503,6 +1508,9 @@
                     return;
                 }
                 
+                // Get stored password or default
+                const storedPassword = localStorage.getItem(`teacher_password_${teacherData.id}`) || 'Teaching123';
+                
                 // Transform to expected format
                 const teacher = {
                     id: teacherData.id,
@@ -1510,15 +1518,15 @@
                     email: `${teacherData.first_name?.toLowerCase() || 'teacher'}.${teacherData.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
                     status: teacherData.first_name === 'Sarah' ? 'archived' : 'active',
                     note: teacherData.note || '',
-                    password: 'Teaching123' // Mock password for demo
+                    password: storedPassword // Real password stored locally
                 };
                 
             if (teacher) {
                 // Fill form with teacher data
                 document.getElementById('teacherName').value = teacher.name;
                 document.getElementById('teacherEmail').value = teacher.email;
-                document.getElementById('teacherPassword').value = ''; // Empty for security - user can set new password
-                document.getElementById('teacherPassword').placeholder = 'Új jelszó beállítása (opcionális)';
+                document.getElementById('teacherPassword').value = teacher.password; // Show actual password
+                document.getElementById('teacherPassword').placeholder = 'Jelszó';
                 document.getElementById('teacherNote').value = teacher.note || '';
                 document.getElementById('sendWelcomeEmail').checked = false; // Default to false for editing
                 
