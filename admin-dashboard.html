@@ -1000,10 +1000,8 @@
                 showSuccess('Beállítások mentve', 'Az iskola beállítások sikeresen frissítve!');
                 closeSchoolSettings();
                 
-                // Reload statistics if new school was created
-                if (!currentSchool?.id) {
-                    await loadSchoolStatistics();
-                }
+                // Reload statistics to reflect changes
+                await loadSchoolStatistics();
                 
             } catch (error) {
                 console.error('Error saving settings:', error);
