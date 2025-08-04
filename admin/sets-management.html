@@ -253,16 +253,8 @@
             border: 1px solid rgba(147, 51, 234, 0.3);
         }
 
-        .difficulty-mixed {
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-        }
-
         .difficulty-none {
-            background: rgba(156, 163, 175, 0.1);
-            color: #6b7280;
-            border: 1px solid rgba(156, 163, 175, 0.3);
+            display: none;
         }
 
         .actions {
@@ -487,8 +479,6 @@
                     <option value="B2">B2 - Felsőfok</option>
                     <option value="C1">C1 - Haladó</option>
                     <option value="C2">C2 - Mesterfok</option>
-                    <option value="mixed">Vegyes szint</option>
-                    <option value="">Nincs megadva</option>
                 </select>
             </div>
 
@@ -635,13 +625,13 @@
             },
             {
                 id: 11,
-                setName: "Mixed Level Phrasal Verbs",
-                description: "Essential phrasal verbs for all levels",
-                className: "General English",
+                setName: "Phrasal Verbs Collection",
+                description: "Essential phrasal verbs for intermediate learners",
+                className: "Intermediate B1",
                 teacherName: "Taylor Sarah",
                 studentsCount: 45,
-                difficulty: "mixed",
-                cefrLevel: "mixed",
+                difficulty: "B1",
+                cefrLevel: "B1",
                 cardsCount: 120,
                 lastUpdated: "2024-08-06"
             },
@@ -649,11 +639,11 @@
                 id: 12,
                 setName: "Basic Vocabulary",
                 description: "First words for absolute beginners",
-                className: "Pre-A1 Starter",
+                className: "Elementary A1-A2",
                 teacherName: "Johnson Michael",
                 studentsCount: 35,
-                difficulty: "",
-                cefrLevel: null,
+                difficulty: "A1",
+                cefrLevel: "A1",
                 cardsCount: 30,
                 lastUpdated: "2024-08-07"
             },
@@ -762,7 +752,7 @@
         }
 
         function getDifficultyText(difficulty) {
-            if (!difficulty) return 'Nincs megadva';
+            if (!difficulty) return '';
             
             const difficultyMap = {
                 'A1': 'A1',
@@ -770,8 +760,7 @@
                 'B1': 'B1',
                 'B2': 'B2',
                 'C1': 'C1',
-                'C2': 'C2',
-                'mixed': 'Vegyes'
+                'C2': 'C2'
             };
             return difficultyMap[difficulty] || difficulty;
         }
