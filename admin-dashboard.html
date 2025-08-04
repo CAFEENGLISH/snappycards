@@ -455,6 +455,114 @@
             opacity: 0.5;
         }
 
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 20000;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 320px;
+            max-width: 400px;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: auto;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid #16a34a;
+        }
+
+        .toast.error {
+            border-left: 4px solid #dc2626;
+        }
+
+        .toast.warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .toast.info {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .toast.success .toast-icon {
+            background: #16a34a;
+        }
+
+        .toast.error .toast-icon {
+            background: #dc2626;
+        }
+
+        .toast.warning .toast-icon {
+            background: #f59e0b;
+        }
+
+        .toast.info .toast-icon {
+            background: #3b82f6;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 4px 0;
+            font-size: 14px;
+        }
+
+        .toast-message {
+            color: #64748b;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+
+        .toast-close:hover {
+            color: #6b7280;
+        }
+
         /* Modal buttons should stay at bottom */
         .modal-buttons {
             margin-top: 20px;
@@ -675,7 +783,7 @@
                 schoolName, schoolAddress, adminName, adminEmail, adminPhone
             });
             
-            alert('Beállítások sikeresen mentve! ✅');
+            showSuccess('Beállítások mentve', 'Az iskola beállítások sikeresen frissítve!');
             closeSchoolSettings();
         }
         
@@ -780,20 +888,20 @@
             const sendEmail = document.getElementById('sendWelcomeEmail').checked;
 
             if (!name || !email || !password) {
-                alert('Kérjük töltse ki a kötelező mezőket!');
+                showError('Hiányzó adatok', 'Kérjük töltse ki a kötelező mezőket!');
                 return;
             }
 
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Kérjük adjon meg egy érvényes email címet!');
+                showError('Érvénytelen email', 'Kérjük adjon meg egy érvényes email címet!');
                 return;
             }
 
             // Check if email already exists
             if (teachers.find(t => t.email.toLowerCase() === email.toLowerCase())) {
-                alert('Ez az email cím már használatban van!');
+                showError('Email foglalt', 'Ez az email cím már használatban van!');
                 return;
             }
 
@@ -821,9 +929,9 @@
                     email: email,
                     password: password
                 });
-                alert(`✅ Tanár sikeresen hozzáadva!\n📧 Üdvözlő email elküldve: ${email}`);
+                showSuccess('Tanár hozzáadva', `Tanár sikeresen hozzáadva! Üdvözlő email elküldve: ${email}`);
             } else {
-                alert('✅ Tanár sikeresen hozzáadva!');
+                showSuccess('Tanár hozzáadva', 'Tanár sikeresen felvéve a rendszerbe!');
             }
 
             closeAddTeacher();
@@ -944,7 +1052,7 @@
                 if (teacher) {
                     teacher.status = 'archived';
                     loadTeachers();
-                    alert('✅ Tanár sikeresen archiválva!');
+                    showSuccess('Tanár archiválva', 'Tanár sikeresen archiválva!');
                 }
             }
         }
@@ -954,7 +1062,7 @@
             if (teacher) {
                 teacher.status = 'active';
                 loadTeachers();
-                alert('✅ Tanár sikeresen aktiválva!');
+                showSuccess('Tanár aktiválva', 'Tanár sikeresen aktiválva!');
             }
         }
 
@@ -963,7 +1071,7 @@
             if (teacher && confirm(`Biztosan törli ${teacher.name} tanárt?\n\nEz a művelet nem vonható vissza!`)) {
                 teachers = teachers.filter(t => t.id !== id);
                 loadTeachers();
-                alert('✅ Tanár sikeresen törölve!');
+                showSuccess('Tanár törölve', 'Tanár sikeresen törölve!');
             }
         }
 
@@ -1087,7 +1195,7 @@
             const description = document.getElementById('classroomDescription').value.trim();
 
             if (!name) {
-                alert('Kérjük adja meg az osztály nevét!');
+                showError('Hiányzó adat', 'Kérjük adja meg az osztály nevét!');
                 return;
             }
 
@@ -1104,7 +1212,7 @@
 
             classrooms.push(newClassroom);
             console.log('🏫 Új osztály hozzáadva:', newClassroom);
-            alert('✅ Osztály sikeresen létrehozva!');
+            showSuccess('Osztály létrehozva', 'Osztály sikeresen létrehozva!');
 
             closeAddClassroom();
             
@@ -1182,7 +1290,7 @@
         }
 
         function editClassroom(id) {
-            alert('Osztály szerkesztése fejlesztés alatt...');
+            showInfo('Fejlesztés alatt', 'Az osztály szerkesztése hamarosan elérhető lesz!');
         }
 
         function archiveClassroom(id) {
@@ -1191,7 +1299,7 @@
                 if (classroom) {
                     classroom.status = 'archived';
                     loadClassrooms();
-                    alert('✅ Osztály sikeresen archiválva!');
+                    showSuccess('Osztály archiválva', 'Osztály sikeresen archiválva!');
                 }
             }
         }
@@ -1201,7 +1309,7 @@
             if (classroom) {
                 classroom.status = 'active';
                 loadClassrooms();
-                alert('✅ Osztály sikeresen aktiválva!');
+                showSuccess('Osztály aktiválva', 'Osztály sikeresen aktiválva!');
             }
         }
 
@@ -1210,7 +1318,7 @@
             if (classroom && confirm(`Biztosan törli a "${classroom.name}" osztályt?\n\nEz a művelet nem vonható vissza!`)) {
                 classrooms = classrooms.filter(c => c.id !== id);
                 loadClassrooms();
-                alert('✅ Osztály sikeresen törölve!');
+                showSuccess('Osztály törölve', 'Osztály sikeresen törölve!');
             }
         }
 
@@ -1296,7 +1404,7 @@
             const isPublic = document.getElementById('setIsPublic').checked;
 
             if (!name) {
-                alert('Kérjük adja meg a szett nevét!');
+                showError('Hiányzó adat', 'Kérjük adja meg a szett nevét!');
                 return;
             }
 
@@ -1314,7 +1422,7 @@
 
             sets.push(newSet);
             console.log('🃏 Új szett hozzáadva:', newSet);
-            alert('✅ Szett sikeresen létrehozva!\n\nMost hozzáadhat kártyákat a szetthez.');
+            showSuccess('Szett létrehozva', 'Szett sikeresen létrehozva! Most hozzáadhat kártyákat.');
 
             closeAddSet();
             
@@ -1396,7 +1504,7 @@
         }
 
         function editSet(id) {
-            alert('Szett szerkesztése fejlesztés alatt...');
+            showInfo('Fejlesztés alatt', 'A szett szerkesztése hamarosan elérhető lesz!');
         }
 
         function archiveSet(id) {
@@ -1405,7 +1513,7 @@
                 if (set) {
                     set.status = 'archived';
                     loadSets();
-                    alert('✅ Szett sikeresen archiválva!');
+                    showSuccess('Szett archiválva', 'Szett sikeresen archiválva!');
                 }
             }
         }
@@ -1415,7 +1523,7 @@
             if (set) {
                 set.status = 'active';
                 loadSets();
-                alert('✅ Szett sikeresen aktiválva!');
+                showSuccess('Szett aktiválva', 'Szett sikeresen aktiválva!');
             }
         }
 
@@ -1424,7 +1532,7 @@
             if (set && confirm(`Biztosan törli a "${set.name}" szettet?\n\nEz a művelet nem vonható vissza!`)) {
                 sets = sets.filter(s => s.id !== id);
                 loadSets();
-                alert('✅ Szett sikeresen törölve!');
+                showSuccess('Szett törölve', 'Szett sikeresen törölve!');
             }
         }
 
@@ -1551,7 +1659,7 @@
             const note = document.getElementById('assignmentNote').value;
 
             if (!teacherId || !startDate) {
-                alert('❌ Kérjük, válasszon tanárt és adja meg a kezdés dátumát!');
+                showError('Hiányzó adatok', 'Kérjük, válasszon tanárt és adja meg a kezdés dátumát!');
                 return;
             }
 
@@ -1563,7 +1671,8 @@
             );
 
             if (existingAssignments.length > 0) {
-                if (!confirm('⚠️ Ez a tanár már hozzá van rendelve ehhez az osztályhoz a megadott időszakban.\n\nBiztosan folytatja? (Átfedő hozzárendelések lehetnek.)')) {
+                showWarning('Átfedő hozzárendelés', 'Ez a tanár már hozzá van rendelve ehhez az osztályhoz a megadott időszakban.');
+                if (!confirm('Biztosan folytatja? (Átfedő hozzárendelések lehetnek.)')) {
                     return;
                 }
             }
@@ -1584,7 +1693,7 @@
             closeAssignTeacher();
 
             const teacher = teachers.find(t => t.id == teacherId);
-            alert(`✅ ${teacher.name} sikeresen hozzárendelve az osztályhoz!`);
+            showSuccess('Tanár hozzárendelve', `${teacher.name} sikeresen hozzárendelve az osztályhoz!`);
         }
 
         function endAssignment(assignmentId) {
@@ -1594,12 +1703,12 @@
                 assignment.endDate = today;
                 assignment.status = 'ended';
                 loadClassroomTeachers();
-                alert('✅ Tanári hozzárendelés sikeresen befejezve!');
+                showSuccess('Hozzárendelés befejezve', 'A tanári hozzárendelés sikeresen befejezve!');
             }
         }
 
         function editAssignment(assignmentId) {
-            alert('Hozzárendelés szerkesztése fejlesztés alatt...');
+            showInfo('Fejlesztés alatt', 'A hozzárendelés szerkesztése hamarosan elérhető lesz!');
         }
 
         function deleteAssignment(assignmentId) {
@@ -1607,7 +1716,7 @@
             if (assignment && confirm('Biztosan törli ezt a tanári hozzárendelést?\n\nEz a művelet nem vonható vissza!')) {
                 teacherAssignments = teacherAssignments.filter(a => a.id !== assignmentId);
                 loadClassroomTeachers();
-                alert('✅ Tanári hozzárendelés sikeresen törölve!');
+                showSuccess('Hozzárendelés törölve', 'A tanári hozzárendelés sikeresen törölve!');
             }
         }
 
@@ -1658,6 +1767,79 @@
                 closeAssignTeacher();
             }
         });
+
+        // TOAST NOTIFICATION SYSTEM
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toastId = 'toast-' + Date.now();
+            
+            // Define icons for each type
+            const icons = {
+                success: 'check',
+                error: 'x',
+                warning: 'alert-triangle',
+                info: 'info'
+            };
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.id = toastId;
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i data-lucide="${icons[type]}" style="width: 14px; height: 14px;"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    ${message ? `<div class="toast-message">${message}</div>` : ''}
+                </div>
+                <button class="toast-close" onclick="hideToast('${toastId}')">
+                    <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Initialize icons
+            setTimeout(() => {
+                lucide.createIcons();
+                toast.classList.add('show');
+            }, 100);
+            
+            // Auto-hide after 4 seconds
+            setTimeout(() => {
+                hideToast(toastId);
+            }, 4000);
+        }
+
+        function hideToast(toastId) {
+            const toast = document.getElementById(toastId);
+            if (toast) {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }
+        }
+
+        // Success toast helper
+        function showSuccess(title, message = '') {
+            showToast('success', title, message);
+        }
+
+        // Error toast helper
+        function showError(title, message = '') {
+            showToast('error', title, message);
+        }
+
+        // Warning toast helper
+        function showWarning(title, message = '') {
+            showToast('warning', title, message);
+        }
+
+        // Info toast helper
+        function showInfo(title, message = '') {
+            showToast('info', title, message);
+        }
 
         checkAuth();
     </script>
@@ -2081,6 +2263,11 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer">
+        <!-- Toasts will be dynamically added here -->
     </div>
 
 </body>
