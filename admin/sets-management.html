@@ -406,10 +406,10 @@
             </div>
 
             <!-- Search and Filters in one row -->
-            <div class="search-and-filters" style="display: flex; gap: 16px; margin-bottom: 20px; align-items: center;">
-                <!-- Search Box -->
+            <div class="search-and-filters" style="display: flex; gap: 12px; margin-bottom: 20px; align-items: center;">
+                <!-- Szett keresés -->
                 <div class="search-box" style="position: relative; flex: 1;">
-                    <input type="text" id="searchInput" placeholder="Keresés szett névben..." 
+                    <input type="text" id="setSearchInput" placeholder="Keresés szett névben..." 
                            onkeyup="filterSets()" style="
                         width: 100%;
                         padding: 12px 16px;
@@ -421,7 +421,7 @@
                         outline: none;
                         transition: border-color 0.2s;
                     " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
-                    <button onclick="clearSearch()" style="
+                    <button onclick="clearSetSearch()" style="
                         position: absolute;
                         right: 8px;
                         top: 50%;
@@ -440,31 +440,106 @@
                     </button>
                 </div>
 
-                <!-- Filters -->
-                <select class="filter-select" id="classFilter" onchange="filterSets()">
-                    <option value="">Minden Csoport</option>
-                    <option value="Advanced English B2">Advanced English B2</option>
-                    <option value="Business English">Business English</option>
-                    <option value="Elementary A1-A2">Elementary A1-A2</option>
-                    <option value="IELTS Preparation">IELTS Preparation</option>
-                    <option value="Intermediate B1">Intermediate B1</option>
-                    <option value="Proficiency Course">Proficiency Course</option>
-                    <option value="General English">General English</option>
-                    <option value="Pre-A1 Starter">Pre-A1 Starter</option>
-                    <option value="Advanced Academic">Advanced Academic</option>
-                    <option value="Business Professional">Business Professional</option>
-                </select>
+                <!-- Csoport keresés -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="classSearchInput" placeholder="Keresés csoportban..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearClassSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
 
-                <select class="filter-select" id="teacherFilter" onchange="filterSets()">
-                    <option value="">Minden Tanár</option>
-                    <option value="Smith Rebecca">Smith Rebecca</option>
-                    <option value="Johnson Michael">Johnson Michael</option>
-                    <option value="Taylor Sarah">Taylor Sarah</option>
-                    <option value="Smith Rebecca, Taylor Sarah">Smith Rebecca + Taylor Sarah</option>
-                    <option value="Johnson Michael, Smith Rebecca">Johnson Michael + Smith Rebecca</option>
-                    <option value="Johnson Michael, Smith Rebecca, Taylor Sarah">Minden tanár együtt</option>
-                </select>
+                <!-- Tanár keresés -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="teacherSearchInput" placeholder="Keresés tanárban..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearTeacherSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
 
+                <!-- Diák keresés -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="studentSearchInput" placeholder="Keresés diákban..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearStudentSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
+
+                <!-- CEFR Szint filter -->
                 <select class="filter-select" id="difficultyFilter" onchange="filterSets()">
                     <option value="">Minden Szint</option>
                     <option value="A1">A1 - Kezdő</option>
@@ -504,6 +579,7 @@
                 className: "Business English",
                 teacherName: "Johnson Michael",
                 studentsCount: 24,
+                students: ["Alex Thompson", "Maria Garcia", "John Wilson", "Emma Brown", "David Lee", "Sarah Johnson", "Peter Smith", "Lisa Wang"],
                 difficulty: "B2",
                 cefrLevel: "B2",
                 cardsCount: 85,
@@ -516,6 +592,7 @@
                 className: "IELTS Preparation",
                 teacherName: "Smith Rebecca",
                 studentsCount: 18,
+                students: ["James Miller", "Anna Kowalski", "Michael Zhang", "Sophie Turner", "Robert Chen", "Julia Martinez", "Tom Anderson", "Nina Patel"],
                 difficulty: "C1",
                 cefrLevel: "C1",
                 cardsCount: 62,
@@ -528,6 +605,7 @@
                 className: "Elementary A1-A2",
                 teacherName: "Taylor Sarah",
                 studentsCount: 32,
+                students: ["Lucy Green", "Mark Davis", "Elena Rodriguez", "Paul Johnson", "Amy Chen", "Kevin O'Connor", "Sophia Kim", "Daniel Lopez", "Rachel Evans", "Carlos Silva"],
                 difficulty: "A1",
                 cefrLevel: "A1",
                 cardsCount: 48,
@@ -540,6 +618,7 @@
                 className: "Advanced English B2",
                 teacherName: "Smith Rebecca",
                 studentsCount: 16,
+                students: ["Christopher Lee", "Isabella Clark", "Matthew Taylor", "Victoria Adams", "Oliver Thompson", "Charlotte Wilson"],
                 difficulty: "B2",
                 cefrLevel: "B2",
                 cardsCount: 74,
@@ -552,6 +631,7 @@
                 className: "Elementary A1-A2",
                 teacherName: "Johnson Michael",
                 studentsCount: 28,
+                students: ["Gabriel Smith", "Mia Johnson", "Lucas Brown", "Ava Davis", "Benjamin Miller", "Emma Garcia", "Henry Wilson", "Olivia Martinez"],
                 difficulty: "A2",
                 cefrLevel: "A2",
                 cardsCount: 56,
@@ -564,6 +644,7 @@
                 className: "Business English",
                 teacherName: "Johnson Michael",
                 studentsCount: 22,
+                students: ["Sebastian Anderson", "Amelia Thompson", "Alexander White", "Grace Harris", "William Clark", "Lily Lewis", "James Walker"],
                 difficulty: "C1",
                 cefrLevel: "C1",
                 cardsCount: 68,
@@ -765,20 +846,32 @@
         }
 
         function filterSets() {
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            const classFilter = document.getElementById('classFilter').value;
-            const teacherFilter = document.getElementById('teacherFilter').value;
+            const setSearchQuery = document.getElementById('setSearchInput').value.toLowerCase();
+            const classSearchQuery = document.getElementById('classSearchInput').value.toLowerCase();
+            const teacherSearchQuery = document.getElementById('teacherSearchInput').value.toLowerCase();
+            const studentSearchQuery = document.getElementById('studentSearchInput').value.toLowerCase();
             const difficultyFilter = document.getElementById('difficultyFilter').value;
 
             filteredSets = setsData.filter(set => {
-                const matchesSearch = !searchQuery || 
-                    set.setName.toLowerCase().includes(searchQuery) ||
-                    set.description.toLowerCase().includes(searchQuery);
-                const matchesClass = !classFilter || set.className === classFilter;
-                const matchesTeacher = !teacherFilter || set.teacherName === teacherFilter;
+                const matchesSetSearch = !setSearchQuery || 
+                    set.setName.toLowerCase().includes(setSearchQuery) ||
+                    set.description.toLowerCase().includes(setSearchQuery);
+                
+                const matchesClassSearch = !classSearchQuery || 
+                    set.className.toLowerCase().includes(classSearchQuery);
+                
+                const matchesTeacherSearch = !teacherSearchQuery || 
+                    set.teacherName.toLowerCase().includes(teacherSearchQuery);
+                
+                const matchesStudentSearch = !studentSearchQuery || 
+                    (set.students && set.students.some(student => 
+                        student.toLowerCase().includes(studentSearchQuery)
+                    ));
+                
                 const matchesDifficulty = !difficultyFilter || set.difficulty === difficultyFilter;
 
-                return matchesSearch && matchesClass && matchesTeacher && matchesDifficulty;
+                return matchesSetSearch && matchesClassSearch && matchesTeacherSearch && 
+                       matchesStudentSearch && matchesDifficulty;
             });
 
             loadSetsTable();
@@ -798,8 +891,23 @@
             document.getElementById('totalStudents').textContent = totalStudents;
         }
 
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
+        function clearSetSearch() {
+            document.getElementById('setSearchInput').value = '';
+            filterSets();
+        }
+
+        function clearClassSearch() {
+            document.getElementById('classSearchInput').value = '';
+            filterSets();
+        }
+
+        function clearTeacherSearch() {
+            document.getElementById('teacherSearchInput').value = '';
+            filterSets();
+        }
+
+        function clearStudentSearch() {
+            document.getElementById('studentSearchInput').value = '';
             filterSets();
         }
 
@@ -807,7 +915,8 @@
             const set = setsData.find(s => s.id === id);
             if (set) {
                 const cefrLevel = set.cefrLevel ? `CEFR szint: ${set.cefrLevel}` : 'CEFR szint: Nincs megadva';
-                alert(`Szett megtekintése: ${set.setName}\n\nRészletek:\n- ${set.cardsCount} kártya\n- ${set.studentsCount} diák\n- ${cefrLevel}\n- Csoport: ${set.className}\n- Tanár: ${set.teacherName}\n- Leírás: ${set.description}\n- Utoljára frissítve: ${set.lastUpdated}`);
+                const studentsList = set.students ? `\n- Diákok: ${set.students.join(', ')}` : '';
+                alert(`Szett megtekintése: ${set.setName}\n\nRészletek:\n- ${set.cardsCount} kártya\n- ${set.studentsCount} diák\n- ${cefrLevel}\n- Csoport: ${set.className}\n- Tanár: ${set.teacherName}\n- Leírás: ${set.description}${studentsList}\n- Utoljára frissítve: ${set.lastUpdated}`);
             }
         }
 
