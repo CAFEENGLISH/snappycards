@@ -460,17 +460,17 @@
     <!-- Quick Actions -->
     <h2 style="color: #1e293b;">⚡ Gyors Műveletek</h2>
     <div class="actions">
-        <button class="action-btn" onclick="openAddTeacher()">
-            <i data-lucide="user-plus"></i>
-            Tanár Hozzáadása
-        </button>
         <button class="action-btn" onclick="openTeachersModal()">
             <i data-lucide="users"></i>
-            Tanárok Kezelése
+            Tanárok
         </button>
-        <button class="action-btn" onclick="alert('Jelentések funkció fejlesztés alatt...')">
-            <i data-lucide="bar-chart"></i>
-            Jelentések
+        <button class="action-btn" onclick="openClassroomsModal()">
+            <i data-lucide="school"></i>
+            Osztályok
+        </button>
+        <button class="action-btn" onclick="openSetsModal()">
+            <i data-lucide="layers"></i>
+            Szettek
         </button>
     </div>
 
@@ -830,6 +830,423 @@
             }
         }
 
+        // CLASSROOMS MANAGEMENT
+        let classrooms = [
+            {
+                id: 1,
+                name: '9.A',
+                grade: '9',
+                subject: 'Matematika',
+                size: 28,
+                description: 'Emelt szintű matematika osztály',
+                status: 'active',
+                createdAt: '2024-01-15'
+            },
+            {
+                id: 2,
+                name: '10.B',
+                grade: '10',
+                subject: 'Fizika',
+                size: 24,
+                description: 'Fizika tagozatos osztály',
+                status: 'active',
+                createdAt: '2024-02-01'
+            },
+            {
+                id: 3,
+                name: 'Nyelvtani alapok',
+                grade: 'other',
+                subject: 'Magyar',
+                size: 15,
+                description: 'Vegyes korosztályú nyelvtani felzárkóztató',
+                status: 'archived',
+                createdAt: '2023-09-01'
+            }
+        ];
+
+        let currentClassroomFilter = 'all';
+
+        function openClassroomsModal() {
+            const modal = document.getElementById('classroomsModal');
+            modal.style.display = 'flex';
+            loadClassrooms();
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function closeClassroomsModal() {
+            document.getElementById('classroomsModal').style.display = 'none';
+        }
+
+        function openAddClassroom() {
+            // Reset form
+            document.getElementById('classroomName').value = '';
+            document.getElementById('classroomGrade').value = '';
+            document.getElementById('classroomSubject').value = '';
+            document.getElementById('classroomSize').value = '';
+            document.getElementById('classroomDescription').value = '';
+            
+            // Show modal
+            const modal = document.getElementById('addClassroomModal');
+            modal.style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('classroomName').focus();
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function closeAddClassroom() {
+            document.getElementById('addClassroomModal').style.display = 'none';
+        }
+
+        function addClassroom() {
+            const name = document.getElementById('classroomName').value.trim();
+            const grade = document.getElementById('classroomGrade').value;
+            const subject = document.getElementById('classroomSubject').value.trim();
+            const size = document.getElementById('classroomSize').value;
+            const description = document.getElementById('classroomDescription').value.trim();
+
+            if (!name) {
+                alert('Kérjük adja meg az osztály nevét!');
+                return;
+            }
+
+            const newClassroom = {
+                id: Math.max(...classrooms.map(c => c.id), 0) + 1,
+                name: name,
+                grade: grade,
+                subject: subject,
+                size: size ? parseInt(size) : null,
+                description: description,
+                status: 'active',
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+
+            classrooms.push(newClassroom);
+            console.log('🏫 Új osztály hozzáadva:', newClassroom);
+            alert('✅ Osztály sikeresen létrehozva!');
+
+            closeAddClassroom();
+            
+            if (document.getElementById('classroomsModal').style.display === 'flex') {
+                loadClassrooms();
+            }
+        }
+
+        function filterClassrooms(filter) {
+            currentClassroomFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('#classroomsModal .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`#classroomsModal [data-filter="${filter}"]`).classList.add('active');
+            
+            loadClassrooms();
+        }
+
+        function loadClassrooms() {
+            const container = document.getElementById('classroomsContainer');
+            const filteredClassrooms = classrooms.filter(classroom => {
+                if (currentClassroomFilter === 'all') return true;
+                return classroom.status === currentClassroomFilter;
+            });
+
+            if (filteredClassrooms.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #64748b;">
+                        <i data-lucide="school" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>Nincs megjeleníthető osztály.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredClassrooms.map(classroom => `
+                <div class="teacher-card">
+                    <div class="teacher-info">
+                        <div class="teacher-name">${classroom.name}</div>
+                        <div class="teacher-email">${classroom.subject} ${classroom.grade ? `• ${classroom.grade}. évfolyam` : ''} ${classroom.size ? `• ${classroom.size} fő` : ''}</div>
+                        ${classroom.description ? `<div class="teacher-note">${classroom.description}</div>` : ''}
+                    </div>
+                    <div class="teacher-status">
+                        <span class="status-badge ${classroom.status === 'active' ? 'status-active' : 'status-archived'}">
+                            ${classroom.status === 'active' ? 'Aktív' : 'Archivált'}
+                        </span>
+                    </div>
+                    <div class="teacher-actions">
+                        <button class="action-btn edit" onclick="editClassroom(${classroom.id})" title="Szerkesztés">
+                            <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
+                        </button>
+                        ${classroom.status === 'active' ? 
+                            `<button class="action-btn archive" onclick="archiveClassroom(${classroom.id})" title="Archiválás">
+                                <i data-lucide="archive" style="width: 12px; height: 12px;"></i>
+                            </button>` :
+                            `<button class="action-btn activate" onclick="activateClassroom(${classroom.id})" title="Aktiválás">
+                                <i data-lucide="check-circle" style="width: 12px; height: 12px;"></i>
+                            </button>`
+                        }
+                        <button class="action-btn delete" onclick="deleteClassroom(${classroom.id})" title="Törlés">
+                            <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function editClassroom(id) {
+            alert('Osztály szerkesztése fejlesztés alatt...');
+        }
+
+        function archiveClassroom(id) {
+            if (confirm('Biztosan archiválja ezt az osztályt?')) {
+                const classroom = classrooms.find(c => c.id === id);
+                if (classroom) {
+                    classroom.status = 'archived';
+                    loadClassrooms();
+                    alert('✅ Osztály sikeresen archiválva!');
+                }
+            }
+        }
+
+        function activateClassroom(id) {
+            const classroom = classrooms.find(c => c.id === id);
+            if (classroom) {
+                classroom.status = 'active';
+                loadClassrooms();
+                alert('✅ Osztály sikeresen aktiválva!');
+            }
+        }
+
+        function deleteClassroom(id) {
+            const classroom = classrooms.find(c => c.id === id);
+            if (classroom && confirm(`Biztosan törli a "${classroom.name}" osztályt?\n\nEz a művelet nem vonható vissza!`)) {
+                classrooms = classrooms.filter(c => c.id !== id);
+                loadClassrooms();
+                alert('✅ Osztály sikeresen törölve!');
+            }
+        }
+
+        // SETS MANAGEMENT
+        let sets = [
+            {
+                id: 1,
+                name: 'Matematikai alapfogalmak',
+                subject: 'Matematika',
+                difficulty: 'beginner',
+                description: 'Alapvető matematikai fogalmak és műveletek',
+                isPublic: false,
+                cardCount: 45,
+                status: 'active',
+                createdAt: '2024-01-15'
+            },
+            {
+                id: 2,
+                name: 'Fizikai törvények',
+                subject: 'Fizika',
+                difficulty: 'intermediate',
+                description: 'Newton törvényei és mechanika alapjai',
+                isPublic: true,
+                cardCount: 32,
+                status: 'active',
+                createdAt: '2024-02-01'
+            },
+            {
+                id: 3,
+                name: 'Magyar irodalom klasszikusok',
+                subject: 'Magyar',
+                difficulty: 'advanced',
+                description: 'XIX. századi magyar írók és műveik',
+                isPublic: false,
+                cardCount: 28,
+                status: 'archived',
+                createdAt: '2023-11-15'
+            }
+        ];
+
+        let currentSetFilter = 'all';
+
+        function openSetsModal() {
+            const modal = document.getElementById('setsModal');
+            modal.style.display = 'flex';
+            loadSets();
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function closeSetsModal() {
+            document.getElementById('setsModal').style.display = 'none';
+        }
+
+        function openAddSet() {
+            // Reset form
+            document.getElementById('setName').value = '';
+            document.getElementById('setSubject').value = '';
+            document.getElementById('setDifficulty').value = '';
+            document.getElementById('setDescription').value = '';
+            document.getElementById('setIsPublic').checked = false;
+            
+            // Show modal
+            const modal = document.getElementById('addSetModal');
+            modal.style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('setName').focus();
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function closeAddSet() {
+            document.getElementById('addSetModal').style.display = 'none';
+        }
+
+        function addSet() {
+            const name = document.getElementById('setName').value.trim();
+            const subject = document.getElementById('setSubject').value.trim();
+            const difficulty = document.getElementById('setDifficulty').value;
+            const description = document.getElementById('setDescription').value.trim();
+            const isPublic = document.getElementById('setIsPublic').checked;
+
+            if (!name) {
+                alert('Kérjük adja meg a szett nevét!');
+                return;
+            }
+
+            const newSet = {
+                id: Math.max(...sets.map(s => s.id), 0) + 1,
+                name: name,
+                subject: subject,
+                difficulty: difficulty,
+                description: description,
+                isPublic: isPublic,
+                cardCount: 0,
+                status: 'active',
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+
+            sets.push(newSet);
+            console.log('🃏 Új szett hozzáadva:', newSet);
+            alert('✅ Szett sikeresen létrehozva!\n\nMost hozzáadhat kártyákat a szetthez.');
+
+            closeAddSet();
+            
+            if (document.getElementById('setsModal').style.display === 'flex') {
+                loadSets();
+            }
+        }
+
+        function filterSets(filter) {
+            currentSetFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('#setsModal .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`#setsModal [data-filter="${filter}"]`).classList.add('active');
+            
+            loadSets();
+        }
+
+        function loadSets() {
+            const container = document.getElementById('setsContainer');
+            const filteredSets = sets.filter(set => {
+                if (currentSetFilter === 'all') return true;
+                return set.status === currentSetFilter;
+            });
+
+            if (filteredSets.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #64748b;">
+                        <i data-lucide="layers" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>Nincs megjeleníthető szett.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const difficultyMap = {
+                'beginner': 'Kezdő',
+                'intermediate': 'Középhaladó',
+                'advanced': 'Haladó',
+                'expert': 'Szakértő'
+            };
+
+            container.innerHTML = filteredSets.map(set => `
+                <div class="teacher-card">
+                    <div class="teacher-info">
+                        <div class="teacher-name">${set.name} ${set.isPublic ? '🌐' : '🔒'}</div>
+                        <div class="teacher-email">${set.subject} ${set.difficulty ? `• ${difficultyMap[set.difficulty]}` : ''} • ${set.cardCount} kártya</div>
+                        ${set.description ? `<div class="teacher-note">${set.description}</div>` : ''}
+                    </div>
+                    <div class="teacher-status">
+                        <span class="status-badge ${set.status === 'active' ? 'status-active' : 'status-archived'}">
+                            ${set.status === 'active' ? 'Aktív' : 'Archivált'}
+                        </span>
+                    </div>
+                    <div class="teacher-actions">
+                        <button class="action-btn edit" onclick="editSet(${set.id})" title="Szerkesztés">
+                            <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
+                        </button>
+                        ${set.status === 'active' ? 
+                            `<button class="action-btn archive" onclick="archiveSet(${set.id})" title="Archiválás">
+                                <i data-lucide="archive" style="width: 12px; height: 12px;"></i>
+                            </button>` :
+                            `<button class="action-btn activate" onclick="activateSet(${set.id})" title="Aktiválás">
+                                <i data-lucide="check-circle" style="width: 12px; height: 12px;"></i>
+                            </button>`
+                        }
+                        <button class="action-btn delete" onclick="deleteSet(${set.id})" title="Törlés">
+                            <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function editSet(id) {
+            alert('Szett szerkesztése fejlesztés alatt...');
+        }
+
+        function archiveSet(id) {
+            if (confirm('Biztosan archiválja ezt a szettet?')) {
+                const set = sets.find(s => s.id === id);
+                if (set) {
+                    set.status = 'archived';
+                    loadSets();
+                    alert('✅ Szett sikeresen archiválva!');
+                }
+            }
+        }
+
+        function activateSet(id) {
+            const set = sets.find(s => s.id === id);
+            if (set) {
+                set.status = 'active';
+                loadSets();
+                alert('✅ Szett sikeresen aktiválva!');
+            }
+        }
+
+        function deleteSet(id) {
+            const set = sets.find(s => s.id === id);
+            if (set && confirm(`Biztosan törli a "${set.name}" szettet?\n\nEz a művelet nem vonható vissza!`)) {
+                sets = sets.filter(s => s.id !== id);
+                loadSets();
+                alert('✅ Szett sikeresen törölve!');
+            }
+        }
+
         // Close modals when clicking outside
         document.addEventListener('click', function(event) {
             // Add teacher modal
@@ -842,6 +1259,28 @@
             const listModal = document.getElementById('teachersModal');
             if (event.target === listModal) {
                 closeTeachersModal();
+            }
+
+            // Classrooms modals
+            const classroomsModal = document.getElementById('classroomsModal');
+            if (event.target === classroomsModal) {
+                closeClassroomsModal();
+            }
+
+            const addClassroomModal = document.getElementById('addClassroomModal');
+            if (event.target === addClassroomModal) {
+                closeAddClassroom();
+            }
+
+            // Sets modals
+            const setsModal = document.getElementById('setsModal');
+            if (event.target === setsModal) {
+                closeSetsModal();
+            }
+
+            const addSetModal = document.getElementById('addSetModal');
+            if (event.target === addSetModal) {
+                closeAddSet();
             }
         });
 
@@ -951,10 +1390,16 @@
     <!-- Teachers List Modal -->
     <div id="teachersModal" class="modal-overlay">
         <div class="modal" style="max-width: 900px;">
-            <h2>
-                <i data-lucide="users" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
-                Tanárok Kezelése
-            </h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">
+                    <i data-lucide="users" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                    Tanárok Kezelése
+                </h2>
+                <button class="btn btn-primary" onclick="closeTeachersModal(); openAddTeacher();" style="padding: 8px 16px;">
+                    <i data-lucide="plus" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Új Tanár
+                </button>
+            </div>
             
             <!-- Filter Toggles -->
             <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
@@ -978,6 +1423,195 @@
                 <button class="btn btn-secondary" onclick="closeTeachersModal()">
                     <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
                     Bezárás
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classrooms Modal -->
+    <div id="classroomsModal" class="modal-overlay">
+        <div class="modal" style="max-width: 900px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">
+                    <i data-lucide="school" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                    Osztályok Kezelése
+                </h2>
+                <button class="btn btn-primary" onclick="closeClassroomsModal(); openAddClassroom();" style="padding: 8px 16px;">
+                    <i data-lucide="plus" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Új Osztály
+                </button>
+            </div>
+            
+            <!-- Filter Toggles -->
+            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="filter-btn active" data-filter="all" onclick="filterClassrooms('all')">
+                    <i data-lucide="school"></i> Mind
+                </button>
+                <button class="filter-btn" data-filter="active" onclick="filterClassrooms('active')">
+                    <i data-lucide="check-circle"></i> Aktív
+                </button>
+                <button class="filter-btn" data-filter="archived" onclick="filterClassrooms('archived')">
+                    <i data-lucide="archive"></i> Archivált
+                </button>
+            </div>
+            
+            <!-- Classrooms Table -->
+            <div id="classroomsContainer" style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px;">
+                <!-- Classrooms will be loaded here -->
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeClassroomsModal()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Bezárás
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Classroom Modal -->
+    <div id="addClassroomModal" class="modal-overlay">
+        <div class="modal">
+            <h2>
+                <i data-lucide="school" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                Osztály Hozzáadása
+            </h2>
+            
+            <div class="form-group">
+                <label class="form-label">Osztály neve *</label>
+                <input type="text" class="form-input" id="classroomName" placeholder="pl. 9.A, Matematika alapozó" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Évfolyam</label>
+                <select class="form-input" id="classroomGrade">
+                    <option value="">Válasszon évfolyamot</option>
+                    <option value="9">9. évfolyam</option>
+                    <option value="10">10. évfolyam</option>
+                    <option value="11">11. évfolyam</option>
+                    <option value="12">12. évfolyam</option>
+                    <option value="other">Egyéb/Vegyes</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tantárgy</label>
+                <input type="text" class="form-input" id="classroomSubject" placeholder="Matematika, Fizika, Magyar, stb.">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Létszám</label>
+                <input type="number" class="form-input" id="classroomSize" placeholder="25" min="1" max="50">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Leírás</label>
+                <textarea class="form-input" id="classroomDescription" placeholder="Opcionális leírás az osztályról..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeAddClassroom()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Mégse
+                </button>
+                <button class="btn btn-primary" onclick="addClassroom()">
+                    <i data-lucide="school" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Osztály Létrehozása
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sets Modal -->
+    <div id="setsModal" class="modal-overlay">
+        <div class="modal" style="max-width: 900px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">
+                    <i data-lucide="layers" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                    Szettek Kezelése
+                </h2>
+                <button class="btn btn-primary" onclick="closeSetsModal(); openAddSet();" style="padding: 8px 16px;">
+                    <i data-lucide="plus" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Új Szett
+                </button>
+            </div>
+            
+            <!-- Filter Toggles -->
+            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="filter-btn active" data-filter="all" onclick="filterSets('all')">
+                    <i data-lucide="layers"></i> Mind
+                </button>
+                <button class="filter-btn" data-filter="active" onclick="filterSets('active')">
+                    <i data-lucide="check-circle"></i> Aktív
+                </button>
+                <button class="filter-btn" data-filter="archived" onclick="filterSets('archived')">
+                    <i data-lucide="archive"></i> Archivált
+                </button>
+            </div>
+            
+            <!-- Sets Table -->
+            <div id="setsContainer" style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px;">
+                <!-- Sets will be loaded here -->
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeSetsModal()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Bezárás
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Set Modal -->
+    <div id="addSetModal" class="modal-overlay">
+        <div class="modal">
+            <h2>
+                <i data-lucide="layers" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                Szett Létrehozása
+            </h2>
+            
+            <div class="form-group">
+                <label class="form-label">Szett neve *</label>
+                <input type="text" class="form-input" id="setName" placeholder="pl. Matematikai alapfogalmak" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tantárgy</label>
+                <input type="text" class="form-input" id="setSubject" placeholder="Matematika, Fizika, Magyar, stb.">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Nehézségi szint</label>
+                <select class="form-input" id="setDifficulty">
+                    <option value="">Válasszon szintet</option>
+                    <option value="beginner">Kezdő</option>
+                    <option value="intermediate">Középhaladó</option>
+                    <option value="advanced">Haladó</option>
+                    <option value="expert">Szakértő</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Leírás</label>
+                <textarea class="form-input" id="setDescription" placeholder="Szett leírása és tartalma..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="setIsPublic" style="width: 18px; height: 18px;">
+                    <span class="form-label" style="margin: 0;">Nyilvános szett (minden tanár számára elérhető)</span>
+                </label>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeAddSet()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Mégse
+                </button>
+                <button class="btn btn-primary" onclick="addSet()">
+                    <i data-lucide="layers" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Szett Létrehozása
                 </button>
             </div>
         </div>
