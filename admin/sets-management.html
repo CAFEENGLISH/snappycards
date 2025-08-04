@@ -23,6 +23,37 @@
             padding: 0;
         }
 
+        /* Mock Mode Banner */
+        .mock-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .mock-banner.active {
+            display: block;
+        }
+
+        .mock-banner i {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Adjust body padding when mock banner is active */
+        body.mock-mode-active {
+            padding-top: 50px;
+        }
+
         .header {
             background: white;
             border-bottom: 1px solid #e2e8f0;
@@ -347,6 +378,12 @@
     </style>
 </head>
 <body>
+    <!-- Mock Mode Banner -->
+    <div id="mockBanner" class="mock-banner">
+        <i data-lucide="database"></i>
+        <span>🎭 DEMO ÜZEMMÓD AKTÍV - Csak bemutató adatok láthatóak</span>
+    </div>
+
     <div class="header">
         <div class="header-content">
             <div class="header-title">
@@ -764,6 +801,9 @@
         let filteredSets = [...setsData];
 
         function loadSetsTable() {
+            // Ensure we're using current data
+            syncDataWithMockMode();
+            
             const tbody = document.getElementById('setsTableBody');
             
             if (filteredSets.length === 0) {
@@ -853,7 +893,8 @@
             const studentSearchQuery = document.getElementById('studentSearchInput').value.toLowerCase();
             const difficultyFilter = document.getElementById('difficultyFilter').value;
 
-            filteredSets = setsData.filter(set => {
+            const currentSetsData = getCurrentSetsData();
+            filteredSets = currentSetsData.filter(set => {
                 const matchesSetSearch = !setSearchQuery || 
                     set.setName.toLowerCase().includes(setSearchQuery) ||
                     set.description.toLowerCase().includes(setSearchQuery);
@@ -944,8 +985,94 @@
             alert('Új szett hozzáadása funkció hamarosan elérhető lesz!');
         }
 
+        // =============================================================================
+        // MOCK MODE SYSTEM INTEGRATION
+        // =============================================================================
+        
+        // Global Mock Mode State (synchronized with admin dashboard)
+        let isMockMode = localStorage.getItem('snappyCards_mockMode') === 'true';
+        
+        // Mock data sets for sets management
+        const mockSetsData = [
+            {
+                id: 301,
+                setName: 'Business English Vocabulary DEMO',
+                description: 'Demo flashcard set - Essential business terms and phrases',
+                className: 'Advanced Business English B2+',
+                teacherName: 'Sarah Wilson',
+                studentsCount: 12,
+                cardsCount: 45,
+                difficulty: 'B2',
+                cefrLevel: 'B2',
+                lastUpdated: '2024-08-04',
+                students: ['Michael Brown', 'Emma Davis', 'James Wilson', 'Sophie Taylor']
+            },
+            {
+                id: 302,
+                setName: 'IELTS Writing Task 1 DEMO',
+                description: 'Demo flashcard set - IELTS Academic Writing vocabulary',
+                className: 'IELTS Preparation Course',
+                teacherName: 'James Martinez',
+                studentsCount: 8,
+                cardsCount: 38,
+                difficulty: 'B2',
+                cefrLevel: 'B2',
+                lastUpdated: '2024-08-03',
+                students: ['Anna Johnson', 'David Lee', 'Maria Garcia', 'Tom Anderson']
+            },
+            {
+                id: 303,
+                setName: 'Cambridge FCE Grammar DEMO',
+                description: 'Demo flashcard set - First Certificate grammar patterns',
+                className: 'FCE Preparation',
+                teacherName: 'Emma Thompson',
+                studentsCount: 15,
+                cardsCount: 62,
+                difficulty: 'B2',
+                cefrLevel: 'B2',
+                lastUpdated: '2024-08-02',
+                students: ['Peter Johnson', 'Lisa Brown', 'Alex Green', 'Kate White', 'John Smith']
+            }
+        ];
+        
+        // Data access functions
+        function getCurrentSetsData() {
+            return isMockMode ? mockSetsData : setsData;
+        }
+        
+        function updateMockModeUI() {
+            const mockBanner = document.getElementById('mockBanner');
+            const body = document.body;
+            
+            if (mockBanner) {
+                if (isMockMode) {
+                    mockBanner.classList.add('active');
+                    body.classList.add('mock-mode-active');
+                } else {
+                    mockBanner.classList.remove('active');
+                    body.classList.remove('mock-mode-active');
+                }
+                lucide.createIcons(mockBanner);
+            }
+        }
+        
+        // Override global variables with current data
+        function syncDataWithMockMode() {
+            const currentData = getCurrentSetsData();
+            // Update filteredSets to use current data
+            filteredSets = currentData.slice();
+        }
+        
+        // Initialize Mock Mode on page load
+        function initializeMockMode() {
+            updateMockModeUI();
+            syncDataWithMockMode();
+            console.log(`🎭 Sets Management Mock Mode: ${isMockMode ? 'ACTIVE' : 'DISABLED'}`);
+        }
+
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            initializeMockMode();
             loadSetsTable();
             updateStats();
             lucide.createIcons();
