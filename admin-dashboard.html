@@ -862,9 +862,10 @@
             // Generate initial password
             generatePassword();
             
-            // Show modal
+            // Show modal with higher z-index to appear above teachers list
             const modal = document.getElementById('addTeacherModal');
             modal.style.display = 'flex';
+            modal.style.zIndex = '15000'; // Higher than teachers modal (10000)
             
                             // Reset modal title and button for adding
                 setTimeout(() => {
@@ -881,12 +882,16 @@
                     
                     // Focus on name field
                     document.getElementById('teacherName').focus();
-                    lucide.createIcons();
+                    // Only recreate icons for the modal content
+                    const modal = document.getElementById('addTeacherModal');
+                    lucide.createIcons(modal);
                 }, 100);
         }
 
         function closeAddTeacher() {
-            document.getElementById('addTeacherModal').style.display = 'none';
+            const modal = document.getElementById('addTeacherModal');
+            modal.style.display = 'none';
+            modal.style.zIndex = ''; // Reset z-index to default
         }
 
         function generatePassword() {
@@ -1126,9 +1131,10 @@
                 // Store editing teacher ID
                 window.editingTeacherId = id;
                 
-                // Show modal
+                // Show modal with higher z-index to appear above teachers list
                 const modal = document.getElementById('addTeacherModal');
                 modal.style.display = 'flex';
+                modal.style.zIndex = '15000'; // Higher than teachers modal (10000)
                 
                 // Update modal title and button
                 setTimeout(() => {
