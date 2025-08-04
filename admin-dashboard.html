@@ -208,17 +208,326 @@
 
         .feature-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        /* School Header */
+        .school-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .school-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        /* Statistics Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #374151;
+            margin: 0 0 4px 0;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .quick-actions h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 24px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Management Sections */
+        .management-section {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .management-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 24px;
+        }
+
+        .teacher-item, .class-item, .student-item, .set-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .teacher-info, .class-info, .student-info, .set-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .teacher-avatar, .class-avatar, .student-avatar, .set-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .small-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-left: 8px;
+        }
+
+        .small-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 32px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .close {
+            color: #9ca3af;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #374151;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Reports Grid */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .report-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .report-item h4 {
+            margin: 0 0 8px 0;
+            color: #374151;
+        }
+
+        .report-item p {
+            margin: 0 0 16px 0;
+            color: #64748b;
+            font-size: 14px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .welcome-title {
+            .school-name {
                 font-size: 2rem;
             }
             
             .features-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-btn {
+                width: 200px;
+                justify-content: center;
             }
         }
     </style>
@@ -249,12 +558,71 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Welcome Section -->
-            <div class="welcome-section">
-                <h1 class="welcome-title" id="welcomeTitle">Üdvözöljük az Iskola Admin Dashboard-ban!</h1>
-                <p class="welcome-subtitle">Irányítsa iskolája teljes SnappyCards ekoszisztémáját</p>
-                <div class="school-info" id="schoolInfo">
-                    🏫 <span id="schoolName">Iskola neve</span>
+            <!-- School Header -->
+            <div class="school-header">
+                <h1 class="school-name" id="schoolName">Budapest Központi Gimnázium</h1>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="user-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="teachersCount">12</h3>
+                        <p class="stat-label">Tanárok</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="classesCount">8</h3>
+                        <p class="stat-label">Osztályok</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="studentsCount">247</h3>
+                        <p class="stat-label">Diákok</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="setsCount">89</h3>
+                        <p class="stat-label">Szettek</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Gyors Műveletek</h2>
+                <div class="action-buttons">
+                    <button class="action-btn add-teacher" onclick="showAddTeacherModal()">
+                        <i data-lucide="user-plus"></i>
+                        Tanár Hozzáadása
+                    </button>
+                    <button class="action-btn create-class" onclick="showCreateClassModal()">
+                        <i data-lucide="plus-circle"></i>
+                        Új Osztály
+                    </button>
+                    <button class="action-btn view-reports" onclick="showReportsModal()">
+                        <i data-lucide="bar-chart-3"></i>
+                        Jelentések
+                    </button>
+                    <button class="action-btn school-settings" onclick="showSchoolSettingsModal()">
+                        <i data-lucide="settings"></i>
+                        Iskola Beállítások
+                    </button>
                 </div>
             </div>
 
@@ -265,8 +633,8 @@
                         <i data-lucide="user-check"></i>
                     </div>
                     <h3 class="feature-title">Teachers</h3>
-                    <p class="feature-description">Iskola tanárainak kezelése, jogosultságok beállítása és teljesítmény nyomonkövetése.</p>
-                    <a href="#" class="feature-btn">Tanárok Kezelése</a>
+                    <p class="feature-description">Tanárok listázása, tanár/osztály kapcsolatok és teljesítmény nyomonkövetése.</p>
+                    <button class="feature-btn" onclick="showTeachersList()">Tanárok Listázása</button>
                 </div>
 
                 <div class="feature-card">
@@ -274,8 +642,8 @@
                         <i data-lucide="users"></i>
                     </div>
                     <h3 class="feature-title">Classes</h3>
-                    <p class="feature-description">Összes iskola osztály áttekintése, csoportosítások és tanulási struktúrák.</p>
-                    <a href="#" class="feature-btn">Osztályok Áttekintése</a>
+                    <p class="feature-description">Összes iskola osztály áttekintése és osztály/diák kapcsolatok kezelése.</p>
+                    <button class="feature-btn" onclick="showClassesList()">Osztályok Áttekintése</button>
                 </div>
 
                 <div class="feature-card">
@@ -283,8 +651,8 @@
                         <i data-lucide="graduation-cap"></i>
                     </div>
                     <h3 class="feature-title">Students</h3>
-                    <p class="feature-description">Az iskola összes diákjának haladása, teljesítménye és tanulási aktivitása.</p>
-                    <a href="#" class="feature-btn">Diákok Áttekintése</a>
+                    <p class="feature-description">Az iskola összes diákjának haladása és tanulási aktivitása.</p>
+                    <button class="feature-btn" onclick="showStudentsList()">Diákok Áttekintése</button>
                 </div>
 
                 <div class="feature-card">
@@ -293,11 +661,172 @@
                     </div>
                     <h3 class="feature-title">Sets</h3>
                     <p class="feature-description">Teljes hozzáférés az iskolában használt összes tanulókártya szetthez.</p>
-                    <a href="manage-sets-cards.html" class="feature-btn">Szettek Kezelése</a>
+                    <button class="feature-btn" onclick="showSetsList()">Szettek Áttekintése</button>
+                </div>
+            </div>
+
+            <!-- Management Sections -->
+            <div id="teachers-section" class="management-section" style="display: none;">
+                <h2>Tanárok Kezelése</h2>
+                <div class="teachers-list" id="teachersList">
+                    <!-- Teachers will be loaded here -->
+                </div>
+            </div>
+
+            <div id="classes-section" class="management-section" style="display: none;">
+                <h2>Osztályok Áttekintése</h2>
+                <div class="classes-list" id="classesList">
+                    <!-- Classes will be loaded here -->
+                </div>
+            </div>
+
+            <div id="students-section" class="management-section" style="display: none;">
+                <h2>Diákok Áttekintése</h2>
+                <div class="students-list" id="studentsList">
+                    <!-- Students will be loaded here -->
+                </div>
+            </div>
+
+            <div id="sets-section" class="management-section" style="display: none;">
+                <h2>Szettek Áttekintése</h2>
+                <div class="sets-list" id="setsList">
+                    <!-- Sets will be loaded here -->
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Modals -->
+    <!-- Add Teacher Modal -->
+    <div id="addTeacherModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Új Tanár Hozzáadása</h3>
+                <span class="close" onclick="closeModal('addTeacherModal')">&times;</span>
+            </div>
+            <form id="addTeacherForm">
+                <div class="form-group">
+                    <label class="form-label">Tanár Neve</label>
+                    <input type="text" id="teacherName" class="form-input" placeholder="pl. Nagy Katalin" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Cím</label>
+                    <input type="email" id="teacherEmail" class="form-input" placeholder="katalin.nagy@iskola.hu" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Jelszó (automatikusan generált)</label>
+                    <input type="text" id="teacherPassword" class="form-input" readonly>
+                    <button type="button" onclick="generatePassword()" class="btn-secondary" style="margin-top: 8px;">Új Jelszó Generálása</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Szakok/Tárgyak</label>
+                    <input type="text" id="teacherSubjects" class="form-input" placeholder="pl. Magyar nyelv és irodalom, Történelem">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal('addTeacherModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Tanár Hozzáadása & Email Küldése</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- School Settings Modal -->
+    <div id="schoolSettingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Iskola Beállítások</h3>
+                <span class="close" onclick="closeModal('schoolSettingsModal')">&times;</span>
+            </div>
+            <form id="schoolSettingsForm">
+                <div class="form-group">
+                    <label class="form-label">Iskola Neve</label>
+                    <input type="text" id="schoolNameSetting" class="form-input" value="Budapest Központi Gimnázium" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Admin Neve</label>
+                    <input type="text" id="adminName" class="form-input" placeholder="Dr. Kovács Péter" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Admin Email</label>
+                    <input type="email" id="adminEmail" class="form-input" placeholder="admin@iskola.hu" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Iskola Címe</label>
+                    <textarea id="schoolAddress" class="form-textarea" rows="3" placeholder="1051 Budapest, Sas utca 15."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Telefonszám</label>
+                    <input type="tel" id="schoolPhone" class="form-input" placeholder="+36 1 234 5678">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Weboldal</label>
+                    <input type="url" id="schoolWebsite" class="form-input" placeholder="https://www.iskola.hu">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal('schoolSettingsModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Beállítások Mentése</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Class Modal -->
+    <div id="createClassModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Új Osztály Létrehozása</h3>
+                <span class="close" onclick="closeModal('createClassModal')">&times;</span>
+            </div>
+            <form id="createClassForm">
+                <div class="form-group">
+                    <label class="form-label">Osztály Neve</label>
+                    <input type="text" id="className" class="form-input" placeholder="pl. 9.A" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Osztályfőnök</label>
+                    <select id="classTeacher" class="form-input" required>
+                        <option value="">Válasszon tanárt...</option>
+                        <!-- Teachers will be loaded here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Leírás</label>
+                    <input type="text" id="classDescription" class="form-input" placeholder="Rövid leírás az osztályról">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal('createClassModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Osztály Létrehozása</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reports Modal -->
+    <div id="reportsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Iskola Jelentések</h3>
+                <span class="close" onclick="closeModal('reportsModal')">&times;</span>
+            </div>
+            <div class="reports-grid">
+                <div class="report-item">
+                    <h4>📊 Aktivitási Jelentés</h4>
+                    <p>Diákok és tanárok platform használata</p>
+                    <button class="btn-primary">Letöltés</button>
+                </div>
+                <div class="report-item">
+                    <h4>📈 Tanulási Statisztikák</h4>
+                    <p>Szettek használata és eredmények</p>
+                    <button class="btn-primary">Letöltés</button>
+                </div>
+                <div class="report-item">
+                    <h4>👥 Felhasználói Összesítő</h4>
+                    <p>Tanárok és diákok adatai</p>
+                    <button class="btn-primary">Letöltés</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Supabase configuration
@@ -387,6 +916,298 @@
             } catch (error) {
                 console.error('Error during logout:', error);
             }
+        }
+
+        // Modal functions
+        function showAddTeacherModal() {
+            generatePassword(); // Auto-generate password
+            document.getElementById('addTeacherModal').style.display = 'block';
+        }
+
+        function showSchoolSettingsModal() {
+            loadSchoolSettings();
+            document.getElementById('schoolSettingsModal').style.display = 'block';
+        }
+
+        function showCreateClassModal() {
+            loadTeachersForSelect();
+            document.getElementById('createClassModal').style.display = 'block';
+        }
+
+        function showReportsModal() {
+            document.getElementById('reportsModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // List management functions
+        function showTeachersList() {
+            hideAllSections();
+            document.getElementById('teachers-section').style.display = 'block';
+            loadTeachers();
+        }
+
+        function showClassesList() {
+            hideAllSections();
+            document.getElementById('classes-section').style.display = 'block';
+            loadClasses();
+        }
+
+        function showStudentsList() {
+            hideAllSections();
+            document.getElementById('students-section').style.display = 'block';
+            loadStudents();
+        }
+
+        function showSetsList() {
+            hideAllSections();
+            document.getElementById('sets-section').style.display = 'block';
+            loadSets();
+        }
+
+        function hideAllSections() {
+            document.getElementById('teachers-section').style.display = 'none';
+            document.getElementById('classes-section').style.display = 'none';
+            document.getElementById('students-section').style.display = 'none';
+            document.getElementById('sets-section').style.display = 'none';
+        }
+
+        // Password generation
+        function generatePassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let password = '';
+            for (let i = 0; i < 12; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('teacherPassword').value = password;
+        }
+
+        // Load data functions
+        async function loadTeachers() {
+            const teachersList = document.getElementById('teachersList');
+            teachersList.innerHTML = '<p>🔄 Tanárok betöltése...</p>';
+            
+            // Mock data for now
+            const mockTeachers = [
+                { id: 1, name: 'Nagy Katalin', email: 'katalin.nagy@iskola.hu', subjects: 'Magyar nyelv és irodalom', classes: 3 },
+                { id: 2, name: 'Kovács János', email: 'janos.kovacs@iskola.hu', subjects: 'Matematika, Fizika', classes: 2 },
+                { id: 3, name: 'Szabó Anna', email: 'anna.szabo@iskola.hu', subjects: 'Angol nyelv', classes: 4 }
+            ];
+            
+            teachersList.innerHTML = '';
+            mockTeachers.forEach(teacher => {
+                const teacherDiv = document.createElement('div');
+                teacherDiv.className = 'teacher-item';
+                teacherDiv.innerHTML = `
+                    <div class="teacher-info">
+                        <div class="teacher-avatar">${teacher.name.charAt(0)}</div>
+                        <div>
+                            <div style="font-weight: 600;">${teacher.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">${teacher.email} • ${teacher.subjects}</div>
+                            <div style="font-size: 12px; color: #64748b;">${teacher.classes} osztály</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="small-btn" onclick="viewTeacherClasses(${teacher.id})">Osztályok</button>
+                        <button class="small-btn" onclick="editTeacher(${teacher.id})">Szerkesztés</button>
+                    </div>
+                `;
+                teachersList.appendChild(teacherDiv);
+            });
+        }
+
+        async function loadClasses() {
+            const classesList = document.getElementById('classesList');
+            classesList.innerHTML = '<p>🔄 Osztályok betöltése...</p>';
+            
+            // Mock data for now
+            const mockClasses = [
+                { id: 1, name: '9.A', teacher: 'Nagy Katalin', students: 28, subjects: 'Magyar nyelv és irodalom' },
+                { id: 2, name: '9.B', teacher: 'Kovács János', students: 25, subjects: 'Matematika' },
+                { id: 3, name: '10.A', teacher: 'Szabó Anna', students: 22, subjects: 'Angol nyelv' }
+            ];
+            
+            classesList.innerHTML = '';
+            mockClasses.forEach(cls => {
+                const classDiv = document.createElement('div');
+                classDiv.className = 'class-item';
+                classDiv.innerHTML = `
+                    <div class="class-info">
+                        <div class="class-avatar">${cls.name.charAt(0)}</div>
+                        <div>
+                            <div style="font-weight: 600;">${cls.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">Osztályfőnök: ${cls.teacher}</div>
+                            <div style="font-size: 12px; color: #64748b;">${cls.students} diák • ${cls.subjects}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="small-btn" onclick="viewClassStudents(${cls.id})">Diákok</button>
+                        <button class="small-btn" onclick="editClass(${cls.id})">Szerkesztés</button>
+                    </div>
+                `;
+                classesList.appendChild(classDiv);
+            });
+        }
+
+        async function loadStudents() {
+            const studentsList = document.getElementById('studentsList');
+            studentsList.innerHTML = '<p>🔄 Diákok betöltése...</p>';
+            
+            // Mock data for now
+            const mockStudents = [
+                { id: 1, name: 'Kiss Péter', email: 'peter.kiss@student.hu', class: '9.A', activity: 'Aktív' },
+                { id: 2, name: 'Tóth Mária', email: 'maria.toth@student.hu', class: '9.B', activity: 'Aktív' },
+                { id: 3, name: 'Varga Zoltán', email: 'zoltan.varga@student.hu', class: '10.A', activity: 'Inaktív' }
+            ];
+            
+            studentsList.innerHTML = '';
+            mockStudents.forEach(student => {
+                const studentDiv = document.createElement('div');
+                studentDiv.className = 'student-item';
+                studentDiv.innerHTML = `
+                    <div class="student-info">
+                        <div class="student-avatar">${student.name.charAt(0)}</div>
+                        <div>
+                            <div style="font-weight: 600;">${student.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">${student.email} • ${student.class}</div>
+                            <div style="font-size: 12px; color: ${student.activity === 'Aktív' ? '#10b981' : '#ef4444'};">${student.activity}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="small-btn" onclick="viewStudentProgress(${student.id})">Haladás</button>
+                    </div>
+                `;
+                studentsList.appendChild(studentDiv);
+            });
+        }
+
+        async function loadSets() {
+            const setsList = document.getElementById('setsList');
+            setsList.innerHTML = '<p>🔄 Szettek betöltése...</p>';
+            
+            // Mock data for now
+            const mockSets = [
+                { id: 1, name: 'Magyar Irodalom - Klasszikusok', teacher: 'Nagy Katalin', cards: 45, classes: 2 },
+                { id: 2, name: 'Matematika - Algebra Alapok', teacher: 'Kovács János', cards: 32, classes: 1 },
+                { id: 3, name: 'Angol Szókincs - Kezdő', teacher: 'Szabó Anna', cards: 67, classes: 3 }
+            ];
+            
+            setsList.innerHTML = '';
+            mockSets.forEach(set => {
+                const setDiv = document.createElement('div');
+                setDiv.className = 'set-item';
+                setDiv.innerHTML = `
+                    <div class="set-info">
+                        <div class="set-avatar">📚</div>
+                        <div>
+                            <div style="font-weight: 600;">${set.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">Készítette: ${set.teacher}</div>
+                            <div style="font-size: 12px; color: #64748b;">${set.cards} kártya • ${set.classes} osztályban használt</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="small-btn" onclick="viewSetDetails(${set.id})">Részletek</button>
+                    </div>
+                `;
+                setsList.appendChild(setDiv);
+            });
+        }
+
+        function loadSchoolSettings() {
+            // Load current settings from user profile
+            const user = supabase.auth.getUser();
+            // Populate form with current data
+        }
+
+        function loadTeachersForSelect() {
+            const mockTeachers = [
+                { id: 1, name: 'Nagy Katalin' },
+                { id: 2, name: 'Kovács János' },
+                { id: 3, name: 'Szabó Anna' }
+            ];
+            
+            const select = document.getElementById('classTeacher');
+            select.innerHTML = '<option value="">Válasszon tanárt...</option>';
+            mockTeachers.forEach(teacher => {
+                const option = document.createElement('option');
+                option.value = teacher.id;
+                option.textContent = teacher.name;
+                select.appendChild(option);
+            });
+        }
+
+        // Form handlers
+        document.getElementById('addTeacherForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const teacherName = document.getElementById('teacherName').value;
+            const teacherEmail = document.getElementById('teacherEmail').value;
+            const teacherPassword = document.getElementById('teacherPassword').value;
+            const teacherSubjects = document.getElementById('teacherSubjects').value;
+            
+            // Here you would create the teacher in Supabase and send credentials via email
+            alert(`✅ Tanár hozzáadva: ${teacherName}\n📧 Belépési adatok elküldve: ${teacherEmail}\n🔑 Jelszó: ${teacherPassword}`);
+            closeModal('addTeacherModal');
+            document.getElementById('addTeacherForm').reset();
+        });
+
+        document.getElementById('schoolSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const schoolName = document.getElementById('schoolNameSetting').value;
+            const adminName = document.getElementById('adminName').value;
+            
+            // Update school name in header
+            document.getElementById('schoolName').textContent = schoolName;
+            
+            alert(`✅ Iskola beállítások mentve!`);
+            closeModal('schoolSettingsModal');
+        });
+
+        document.getElementById('createClassForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const className = document.getElementById('className').value;
+            const classTeacher = document.getElementById('classTeacher').value;
+            
+            alert(`✅ Új osztály létrehozva: ${className}`);
+            closeModal('createClassModal');
+            document.getElementById('createClassForm').reset();
+        });
+
+        // Helper functions
+        function viewTeacherClasses(teacherId) {
+            alert(`Tanár osztályai megtekintése: ID ${teacherId}`);
+        }
+
+        function editTeacher(teacherId) {
+            alert(`Tanár szerkesztése: ID ${teacherId}`);
+        }
+
+        function viewClassStudents(classId) {
+            alert(`Osztály diákjai megtekintése: ID ${classId}`);
+        }
+
+        function editClass(classId) {
+            alert(`Osztály szerkesztése: ID ${classId}`);
+        }
+
+        function viewStudentProgress(studentId) {
+            alert(`Diák haladás megtekintése: ID ${studentId}`);
+        }
+
+        function viewSetDetails(setId) {
+            alert(`Szett részletek megtekintése: ID ${setId}`);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = ['addTeacherModal', 'schoolSettingsModal', 'createClassModal', 'reportsModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target == modal) {
+                    closeModal(modalId);
+                }
+            });
         }
 
         // Initialize when page loads
