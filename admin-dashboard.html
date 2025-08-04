@@ -1105,16 +1105,16 @@
                 </div>
             `).join('');
             
-            // Reinitialize icons
+            // Reinitialize icons only for new content
             setTimeout(() => {
-                lucide.createIcons();
+                const container = document.getElementById('teachersContainer');
+                // Use safer approach to recreate icons only in this container
+                lucide.createIcons(container);
             }, 100);
         }
 
         function editTeacher(id) {
-            console.log('🔧 EDIT TEACHER CLICKED - ID:', id);
             const teacher = teachers.find(t => t.id === id);
-            console.log('👨‍🏫 Found teacher:', teacher);
             if (teacher) {
                 // Fill form with teacher data
                 document.getElementById('teacherName').value = teacher.name;
@@ -1145,7 +1145,9 @@
                     
                     // Focus on name field
                     document.getElementById('teacherName').focus();
-                    lucide.createIcons();
+                    // Only recreate icons for the modal content
+                    const modal = document.getElementById('addTeacherModal');
+                    lucide.createIcons(modal);
                 }, 100);
             }
         }
