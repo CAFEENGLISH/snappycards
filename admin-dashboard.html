@@ -733,9 +733,11 @@
         lucide.createIcons();
         
         // Simple auth check - NO REDIRECTS!
-        const supabaseUrl = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // Use existing Supabase client from favicon.js to avoid multiple instances
+        const supabase = window.globalSupabaseClient || window.supabase.createClient(
+            'https://ycxqxdhaxehspypqbnpi.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g'
+        );
         
         let currentUser = null;
         let currentSchool = null;
@@ -1223,7 +1225,8 @@
                         last_name: lastName,
                         note: note
                     })
-                    .eq('id', window.editingTeacherId);
+                    .eq('id', window.editingTeacherId)
+                    .select();
 
                 if (profileError) {
                     console.error('Error updating teacher profile:', profileError);
@@ -1252,7 +1255,12 @@
                     email,
                     note
                 });
-                console.log('🔍 UPDATE RESULT:', { profileData, profileError });
+                console.log('🔍 UPDATE RESULT:', { 
+                    profileData, 
+                    profileError,
+                    updatedRowsCount: profileData?.length || 0,
+                    wasSuccessful: !profileError && profileData?.length > 0
+                });
                 
                 if (sendEmail) {
                     console.log('📧 Értesítő email küldése:', {
