@@ -2010,7 +2010,14 @@
             const role = currentUser.user_metadata?.user_role || 'student';
             
             userName.textContent = firstName;
-            userRole.textContent = role === 'student' ? 'Diák' : 'Tanár';
+            // Role translation with proper school_admin support
+            let roleText = 'Diák'; // default
+            if (role === 'teacher') {
+                roleText = 'Tanár';
+            } else if (role === 'school_admin') {
+                roleText = 'Iskola Admin';
+            }
+            userRole.textContent = roleText;
             userAvatar.textContent = firstName.charAt(0).toUpperCase();
             
             // Update welcome message with user's name (localized)
