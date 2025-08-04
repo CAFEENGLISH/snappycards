@@ -365,6 +365,96 @@
             color: white;
         }
 
+        /* Teacher Assignment Styles */
+        .assignment-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .assignment-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .assignment-info h4 {
+            margin: 0 0 8px 0;
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .assignment-info p {
+            margin: 0 0 4px 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .assignment-period {
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #475569;
+            margin-top: 12px;
+        }
+
+        .assignment-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .assignment-status.active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .assignment-status.ended {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .assignment-status.future {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .assignment-actions .action-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .no-assignments {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .no-assignments i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
         /* Modal buttons should stay at bottom */
         .modal-buttons {
             margin-top: 20px;
@@ -911,7 +1001,48 @@
             }
         ];
 
+        // TEACHER-CLASSROOM ASSIGNMENTS
+        let teacherAssignments = [
+            {
+                id: 1,
+                classroomId: 1,
+                teacherId: 1, // Dr. Nagy Péter
+                startDate: '2024-01-15',
+                endDate: null, // Still active
+                note: 'Emelt szintű matematika tanítása',
+                status: 'active'
+            },
+            {
+                id: 2,
+                classroomId: 2,
+                teacherId: 2, // Kis Anna
+                startDate: '2024-01-10',
+                endDate: '2024-06-15', // Ended
+                note: 'Fizika alapok és gyakorlatok',
+                status: 'ended'
+            },
+            {
+                id: 3,
+                classroomId: 2,
+                teacherId: 1, // Dr. Nagy Péter (took over from Kis Anna)
+                startDate: '2024-06-16',
+                endDate: null, // Currently active
+                note: 'Fizika haladó szint',
+                status: 'active'
+            },
+            {
+                id: 4,
+                classroomId: 3,
+                teacherId: 2, // Kis Anna
+                startDate: '2023-12-20',
+                endDate: '2024-05-30',
+                note: 'Magyar nyelvtan és irodalom',
+                status: 'ended'
+            }
+        ];
+
         let currentClassroomFilter = 'all';
+        let selectedClassroomId = null;
 
         function openClassroomsModal() {
             const modal = document.getElementById('classroomsModal');
@@ -1024,6 +1155,9 @@
                         </span>
                     </div>
                     <div class="teacher-actions">
+                        <button class="action-btn edit" onclick="manageClassroomTeachers(${classroom.id})" title="Tanárok Kezelése" style="background: #6366f1; color: white;">
+                            <i data-lucide="users" style="width: 12px; height: 12px;"></i>
+                        </button>
                         <button class="action-btn edit" onclick="editClassroom(${classroom.id})" title="Szerkesztés">
                             <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
                         </button>
@@ -1294,6 +1428,189 @@
             }
         }
 
+        // TEACHER-CLASSROOM ASSIGNMENT MANAGEMENT
+        function manageClassroomTeachers(classroomId) {
+            selectedClassroomId = classroomId;
+            const classroom = classrooms.find(c => c.id === classroomId);
+            if (classroom) {
+                document.getElementById('classroomTeachersTitle').textContent = `${classroom.name} - Tanárok Kezelése`;
+                const modal = document.getElementById('classroomTeachersModal');
+                modal.style.display = 'flex';
+                loadClassroomTeachers();
+                setTimeout(() => {
+                    lucide.createIcons();
+                }, 100);
+            }
+        }
+
+        function closeClassroomTeachers() {
+            document.getElementById('classroomTeachersModal').style.display = 'none';
+            selectedClassroomId = null;
+        }
+
+        function loadClassroomTeachers() {
+            const container = document.getElementById('currentTeachersContainer');
+            const assignments = teacherAssignments
+                .filter(assignment => assignment.classroomId === selectedClassroomId)
+                .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+
+            if (assignments.length === 0) {
+                container.innerHTML = `
+                    <div class="no-assignments">
+                        <i data-lucide="users-x"></i>
+                        <h3>Nincsenek hozzárendelt tanárok</h3>
+                        <p>Még nem rendelt hozzá tanárt ehhez az osztályhoz.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = assignments.map(assignment => {
+                const teacher = teachers.find(t => t.id === assignment.teacherId);
+                const today = new Date();
+                const startDate = new Date(assignment.startDate);
+                const endDate = assignment.endDate ? new Date(assignment.endDate) : null;
+                
+                let status = 'active';
+                if (endDate && endDate < today) {
+                    status = 'ended';
+                } else if (startDate > today) {
+                    status = 'future';
+                }
+
+                const formatDate = (dateStr) => {
+                    return new Date(dateStr).toLocaleDateString('hu-HU');
+                };
+
+                return `
+                    <div class="assignment-card">
+                        <div class="assignment-header">
+                            <div class="assignment-info">
+                                <h4>${teacher ? teacher.name : 'Ismeretlen tanár'}</h4>
+                                <p>${teacher ? teacher.email : ''}</p>
+                                ${assignment.note ? `<p><em>${assignment.note}</em></p>` : ''}
+                            </div>
+                            <span class="assignment-status ${status}">
+                                ${status === 'active' ? 'Aktív' : status === 'ended' ? 'Befejezett' : 'Jövőbeli'}
+                            </span>
+                        </div>
+                        <div class="assignment-period">
+                            <strong>Időszak:</strong> ${formatDate(assignment.startDate)} - ${assignment.endDate ? formatDate(assignment.endDate) : 'jelenleg is'}
+                        </div>
+                        <div class="assignment-actions">
+                            ${status === 'active' ? `
+                                <button class="action-btn archive" onclick="endAssignment(${assignment.id})" title="Hozzárendelés befejezése">
+                                    <i data-lucide="clock-x" style="width: 12px; height: 12px;"></i> Befejezés
+                                </button>
+                            ` : ''}
+                            <button class="action-btn edit" onclick="editAssignment(${assignment.id})" title="Szerkesztés">
+                                <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i> Szerkesztés
+                            </button>
+                            <button class="action-btn delete" onclick="deleteAssignment(${assignment.id})" title="Törlés">
+                                <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i> Törlés
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function openAssignTeacher() {
+            // Populate teacher dropdown
+            const teacherSelect = document.getElementById('selectedTeacher');
+            teacherSelect.innerHTML = '<option value="">Válasszon tanárt</option>' +
+                teachers.filter(t => t.status === 'active').map(teacher => 
+                    `<option value="${teacher.id}">${teacher.name} (${teacher.email})</option>`
+                ).join('');
+
+            // Set today as default start date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('teacherStartDate').value = today;
+            document.getElementById('teacherEndDate').value = '';
+            document.getElementById('assignmentNote').value = '';
+
+            const modal = document.getElementById('assignTeacherModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function closeAssignTeacher() {
+            document.getElementById('assignTeacherModal').style.display = 'none';
+        }
+
+        function confirmAssignTeacher() {
+            const teacherId = document.getElementById('selectedTeacher').value;
+            const startDate = document.getElementById('teacherStartDate').value;
+            const endDate = document.getElementById('teacherEndDate').value;
+            const note = document.getElementById('assignmentNote').value;
+
+            if (!teacherId || !startDate) {
+                alert('❌ Kérjük, válasszon tanárt és adja meg a kezdés dátumát!');
+                return;
+            }
+
+            // Check for overlapping active assignments
+            const existingAssignments = teacherAssignments.filter(assignment => 
+                assignment.classroomId === selectedClassroomId && 
+                assignment.teacherId == teacherId &&
+                (!assignment.endDate || new Date(assignment.endDate) >= new Date(startDate))
+            );
+
+            if (existingAssignments.length > 0) {
+                if (!confirm('⚠️ Ez a tanár már hozzá van rendelve ehhez az osztályhoz a megadott időszakban.\n\nBiztosan folytatja? (Átfedő hozzárendelések lehetnek.)')) {
+                    return;
+                }
+            }
+
+            // Create new assignment
+            const newAssignment = {
+                id: Date.now(),
+                classroomId: selectedClassroomId,
+                teacherId: parseInt(teacherId),
+                startDate: startDate,
+                endDate: endDate || null,
+                note: note,
+                status: 'active'
+            };
+
+            teacherAssignments.push(newAssignment);
+            loadClassroomTeachers();
+            closeAssignTeacher();
+
+            const teacher = teachers.find(t => t.id == teacherId);
+            alert(`✅ ${teacher.name} sikeresen hozzárendelve az osztályhoz!`);
+        }
+
+        function endAssignment(assignmentId) {
+            const assignment = teacherAssignments.find(a => a.id === assignmentId);
+            if (assignment && confirm('Biztosan befejezi ezt a tanári hozzárendelést?')) {
+                const today = new Date().toISOString().split('T')[0];
+                assignment.endDate = today;
+                assignment.status = 'ended';
+                loadClassroomTeachers();
+                alert('✅ Tanári hozzárendelés sikeresen befejezve!');
+            }
+        }
+
+        function editAssignment(assignmentId) {
+            alert('Hozzárendelés szerkesztése fejlesztés alatt...');
+        }
+
+        function deleteAssignment(assignmentId) {
+            const assignment = teacherAssignments.find(a => a.id === assignmentId);
+            if (assignment && confirm('Biztosan törli ezt a tanári hozzárendelést?\n\nEz a művelet nem vonható vissza!')) {
+                teacherAssignments = teacherAssignments.filter(a => a.id !== assignmentId);
+                loadClassroomTeachers();
+                alert('✅ Tanári hozzárendelés sikeresen törölve!');
+            }
+        }
+
         // Close modals when clicking outside
         document.addEventListener('click', function(event) {
             // Add teacher modal
@@ -1328,6 +1645,17 @@
             const addSetModal = document.getElementById('addSetModal');
             if (event.target === addSetModal) {
                 closeAddSet();
+            }
+
+            // Teacher assignment modals
+            const classroomTeachersModal = document.getElementById('classroomTeachersModal');
+            if (event.target === classroomTeachersModal) {
+                closeClassroomTeachers();
+            }
+
+            const assignTeacherModal = document.getElementById('assignTeacherModal');
+            if (event.target === assignTeacherModal) {
+                closeAssignTeacher();
             }
         });
 
@@ -1525,41 +1853,43 @@
     <!-- Add Classroom Modal -->
     <div id="addClassroomModal" class="modal-overlay">
         <div class="modal">
-            <h2>
+            <h2 style="flex-shrink: 0;">
                 <i data-lucide="school" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
                 Osztály Hozzáadása
             </h2>
             
-            <div class="form-group">
-                <label class="form-label">Osztály neve *</label>
-                <input type="text" class="form-input" id="classroomName" placeholder="pl. 9.A, Matematika alapozó" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Évfolyam</label>
-                <select class="form-input" id="classroomGrade">
-                    <option value="">Válasszon évfolyamot</option>
-                    <option value="9">9. évfolyam</option>
-                    <option value="10">10. évfolyam</option>
-                    <option value="11">11. évfolyam</option>
-                    <option value="12">12. évfolyam</option>
-                    <option value="other">Egyéb/Vegyes</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Tantárgy</label>
-                <input type="text" class="form-input" id="classroomSubject" placeholder="Matematika, Fizika, Magyar, stb.">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Létszám</label>
-                <input type="number" class="form-input" id="classroomSize" placeholder="25" min="1" max="50">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Leírás</label>
-                <textarea class="form-input" id="classroomDescription" placeholder="Opcionális leírás az osztályról..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="form-label">Osztály neve *</label>
+                    <input type="text" class="form-input" id="classroomName" placeholder="pl. 9.A, Matematika alapozó" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Évfolyam</label>
+                    <select class="form-input" id="classroomGrade">
+                        <option value="">Válasszon évfolyamot</option>
+                        <option value="9">9. évfolyam</option>
+                        <option value="10">10. évfolyam</option>
+                        <option value="11">11. évfolyam</option>
+                        <option value="12">12. évfolyam</option>
+                        <option value="other">Egyéb/Vegyes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tantárgy</label>
+                    <input type="text" class="form-input" id="classroomSubject" placeholder="Matematika, Fizika, Magyar, stb.">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Létszám</label>
+                    <input type="number" class="form-input" id="classroomSize" placeholder="25" min="1" max="50">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Leírás</label>
+                    <textarea class="form-input" id="classroomDescription" placeholder="Opcionális leírás az osztályról..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+                </div>
             </div>
             
             <div class="modal-buttons">
@@ -1621,42 +1951,44 @@
     <!-- Add Set Modal -->
     <div id="addSetModal" class="modal-overlay">
         <div class="modal">
-            <h2>
+            <h2 style="flex-shrink: 0;">
                 <i data-lucide="layers" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
                 Szett Létrehozása
             </h2>
             
-            <div class="form-group">
-                <label class="form-label">Szett neve *</label>
-                <input type="text" class="form-input" id="setName" placeholder="pl. Matematikai alapfogalmak" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Tantárgy</label>
-                <input type="text" class="form-input" id="setSubject" placeholder="Matematika, Fizika, Magyar, stb.">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Nehézségi szint</label>
-                <select class="form-input" id="setDifficulty">
-                    <option value="">Válasszon szintet</option>
-                    <option value="beginner">Kezdő</option>
-                    <option value="intermediate">Középhaladó</option>
-                    <option value="advanced">Haladó</option>
-                    <option value="expert">Szakértő</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Leírás</label>
-                <textarea class="form-input" id="setDescription" placeholder="Szett leírása és tartalma..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="setIsPublic" style="width: 18px; height: 18px;">
-                    <span class="form-label" style="margin: 0;">Nyilvános szett (minden tanár számára elérhető)</span>
-                </label>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="form-label">Szett neve *</label>
+                    <input type="text" class="form-input" id="setName" placeholder="pl. Matematikai alapfogalmak" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tantárgy</label>
+                    <input type="text" class="form-input" id="setSubject" placeholder="Matematika, Fizika, Magyar, stb.">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nehézségi szint</label>
+                    <select class="form-input" id="setDifficulty">
+                        <option value="">Válasszon szintet</option>
+                        <option value="beginner">Kezdő</option>
+                        <option value="intermediate">Középhaladó</option>
+                        <option value="advanced">Haladó</option>
+                        <option value="expert">Szakértő</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Leírás</label>
+                    <textarea class="form-input" id="setDescription" placeholder="Szett leírása és tartalma..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="setIsPublic" style="width: 18px; height: 18px;">
+                        <span class="form-label" style="margin: 0;">Nyilvános szett (minden tanár számára elérhető)</span>
+                    </label>
+                </div>
             </div>
             
             <div class="modal-buttons">
@@ -1671,5 +2003,85 @@
             </div>
         </div>
     </div>
+
+    <!-- Classroom Teacher Assignment Modal -->
+    <div id="classroomTeachersModal" class="modal-overlay">
+        <div class="modal large">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0;">
+                <h2 style="margin: 0;">
+                    <i data-lucide="users" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                    <span id="classroomTeachersTitle">Osztály - Tanárok Kezelése</span>
+                </h2>
+                <button class="btn btn-primary" onclick="openAssignTeacher();" style="padding: 8px 16px;">
+                    <i data-lucide="user-plus" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Tanár Hozzárendelése
+                </button>
+            </div>
+            
+            <div class="modal-content">
+                <!-- Current Teacher Assignments -->
+                <div id="currentTeachersContainer" style="border: 1px solid #e2e8f0; border-radius: 12px; min-height: 300px;">
+                    <!-- Current teacher assignments will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeClassroomTeachers()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Bezárás
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Teacher Modal -->
+    <div id="assignTeacherModal" class="modal-overlay">
+        <div class="modal">
+            <h2 style="flex-shrink: 0;">
+                <i data-lucide="user-plus" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                Tanár Hozzárendelése
+            </h2>
+            
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="form-label">Tanár kiválasztása *</label>
+                    <select class="form-input" id="selectedTeacher" required>
+                        <option value="">Válasszon tanárt</option>
+                        <!-- Teachers will be loaded here dynamically -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Kezdés dátuma *</label>
+                    <input type="date" class="form-input" id="teacherStartDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Befejezés dátuma</label>
+                    <input type="date" class="form-input" id="teacherEndDate" placeholder="Hagyja üresen, ha nincs végdátum">
+                    <small style="color: #6b7280; font-size: 13px; margin-top: 5px; display: block;">
+                        Ha üresen hagyja, a tanár jelenleg aktív marad ebben az osztályban
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Megjegyzés</label>
+                    <textarea class="form-input" id="assignmentNote" placeholder="Tanári hozzárendelés megjegyzése..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeAssignTeacher()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Mégse
+                </button>
+                <button class="btn btn-primary" onclick="confirmAssignTeacher()">
+                    <i data-lucide="user-plus" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Tanár Hozzárendelése
+                </button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
