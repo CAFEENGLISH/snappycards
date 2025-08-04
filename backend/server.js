@@ -147,7 +147,7 @@ app.get('/', (req, res) => {
 // Register user endpoint - with Resend verification email
 app.post('/register', async (req, res) => {
     try {
-        const { firstName, email, password, userRole = 'student', language = 'hu', supabaseUserId, createSupabaseUser = false } = req.body;
+        const { firstName, email, password, userRole = 'student', schoolName, language = 'hu', supabaseUserId, createSupabaseUser = false } = req.body;
 
         // Input validation
         if (!firstName || !email || !password) {
@@ -175,11 +175,19 @@ app.post('/register', async (req, res) => {
         }
 
         // User role validation
-        const validRoles = ['student', 'teacher', 'admin'];
+        const validRoles = ['student', 'teacher', 'school_admin', 'admin'];
         if (!validRoles.includes(userRole)) {
             return res.status(400).json({
                 success: false,
-                error: 'Invalid user role. Must be student, teacher, or admin'
+                error: 'Invalid user role. Must be student, teacher, school_admin, or admin'
+            });
+        }
+
+        // School admin specific validation
+        if (userRole === 'school_admin' && !schoolName) {
+            return res.status(400).json({
+                success: false,
+                error: 'School name is required for school admin accounts'
             });
         }
 
@@ -204,7 +212,8 @@ app.post('/register', async (req, res) => {
                     user_metadata: {
                         first_name: firstName,
                         user_role: userRole,
-                        language: language
+                        language: language,
+                        school_name: schoolName // Include school name for school_admin
                     },
                     email_confirm: false // Important: Don't send Supabase email
                 });
@@ -384,6 +393,9 @@ app.get('/verify', async (req, res) => {
                     console.error('⚠️ Supabase confirmation error:', confirmError);
                 } else {
                     console.log('✅ Supabase user email confirmed:', userData.user?.email);
+                    
+                    // Create user profile and school if needed
+                    await createUserProfileAndSchool(userData.user);
                 }
             } catch (adminError) {
                 console.error('⚠️ Admin API error:', adminError);
@@ -491,6 +503,71 @@ app.get('/verify', async (req, res) => {
         `);
     }
 });
+
+// Helper function to create user profile and school
+async function createUserProfileAndSchool(user) {
+    try {
+        const { id: userId, user_metadata } = user;
+        const { first_name, user_role, school_name } = user_metadata || {};
+        
+        console.log(`📝 Creating user profile for: ${user.email} (Role: ${user_role})`);
+        
+        let schoolId = null;
+        
+        // If school_admin, create school first
+        if (user_role === 'school_admin' && school_name) {
+            console.log(`🏫 Creating school: ${school_name}`);
+            
+            const { data: schoolData, error: schoolError } = await supabaseAdmin
+                .from('schools')
+                .insert({
+                    name: school_name,
+                    description: `School managed by ${first_name}`,
+                    contact_email: user.email,
+                    is_active: true
+                })
+                .select()
+                .single();
+                
+            if (schoolError) {
+                console.error('❌ Failed to create school:', schoolError);
+                throw schoolError;
+            }
+            
+            schoolId = schoolData.id;
+            console.log(`✅ School created with ID: ${schoolId}`);
+        }
+        
+        // Create user profile
+        const { data: profileData, error: profileError } = await supabaseAdmin
+            .from('user_profiles')
+            .insert({
+                id: userId,
+                first_name: first_name || '',
+                last_name: '', // Can be added later
+                user_role: user_role || 'student',
+                school_id: schoolId
+            })
+            .select()
+            .single();
+            
+        if (profileError) {
+            console.error('❌ Failed to create user profile:', profileError);
+            throw profileError;
+        }
+        
+        console.log(`✅ User profile created for: ${user.email}`);
+        if (schoolId) {
+            console.log(`🔗 User linked to school ID: ${schoolId}`);
+        }
+        
+        return { profile: profileData, schoolId };
+        
+    } catch (error) {
+        console.error('❌ Error in createUserProfileAndSchool:', error);
+        throw error;
+    }
+}
 
 // CORS preflight for endpoints
 app.options('/register', cors());

@@ -448,7 +448,7 @@
 
                     <div class="form-group">
                         <label class="form-label" id="roleLabel">I want to register as</label>
-                        <div style="display: flex; gap: 16px; margin-top: 8px;">
+                        <div style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;">
                             <label class="role-option">
                                 <input type="radio" name="userRole" value="student" id="studentRole" checked style="margin: 0;">
                                 <div>
@@ -463,7 +463,26 @@
                                     <div style="font-size: 12px; color: #64748b;" id="teacherDesc">Create classrooms</div>
                                 </div>
                             </label>
+                            <label class="role-option">
+                                <input type="radio" name="userRole" value="school_admin" id="schoolAdminRole" style="margin: 0;">
+                                <div>
+                                    <div style="font-weight: 600; color: #374151;" id="schoolAdminText">🏫 School Admin</div>
+                                    <div style="font-size: 12px; color: #64748b;" id="schoolAdminDesc">Manage school</div>
+                                </div>
+                            </label>
                         </div>
+                    </div>
+
+                    <!-- School Name Field (only visible for school_admin) -->
+                    <div class="form-group" id="schoolNameGroup" style="display: none;">
+                        <label for="schoolName" class="form-label" id="schoolNameLabel">School Name</label>
+                        <input 
+                            type="text" 
+                            id="schoolName" 
+                            name="schoolName" 
+                            class="form-input" 
+                            placeholder="Enter your school name"
+                        >
                     </div>
 
                     <div class="form-group">
@@ -522,6 +541,9 @@
                 studentDesc: "Learn with flashcards",
                 teacherText: "👨‍🏫 Teacher", 
                 teacherDesc: "Create classrooms",
+                schoolAdminText: "🏫 School Admin",
+                schoolAdminDesc: "Manage school",
+                schoolNameLabel: "School Name",
                 emailLabel: "Email address",
                 passwordLabel: "Password",
                 buttonText: "Create account",
@@ -564,6 +586,9 @@
             document.getElementById('studentDesc').textContent = t.studentDesc;
             document.getElementById('teacherText').textContent = t.teacherText;
             document.getElementById('teacherDesc').textContent = t.teacherDesc;
+            document.getElementById('schoolAdminText').textContent = t.schoolAdminText;
+            document.getElementById('schoolAdminDesc').textContent = t.schoolAdminDesc;
+            document.getElementById('schoolNameLabel').textContent = t.schoolNameLabel;
             document.getElementById('emailLabel').textContent = t.emailLabel;
             document.getElementById('passwordLabel').textContent = t.passwordLabel;
             document.getElementById('buttonText').textContent = t.buttonText;
@@ -607,6 +632,7 @@
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const userRole = document.querySelector('input[name="userRole"]:checked').value;
+            const schoolName = document.getElementById('schoolName').value.trim();
             const submitButton = document.getElementById('submitButton');
             const buttonText = document.getElementById('buttonText');
             const t = texts[currentLanguage];
@@ -632,6 +658,12 @@
                 return;
             }
 
+            // School admin specific validation
+            if (userRole === 'school_admin' && !schoolName) {
+                showError('Please enter your school name');
+                return;
+            }
+
             // Loading state
             submitButton.disabled = true;
             buttonText.innerHTML = `<span class="loading-spinner"></span>${t.buttonLoading}`;
@@ -651,6 +683,7 @@
                         email: email,
                         password: password,
                         userRole: userRole,
+                        schoolName: schoolName, // Include school name for school_admin
                         language: currentLanguage,
                         createSupabaseUser: true // Signal backend to create Supabase user too
                     })
@@ -690,6 +723,33 @@
                 window.location.href = '/dashboard.html';
             }
         }
+
+        // Role change handler - show/hide school name field
+        function handleRoleChange() {
+            const schoolAdminRole = document.getElementById('schoolAdminRole');
+            const schoolNameGroup = document.getElementById('schoolNameGroup');
+            const schoolNameInput = document.getElementById('schoolName');
+            
+            if (schoolAdminRole.checked) {
+                schoolNameGroup.style.display = 'block';
+                schoolNameInput.required = true;
+            } else {
+                schoolNameGroup.style.display = 'none';
+                schoolNameInput.required = false;
+                schoolNameInput.value = '';
+            }
+        }
+
+        // Add event listeners for role changes
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add role change listeners
+            document.getElementById('studentRole').addEventListener('change', handleRoleChange);
+            document.getElementById('teacherRole').addEventListener('change', handleRoleChange);
+            document.getElementById('schoolAdminRole').addEventListener('change', handleRoleChange);
+            
+            // Initial call
+            handleRoleChange();
+        });
 
         // Initialize
         initializeLanguage();
