@@ -36,6 +36,37 @@
             overflow-x: hidden;
         }
 
+        /* Mock Mode Banner */
+        .mock-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .mock-banner.active {
+            display: block;
+        }
+
+        .mock-banner i {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Adjust body padding when mock banner is active */
+        body.mock-mode-active {
+            padding-top: 50px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -1546,6 +1577,12 @@
     </style>
 </head>
 <body>
+    <!-- Mock Mode Banner -->
+    <div id="mockBanner" class="mock-banner">
+        <i data-lucide="database"></i>
+        <span>🎭 DEMO ÜZEMMÓD AKTÍV - Csak bemutató adatok láthatóak</span>
+    </div>
+
     <!-- Header -->
     <header class="header" style="position: relative;">
         <div class="container">
@@ -9769,6 +9806,77 @@
         window.addEventListener('focus', () => {
             console.log('🔄 Ablak fókuszba került - frissítés...');
             loadDashboardData();
+        });
+
+        // =============================================================================
+        // MOCK MODE SYSTEM INTEGRATION
+        // =============================================================================
+        
+        // Global Mock Mode State (synchronized with admin dashboard)
+        let isMockMode = localStorage.getItem('snappyCards_mockMode') === 'true';
+        
+        function updateMockModeUI() {
+            const mockBanner = document.getElementById('mockBanner');
+            const body = document.body;
+            
+            if (mockBanner) {
+                if (isMockMode) {
+                    mockBanner.classList.add('active');
+                    body.classList.add('mock-mode-active');
+                } else {
+                    mockBanner.classList.remove('active');
+                    body.classList.remove('mock-mode-active');
+                }
+                lucide.createIcons(mockBanner);
+            }
+        }
+        
+        // Initialize Mock Mode on page load
+        function initializeMockMode() {
+            updateMockModeUI();
+            console.log(`🎭 Student Dashboard Mock Mode: ${isMockMode ? 'ACTIVE' : 'DISABLED'}`);
+            
+            // If mock mode is active, show demo notice in student features
+            if (isMockMode) {
+                // Add demo watermark to flashcard sections
+                const studySections = document.querySelectorAll('.card, .quick-action-card');
+                studySections.forEach(section => {
+                    if (!section.querySelector('.demo-watermark')) {
+                        const watermark = document.createElement('div');
+                        watermark.className = 'demo-watermark';
+                        watermark.innerHTML = '<i data-lucide="database"></i> DEMO';
+                        watermark.style.cssText = `
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                            background: rgba(245, 158, 11, 0.9);
+                            color: white;
+                            padding: 4px 8px;
+                            border-radius: 6px;
+                            font-size: 12px;
+                            font-weight: 600;
+                            z-index: 10;
+                            backdrop-filter: blur(10px);
+                        `;
+                        section.style.position = 'relative';
+                        section.appendChild(watermark);
+                        lucide.createIcons(watermark);
+                    }
+                });
+            } else {
+                // Remove demo watermarks in live mode
+                document.querySelectorAll('.demo-watermark').forEach(watermark => {
+                    watermark.remove();
+                });
+            }
+        }
+
+        // Initialize mock mode when dashboard loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Delay to ensure other systems are loaded first
+            setTimeout(() => {
+                initializeMockMode();
+            }, 500);
         });
     </script>
 

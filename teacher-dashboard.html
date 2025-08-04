@@ -36,6 +36,37 @@
             overflow-x: hidden;
         }
 
+        /* Mock Mode Banner */
+        .mock-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .mock-banner.active {
+            display: block;
+        }
+
+        .mock-banner i {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Adjust body padding when mock banner is active */
+        body.mock-mode-active {
+            padding-top: 50px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -420,6 +451,12 @@
     </style>
 </head>
 <body>
+    <!-- Mock Mode Banner -->
+    <div id="mockBanner" class="mock-banner">
+        <i data-lucide="database"></i>
+        <span>🎭 DEMO ÜZEMMÓD AKTÍV - Csak bemutató adatok láthatóak</span>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -872,8 +909,72 @@
             });
         }
 
+        // =============================================================================
+        // MOCK MODE SYSTEM INTEGRATION
+        // =============================================================================
+        
+        // Global Mock Mode State (synchronized with admin dashboard)
+        let isMockMode = localStorage.getItem('snappyCards_mockMode') === 'true';
+        
+        function updateMockModeUI() {
+            const mockBanner = document.getElementById('mockBanner');
+            const body = document.body;
+            
+            if (mockBanner) {
+                if (isMockMode) {
+                    mockBanner.classList.add('active');
+                    body.classList.add('mock-mode-active');
+                } else {
+                    mockBanner.classList.remove('active');
+                    body.classList.remove('mock-mode-active');
+                }
+                lucide.createIcons(mockBanner);
+            }
+        }
+        
+        // Initialize Mock Mode on page load
+        function initializeMockMode() {
+            updateMockModeUI();
+            console.log(`🎭 Teacher Dashboard Mock Mode: ${isMockMode ? 'ACTIVE' : 'DISABLED'}`);
+            
+            // If mock mode is active, show demo notice in teacher features
+            if (isMockMode) {
+                // Add demo indicators to existing functionality
+                const featureButtons = document.querySelectorAll('.feature-button, .action-btn');
+                featureButtons.forEach(btn => {
+                    if (!btn.querySelector('.demo-indicator')) {
+                        const indicator = document.createElement('span');
+                        indicator.className = 'demo-indicator';
+                        indicator.textContent = '🎭 DEMO';
+                        indicator.style.cssText = `
+                            position: absolute;
+                            top: -8px;
+                            right: -8px;
+                            background: #f59e0b;
+                            color: white;
+                            padding: 2px 6px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-weight: 600;
+                            z-index: 1;
+                        `;
+                        btn.style.position = 'relative';
+                        btn.appendChild(indicator);
+                    }
+                });
+            } else {
+                // Remove demo indicators in live mode
+                document.querySelectorAll('.demo-indicator').forEach(indicator => {
+                    indicator.remove();
+                });
+            }
+        }
+
         // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', initPage);
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMockMode();
+            initPage();
+        });
     </script>
 </body>
 </html>
