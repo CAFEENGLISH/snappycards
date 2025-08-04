@@ -19,6 +19,14 @@ const supabaseUrl = process.env.SUPABASE_URL || 'https://ycxqxdhaxehspypqbnpi.su
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzIwMzAzMSwiZXhwIjoyMDY4Nzc5MDMxfQ.0jZl6iSSz0BV9TlQhWOE5utuv71YetOWhsU0vQOdagM';
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
+// Frontend and Backend URLs (global scope for use in multiple endpoints)
+const frontendUrl = process.env.NODE_ENV === 'production' 
+    ? 'https://snappycards.netlify.app' 
+    : 'http://localhost:3000';
+const backendUrl = process.env.NODE_ENV === 'production' 
+    ? 'https://snappycards-api.onrender.com' 
+    : 'http://localhost:8080';
+
 // Verify Resend API key
 if (!process.env.RESEND_API_KEY) {
     console.error('❌ RESEND_API_KEY environment variable is required');
@@ -192,15 +200,7 @@ app.post('/register', async (req, res) => {
             });
         }
 
-        // Generate frontend and backend URLs
-        const frontendUrl = process.env.NODE_ENV === 'production' 
-            ? 'https://snappycards.netlify.app' 
-            : 'http://localhost:3000';
-            
-        // Create a backend verification endpoint that will handle automatic login
-        const backendUrl = process.env.NODE_ENV === 'production' 
-            ? 'https://snappycards-api.onrender.com' 
-            : 'http://localhost:8080';
+        // URLs are now defined globally at the top of the file
 
         // Step 1: Create Supabase user if requested (without automatic email)
         let actualSupabaseUserId = supabaseUserId;
