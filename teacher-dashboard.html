@@ -201,6 +201,202 @@
             box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
         }
 
+        /* Quick Actions */
+        .quick-actions {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .quick-actions h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 24px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Management Sections */
+        .management-section {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .management-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 24px;
+        }
+
+        .student-item, .class-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .student-info, .class-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .student-avatar, .class-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .small-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .small-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 32px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .close {
+            color: #9ca3af;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #374151;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .welcome-title {
@@ -209,6 +405,16 @@
             
             .features-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-btn {
+                width: 200px;
+                justify-content: center;
             }
         }
     </style>
@@ -245,6 +451,29 @@
                 <p class="welcome-subtitle">Kezelje szettjeit, csoportjait és kövesse nyomon diákjainak haladását</p>
             </div>
 
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Gyors Műveletek</h2>
+                <div class="action-buttons">
+                    <button class="action-btn create-class" onclick="showCreateClassModal()">
+                        <i data-lucide="plus-circle"></i>
+                        Új Osztály
+                    </button>
+                    <button class="action-btn create-set" onclick="window.location.href='manage-sets-cards.html'">
+                        <i data-lucide="book-plus"></i>
+                        Új Szett
+                    </button>
+                    <button class="action-btn create-student" onclick="showCreateStudentModal()">
+                        <i data-lucide="user-plus"></i>
+                        Új Diák
+                    </button>
+                    <button class="action-btn generate-invite" onclick="showInviteModal()">
+                        <i data-lucide="send"></i>
+                        Meghívó Küldése
+                    </button>
+                </div>
+            </div>
+
             <!-- Teacher Features -->
             <div class="features-grid">
                 <div class="feature-card">
@@ -252,8 +481,8 @@
                         <i data-lucide="graduation-cap"></i>
                     </div>
                     <h3 class="feature-title">Students</h3>
-                    <p class="feature-description">Diákjai kezelése, haladásuk nyomonkövetése és egyéni tanulási támogatás.</p>
-                    <a href="#" class="feature-btn">Diákok Kezelése</a>
+                    <p class="feature-description">Diákjai listázása, kezelése és haladásuk nyomonkövetése.</p>
+                    <button class="feature-btn" onclick="showStudentsList()">Diákok Listázása</button>
                 </div>
 
                 <div class="feature-card">
@@ -261,8 +490,8 @@
                         <i data-lucide="users"></i>
                     </div>
                     <h3 class="feature-title">Classes</h3>
-                    <p class="feature-description">Osztályok létrehozása, csoportosítás és közös tanulási projektek szervezése.</p>
-                    <a href="#" class="feature-btn">Osztályok Kezelése</a>
+                    <p class="feature-description">Osztályok és diákjaik kezelése, csoportos tanulási projektek.</p>
+                    <button class="feature-btn" onclick="showClassesList()">Osztályok Listázása</button>
                 </div>
 
                 <div class="feature-card">
@@ -270,12 +499,114 @@
                         <i data-lucide="book-open"></i>
                     </div>
                     <h3 class="feature-title">Sets</h3>
-                    <p class="feature-description">Tanulókártya szettek létrehozása, szerkesztése és osztályokhoz rendelése.</p>
+                    <p class="feature-description">Tanulókártya szettek létrehozása és osztályokhoz rendelése.</p>
                     <a href="manage-sets-cards.html" class="feature-btn">Szettek Kezelése</a>
+                </div>
+            </div>
+
+            <!-- Management Sections -->
+            <div id="students-section" class="management-section" style="display: none;">
+                <h2>Diákok Kezelése</h2>
+                <div class="students-list" id="studentsList">
+                    <!-- Students will be loaded here -->
+                </div>
+            </div>
+
+            <div id="classes-section" class="management-section" style="display: none;">
+                <h2>Osztályok Kezelése</h2>
+                <div class="classes-list" id="classesList">
+                    <!-- Classes will be loaded here -->
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Modals -->
+    <!-- Create Class Modal -->
+    <div id="createClassModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Új Osztály Létrehozása</h3>
+                <span class="close" onclick="closeModal('createClassModal')">&times;</span>
+            </div>
+            <form id="createClassForm">
+                <div class="form-group">
+                    <label class="form-label">Osztály Neve</label>
+                    <input type="text" id="className" class="form-input" placeholder="pl. 9.A Magyar" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Leírás</label>
+                    <input type="text" id="classDescription" class="form-input" placeholder="Rövid leírás az osztályról">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal('createClassModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Osztály Létrehozása</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Student Modal -->
+    <div id="createStudentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Új Diák Hozzáadása</h3>
+                <span class="close" onclick="closeModal('createStudentModal')">&times;</span>
+            </div>
+            <form id="createStudentForm">
+                <div class="form-group">
+                    <label class="form-label">Diák Neve</label>
+                    <input type="text" id="studentName" class="form-input" placeholder="pl. Nagy Péter" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Cím</label>
+                    <input type="email" id="studentEmail" class="form-input" placeholder="peter.nagy@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Osztály Kiválasztása</label>
+                    <select id="studentClass" class="form-input" required>
+                        <option value="">Válasszon osztályt...</option>
+                        <!-- Classes will be loaded here -->
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal('createStudentModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Diák Hozzáadása</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invite Modal -->
+    <div id="inviteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Meghívó Küldése</h3>
+                <span class="close" onclick="closeModal('inviteModal')">&times;</span>
+            </div>
+            <form id="inviteForm">
+                <div class="form-group">
+                    <label class="form-label">Diák Email Címe</label>
+                    <input type="email" id="inviteEmail" class="form-input" placeholder="diak@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Osztály</label>
+                    <select id="inviteClass" class="form-input" required>
+                        <option value="">Válasszon osztályt...</option>
+                        <!-- Classes will be loaded here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Üzenet (opcionális)</label>
+                    <textarea id="inviteMessage" class="form-input" rows="3" placeholder="Egyéni üzenet a diáknak..."></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeModal('inviteModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Meghívó Küldése</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Supabase configuration
@@ -362,6 +693,183 @@
             } catch (error) {
                 console.error('Error during logout:', error);
             }
+        }
+
+        // Modal functions
+        function showCreateClassModal() {
+            document.getElementById('createClassModal').style.display = 'block';
+        }
+
+        function showCreateStudentModal() {
+            loadClassesForSelect();
+            document.getElementById('createStudentModal').style.display = 'block';
+        }
+
+        function showInviteModal() {
+            loadClassesForSelect();
+            document.getElementById('inviteModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // List management functions
+        function showStudentsList() {
+            hideAllSections();
+            document.getElementById('students-section').style.display = 'block';
+            loadStudents();
+        }
+
+        function showClassesList() {
+            hideAllSections();
+            document.getElementById('classes-section').style.display = 'block';
+            loadClasses();
+        }
+
+        function hideAllSections() {
+            document.getElementById('students-section').style.display = 'none';
+            document.getElementById('classes-section').style.display = 'none';
+        }
+
+        // Load data functions
+        async function loadStudents() {
+            const studentsList = document.getElementById('studentsList');
+            studentsList.innerHTML = '<p>🔄 Diákok betöltése...</p>';
+            
+            // Mock data for now
+            const mockStudents = [
+                { id: 1, name: 'Nagy Péter', email: 'peter.nagy@example.com', class: '9.A Magyar' },
+                { id: 2, name: 'Kiss Anna', email: 'anna.kiss@example.com', class: '9.B Angol' },
+                { id: 3, name: 'Kovács János', email: 'janos.kovacs@example.com', class: '9.A Magyar' }
+            ];
+            
+            studentsList.innerHTML = '';
+            mockStudents.forEach(student => {
+                const studentDiv = document.createElement('div');
+                studentDiv.className = 'student-item';
+                studentDiv.innerHTML = `
+                    <div class="student-info">
+                        <div class="student-avatar">${student.name.charAt(0)}</div>
+                        <div>
+                            <div style="font-weight: 600;">${student.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">${student.email} • ${student.class}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="small-btn" onclick="viewStudentDetails(${student.id})">Részletek</button>
+                    </div>
+                `;
+                studentsList.appendChild(studentDiv);
+            });
+        }
+
+        async function loadClasses() {
+            const classesList = document.getElementById('classesList');
+            classesList.innerHTML = '<p>🔄 Osztályok betöltése...</p>';
+            
+            // Mock data for now
+            const mockClasses = [
+                { id: 1, name: '9.A Magyar', description: 'Magyar nyelv és irodalom', students: 25 },
+                { id: 2, name: '9.B Angol', description: 'Angol nyelv haladó', students: 22 },
+                { id: 3, name: '10.A Matematika', description: 'Matematika emelt szint', students: 18 }
+            ];
+            
+            classesList.innerHTML = '';
+            mockClasses.forEach(cls => {
+                const classDiv = document.createElement('div');
+                classDiv.className = 'class-item';
+                classDiv.innerHTML = `
+                    <div class="class-info">
+                        <div class="class-avatar">${cls.name.charAt(0)}</div>
+                        <div>
+                            <div style="font-weight: 600;">${cls.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">${cls.description} • ${cls.students} diák</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="small-btn" onclick="viewClassDetails(${cls.id})">Diákok Megtekintése</button>
+                    </div>
+                `;
+                classesList.appendChild(classDiv);
+            });
+        }
+
+        function loadClassesForSelect() {
+            const mockClasses = [
+                { id: 1, name: '9.A Magyar' },
+                { id: 2, name: '9.B Angol' },
+                { id: 3, name: '10.A Matematika' }
+            ];
+            
+            const selects = ['studentClass', 'inviteClass'];
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                // Clear existing options except first
+                select.innerHTML = '<option value="">Válasszon osztályt...</option>';
+                mockClasses.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls.id;
+                    option.textContent = cls.name;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        // Form handlers
+        document.getElementById('createClassForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const className = document.getElementById('className').value;
+            const classDescription = document.getElementById('classDescription').value;
+            
+            // Here you would create the class in Supabase
+            alert(`✅ Új osztály létrehozva: ${className}`);
+            closeModal('createClassModal');
+            document.getElementById('createClassForm').reset();
+        });
+
+        document.getElementById('createStudentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentName = document.getElementById('studentName').value;
+            const studentEmail = document.getElementById('studentEmail').value;
+            const studentClass = document.getElementById('studentClass').value;
+            
+            // Here you would create the student in Supabase
+            alert(`✅ Új diák hozzáadva: ${studentName}`);
+            closeModal('createStudentModal');
+            document.getElementById('createStudentForm').reset();
+        });
+
+        document.getElementById('inviteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const inviteEmail = document.getElementById('inviteEmail').value;
+            const inviteClass = document.getElementById('inviteClass').value;
+            const inviteMessage = document.getElementById('inviteMessage').value;
+            
+            // Here you would send the invite via email
+            alert(`✅ Meghívó elküldve: ${inviteEmail}`);
+            closeModal('inviteModal');
+            document.getElementById('inviteForm').reset();
+        });
+
+        // Helper functions
+        function viewStudentDetails(studentId) {
+            alert(`Diák részletek megtekintése: ID ${studentId}`);
+        }
+
+        function viewClassDetails(classId) {
+            alert(`Osztály diákjai megtekintése: ID ${classId}`);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = ['createClassModal', 'createStudentModal', 'inviteModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target == modal) {
+                    closeModal(modalId);
+                }
+            });
         }
 
         // Initialize when page loads
