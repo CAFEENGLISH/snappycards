@@ -103,10 +103,46 @@
             backdrop-filter: blur(20px);
             border-radius: 24px;
             padding: 40px;
-            max-width: 650px;
-            width: 95%;
+            width: 650px;
+            height: 600px;
+            max-width: 95vw;
+            max-height: 90vh;
             box-shadow: 0 20px 80px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Large modal for lists */
+        .modal.large {
+            width: 900px;
+            height: 700px;
+        }
+
+        /* Modal content wrapper for scrolling */
+        .modal-content {
+            flex: 1;
+            overflow-y: auto;
+            margin: -10px -5px;
+            padding: 10px 5px;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 3px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
         }
 
         .modal h2 {
@@ -329,13 +365,24 @@
             color: white;
         }
 
+        /* Modal buttons should stay at bottom */
+        .modal-buttons {
+            margin-top: 20px;
+            flex-shrink: 0;
+        }
+
         /* Mobile responsive for modal */
         @media (max-width: 768px) {
             .modal {
-                max-width: 95%;
-                width: 95%;
-                padding: 30px 20px;
-                margin: 20px;
+                width: 95vw;
+                height: 85vh;
+                padding: 20px;
+                margin: 0;
+            }
+            
+            .modal.large {
+                width: 95vw;
+                height: 85vh;
             }
             
             .modal h2 {
@@ -1336,42 +1383,44 @@
     <!-- Add Teacher Modal -->
     <div id="addTeacherModal" class="modal-overlay">
         <div class="modal">
-            <h2>
+            <h2 style="flex-shrink: 0;">
                 <i data-lucide="user-plus" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
                 Tanár Hozzáadása
             </h2>
             
-            <div class="form-group">
-                <label class="form-label">Tanár neve *</label>
-                <input type="text" class="form-input" id="teacherName" placeholder="Teljes név" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Email cím *</label>
-                <input type="email" class="form-input" id="teacherEmail" placeholder="email@domain.com" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Ideiglenes jelszó *</label>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="text" class="form-input" id="teacherPassword" placeholder="Automatikusan generált" style="flex: 1;">
-                    <button type="button" class="btn btn-secondary" onclick="generatePassword()" style="white-space: nowrap; padding: 12px 16px;">
-                        <i data-lucide="shuffle" style="width: 16px; height: 16px; margin-right: 8px;"></i>
-                        Generálás
-                    </button>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="form-label">Tanár neve *</label>
+                    <input type="text" class="form-input" id="teacherName" placeholder="Teljes név" required>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Megjegyzés</label>
-                <textarea class="form-input" id="teacherNote" placeholder="Opcionális megjegyzés..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="sendWelcomeEmail" checked style="width: 18px; height: 18px;">
-                    <span class="form-label" style="margin: 0;">Üdvözlő email küldése belépési adatokkal</span>
-                </label>
+                
+                <div class="form-group">
+                    <label class="form-label">Email cím *</label>
+                    <input type="email" class="form-input" id="teacherEmail" placeholder="email@domain.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Ideiglenes jelszó *</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" class="form-input" id="teacherPassword" placeholder="Automatikusan generált" style="flex: 1;">
+                        <button type="button" class="btn btn-secondary" onclick="generatePassword()" style="white-space: nowrap; padding: 12px 16px;">
+                            <i data-lucide="shuffle" style="width: 16px; height: 16px; margin-right: 8px;"></i>
+                            Generálás
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Megjegyzés</label>
+                    <textarea class="form-input" id="teacherNote" placeholder="Opcionális megjegyzés..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="sendWelcomeEmail" checked style="width: 18px; height: 18px;">
+                        <span class="form-label" style="margin: 0;">Üdvözlő email küldése belépési adatokkal</span>
+                    </label>
+                </div>
             </div>
             
             <div class="modal-buttons">
@@ -1389,8 +1438,8 @@
 
     <!-- Teachers List Modal -->
     <div id="teachersModal" class="modal-overlay">
-        <div class="modal" style="max-width: 900px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="modal large">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0;">
                 <h2 style="margin: 0;">
                     <i data-lucide="users" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
                     Tanárok Kezelése
@@ -1401,22 +1450,24 @@
                 </button>
             </div>
             
-            <!-- Filter Toggles -->
-            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="filter-btn active" data-filter="all" onclick="filterTeachers('all')">
-                    <i data-lucide="users"></i> Mind
-                </button>
-                <button class="filter-btn" data-filter="active" onclick="filterTeachers('active')">
-                    <i data-lucide="user-check"></i> Aktív
-                </button>
-                <button class="filter-btn" data-filter="archived" onclick="filterTeachers('archived')">
-                    <i data-lucide="archive"></i> Archivált
-                </button>
-            </div>
-            
-            <!-- Teachers Table -->
-            <div id="teachersContainer" style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <!-- Teachers will be loaded here -->
+            <div class="modal-content">
+                <!-- Filter Toggles -->
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="filter-btn active" data-filter="all" onclick="filterTeachers('all')">
+                        <i data-lucide="users"></i> Mind
+                    </button>
+                    <button class="filter-btn" data-filter="active" onclick="filterTeachers('active')">
+                        <i data-lucide="user-check"></i> Aktív
+                    </button>
+                    <button class="filter-btn" data-filter="archived" onclick="filterTeachers('archived')">
+                        <i data-lucide="archive"></i> Archivált
+                    </button>
+                </div>
+                
+                <!-- Teachers Table -->
+                <div id="teachersContainer" style="border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <!-- Teachers will be loaded here -->
+                </div>
             </div>
             
             <div class="modal-buttons">
@@ -1430,8 +1481,8 @@
 
     <!-- Classrooms Modal -->
     <div id="classroomsModal" class="modal-overlay">
-        <div class="modal" style="max-width: 900px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="modal large">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0;">
                 <h2 style="margin: 0;">
                     <i data-lucide="school" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
                     Osztályok Kezelése
@@ -1442,22 +1493,24 @@
                 </button>
             </div>
             
-            <!-- Filter Toggles -->
-            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="filter-btn active" data-filter="all" onclick="filterClassrooms('all')">
-                    <i data-lucide="school"></i> Mind
-                </button>
-                <button class="filter-btn" data-filter="active" onclick="filterClassrooms('active')">
-                    <i data-lucide="check-circle"></i> Aktív
-                </button>
-                <button class="filter-btn" data-filter="archived" onclick="filterClassrooms('archived')">
-                    <i data-lucide="archive"></i> Archivált
-                </button>
-            </div>
-            
-            <!-- Classrooms Table -->
-            <div id="classroomsContainer" style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <!-- Classrooms will be loaded here -->
+            <div class="modal-content">
+                <!-- Filter Toggles -->
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="filter-btn active" data-filter="all" onclick="filterClassrooms('all')">
+                        <i data-lucide="school"></i> Mind
+                    </button>
+                    <button class="filter-btn" data-filter="active" onclick="filterClassrooms('active')">
+                        <i data-lucide="check-circle"></i> Aktív
+                    </button>
+                    <button class="filter-btn" data-filter="archived" onclick="filterClassrooms('archived')">
+                        <i data-lucide="archive"></i> Archivált
+                    </button>
+                </div>
+                
+                <!-- Classrooms Table -->
+                <div id="classroomsContainer" style="border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <!-- Classrooms will be loaded here -->
+                </div>
             </div>
             
             <div class="modal-buttons">
@@ -1524,8 +1577,8 @@
 
     <!-- Sets Modal -->
     <div id="setsModal" class="modal-overlay">
-        <div class="modal" style="max-width: 900px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="modal large">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0;">
                 <h2 style="margin: 0;">
                     <i data-lucide="layers" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
                     Szettek Kezelése
@@ -1536,22 +1589,24 @@
                 </button>
             </div>
             
-            <!-- Filter Toggles -->
-            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="filter-btn active" data-filter="all" onclick="filterSets('all')">
-                    <i data-lucide="layers"></i> Mind
-                </button>
-                <button class="filter-btn" data-filter="active" onclick="filterSets('active')">
-                    <i data-lucide="check-circle"></i> Aktív
-                </button>
-                <button class="filter-btn" data-filter="archived" onclick="filterSets('archived')">
-                    <i data-lucide="archive"></i> Archivált
-                </button>
-            </div>
-            
-            <!-- Sets Table -->
-            <div id="setsContainer" style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <!-- Sets will be loaded here -->
+            <div class="modal-content">
+                <!-- Filter Toggles -->
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="filter-btn active" data-filter="all" onclick="filterSets('all')">
+                        <i data-lucide="layers"></i> Mind
+                    </button>
+                    <button class="filter-btn" data-filter="active" onclick="filterSets('active')">
+                        <i data-lucide="check-circle"></i> Aktív
+                    </button>
+                    <button class="filter-btn" data-filter="archived" onclick="filterSets('archived')">
+                        <i data-lucide="archive"></i> Archivált
+                    </button>
+                </div>
+                
+                <!-- Sets Table -->
+                <div id="setsContainer" style="border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <!-- Sets will be loaded here -->
+                </div>
             </div>
             
             <div class="modal-buttons">
