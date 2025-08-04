@@ -820,10 +820,20 @@
                     .eq('school_id', currentSchool.id)
                     .eq('is_mock', isMockSchool);
                 
-                // Load sets count
+                // Load sets count - need to join through classrooms and classroom_sets
+                // For now, just check sets created by users in this school
+                const { data: schoolUsers } = await supabase
+                    .from('user_profiles')
+                    .select('id')
+                    .eq('school_id', currentSchool.id)
+                    .eq('is_mock', isMockSchool);
+                
+                const schoolUserIds = schoolUsers?.map(u => u.id) || [];
+                
                 const { count: setsCount } = await supabase
                     .from('flashcard_sets')
                     .select('*', { count: 'exact', head: true })
+                    .in('creator_id', schoolUserIds.length > 0 ? schoolUserIds : ['no-users'])
                     .eq('is_mock', isMockSchool);
                 
                 // For students count - calculate based on classroom enrollments
