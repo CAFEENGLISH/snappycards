@@ -877,7 +877,14 @@
             }
             
             if (currentSchool) {
-                document.getElementById('schoolName').value = currentSchool.name;
+                document.getElementById('schoolName').value = currentSchool.name || '';
+                document.getElementById('schoolAddress').value = currentSchool.address || '';
+                document.getElementById('adminPhone').value = currentSchool.phone || '';
+            } else {
+                // Clear fields if no school
+                document.getElementById('schoolName').value = '';
+                document.getElementById('schoolAddress').value = '';
+                document.getElementById('adminPhone').value = '';
             }
             
             const modal = document.getElementById('schoolSettingsModal');
@@ -916,12 +923,15 @@
                     return;
                 }
                 
-                // Update school name if school exists
+                // Handle school data (create or update)
                 if (currentSchool && currentSchool.id) {
+                    // Update existing school
                     const { error: schoolError } = await supabase
                         .from('schools')
                         .update({ 
-                            name: schoolName
+                            name: schoolName,
+                            address: schoolAddress,
+                            phone: adminPhone
                         })
                         .eq('id', currentSchool.id);
                     
@@ -933,12 +943,50 @@
                     
                     // Update local school object
                     currentSchool.name = schoolName;
+                    currentSchool.address = schoolAddress;
+                    currentSchool.phone = adminPhone;
                     
-                    // Update header with new school name
-                    const schoolNameElement = document.querySelector('.school-name');
-                    if (schoolNameElement) {
-                        schoolNameElement.textContent = schoolName;
+                } else {
+                    // Create new school if none exists
+                    const { data: newSchool, error: createError } = await supabase
+                        .from('schools')
+                        .insert({ 
+                            name: schoolName,
+                            address: schoolAddress,
+                            phone: adminPhone,
+                            is_mock: false,
+                            is_active: true
+                        })
+                        .select()
+                        .single();
+                    
+                    if (createError) {
+                        console.error('Error creating school:', createError);
+                        showError('Hiba', 'Nem sikerült létrehozni az iskolát!');
+                        return;
                     }
+                    
+                    // Update user profile with new school_id
+                    const { error: linkError } = await supabase
+                        .from('user_profiles')
+                        .update({ school_id: newSchool.id })
+                        .eq('id', currentUser.id);
+                    
+                    if (linkError) {
+                        console.error('Error linking school to user:', linkError);
+                        showError('Hiba', 'Nem sikerült hozzárendelni az iskolát!');
+                        return;
+                    }
+                    
+                    // Update local objects
+                    currentSchool = newSchool;
+                    console.log('✅ New school created:', newSchool);
+                }
+                
+                // Update header with new school name
+                const schoolNameElement = document.querySelector('.school-name');
+                if (schoolNameElement) {
+                    schoolNameElement.textContent = schoolName;
                 }
                 
                 // Update local user object
@@ -946,11 +994,16 @@
                 currentUser.user_metadata.first_name = adminName;
                 
                 console.log('✅ Settings saved successfully:', {
-                    schoolName, adminName, adminEmail, adminPhone
+                    schoolName, schoolAddress, adminName, adminEmail, adminPhone
                 });
                 
                 showSuccess('Beállítások mentve', 'Az iskola beállítások sikeresen frissítve!');
                 closeSchoolSettings();
+                
+                // Reload statistics if new school was created
+                if (!currentSchool?.id) {
+                    await loadSchoolStatistics();
+                }
                 
             } catch (error) {
                 console.error('Error saving settings:', error);
