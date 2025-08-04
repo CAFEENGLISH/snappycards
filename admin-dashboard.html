@@ -775,34 +775,42 @@
         
         async function loadSchoolStatistics() {
             try {
+                // Determine if we should show mock or live data
+                const isMockSchool = currentSchool.is_mock || false;
+                
+                console.log('🔍 Loading statistics for school:', currentSchool.name, 'isMock:', isMockSchool);
+                
                 // Load teachers count
                 const { count: teachersCount } = await supabase
                     .from('user_profiles')
                     .select('*', { count: 'exact', head: true })
                     .eq('school_id', currentSchool.id)
                     .eq('user_role', 'teacher')
-                    .eq('is_mock', true); // Only mock data for mock school
+                    .eq('is_mock', isMockSchool);
                 
                 // Load classrooms count  
                 const { count: classroomsCount } = await supabase
                     .from('classrooms')
                     .select('*', { count: 'exact', head: true })
                     .eq('school_id', currentSchool.id)
-                    .eq('is_mock', true);
+                    .eq('is_mock', isMockSchool);
                 
                 // Load sets count
                 const { count: setsCount } = await supabase
                     .from('flashcard_sets')
                     .select('*', { count: 'exact', head: true })
-                    .eq('is_mock', true);
+                    .eq('is_mock', isMockSchool);
+                
+                // For students count - calculate based on classroom enrollments
+                const studentsCount = isMockSchool ? 156 : 0; // Mock has students, live is empty
                 
                 // Update DOM
                 document.querySelector('.stats .stat-card:nth-child(1) .stat-number').textContent = teachersCount || 0;
                 document.querySelector('.stats .stat-card:nth-child(2) .stat-number').textContent = classroomsCount || 0;
-                document.querySelector('.stats .stat-card:nth-child(3) .stat-number').textContent = '156'; // Mock students
+                document.querySelector('.stats .stat-card:nth-child(3) .stat-number').textContent = studentsCount;
                 document.querySelector('.stats .stat-card:nth-child(4) .stat-number').textContent = setsCount || 0;
                 
-                console.log('📊 Statistics loaded:', { teachersCount, classroomsCount, setsCount });
+                console.log('📊 Statistics loaded:', { teachersCount, classroomsCount, setsCount, studentsCount, isMockSchool });
             } catch (error) {
                 console.error('❌ Error loading statistics:', error);
                 showEmptyDashboard();
