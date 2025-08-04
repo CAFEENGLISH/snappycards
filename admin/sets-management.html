@@ -23,36 +23,7 @@
             padding: 0;
         }
 
-        /* Mock Mode Banner */
-        .mock-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            padding: 12px 0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-            z-index: 9999;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
 
-        .mock-banner.active {
-            display: block;
-        }
-
-        .mock-banner i {
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        /* Adjust body padding when mock banner is active */
-        body.mock-mode-active {
-            padding-top: 50px;
-        }
 
         .header {
             background: white;
@@ -378,11 +349,7 @@
     </style>
 </head>
 <body>
-    <!-- Mock Mode Banner -->
-    <div id="mockBanner" class="mock-banner">
-        <i data-lucide="database"></i>
-        <span>🎭 DEMO ÜZEMMÓD AKTÍV - Csak bemutató adatok láthatóak</span>
-    </div>
+
 
     <div class="header">
         <div class="header-content">
@@ -1077,54 +1044,10 @@
             alert('Új szett hozzáadása funkció hamarosan elérhető lesz!');
         }
 
-        // =============================================================================
-        // MOCK MODE SYSTEM INTEGRATION
-        // =============================================================================
-        
-        // Global Mock Mode State (synchronized with admin dashboard)
-        let isMockMode = localStorage.getItem('snappyCards_mockMode') === 'true';
-        
-        // Empty mock data - Mock mode will use the LIVE data above as "mock"
-        const mockSetsData = [];
-        
-        // Data access functions
-        function getCurrentSetsData() {
-            return isMockMode ? setsData : []; // Mock mode shows live data, Live mode shows empty
-        }
-        
-        function updateMockModeUI() {
-            const mockBanner = document.getElementById('mockBanner');
-            const body = document.body;
-            
-            if (mockBanner) {
-                if (isMockMode) {
-                    mockBanner.classList.add('active');
-                    body.classList.add('mock-mode-active');
-                } else {
-                    mockBanner.classList.remove('active');
-                    body.classList.remove('mock-mode-active');
-                }
-                lucide.createIcons(mockBanner);
-            }
-        }
-        
-        // Override global variables with current data
-        function syncDataWithMockMode() {
-            const currentData = getCurrentSetsData();
-            // Update filteredSets to use current data
-            filteredSets = currentData.slice();
-        }
-        
-        // Initialize Mock Mode on page load
-        function initializeMockMode() {
-            updateMockModeUI();
-            syncDataWithMockMode();
-            console.log(`🎭 Sets Management Mock Mode: ${isMockMode ? 'ACTIVE' : 'DISABLED'}`);
-        }
-
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            initializeMockMode();
+            // Use mock data directly - only admin can control mock/live mode
+            filteredSets = setsData.slice();
             loadSetsTable();
             updateStats();
             lucide.createIcons();
