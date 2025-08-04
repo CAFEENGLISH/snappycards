@@ -744,29 +744,35 @@
                 console.log('✅ User role:', user.user_metadata?.user_role);
                 currentUser = user;
                 
-                // Get user profile with school info
+                // Get user profile
                 const { data: profile } = await supabase
                     .from('user_profiles')
-                    .select(`
-                        *,
-                        school:schools!school_id (
-                            id,
-                            name,
-                            is_mock
-                        )
-                    `)
+                    .select('*')
                     .eq('id', user.id)
                     .single();
                 
                 console.log('🔍 DEBUG Profile:', profile);
-                console.log('🔍 DEBUG Profile.school:', profile?.school);
-                console.log('🔍 DEBUG Profile.school_id:', profile?.school_id);
                 
-                if (profile?.school_id && profile?.school) {
-                    currentSchool = profile.school;
-                    document.querySelector('.school-name').textContent = currentSchool.name;
-                    console.log('🏫 School:', currentSchool.name);
-                    await loadSchoolStatistics();
+                // Get school if user has school_id
+                if (profile?.school_id) {
+                    const { data: school } = await supabase
+                        .from('schools')
+                        .select('id, name, is_mock')
+                        .eq('id', profile.school_id)
+                        .single();
+                        
+                    console.log('🔍 DEBUG School:', school);
+                    
+                    if (school) {
+                        currentSchool = school;
+                        document.querySelector('.school-name').textContent = currentSchool.name;
+                        console.log('🏫 School:', currentSchool.name);
+                        await loadSchoolStatistics();
+                    } else {
+                        document.querySelector('.school-name').textContent = 'Új Iskola Létrehozása';
+                        console.log('📝 School not found - showing empty dashboard');
+                        showEmptyDashboard();
+                    }
                 } else {
                     document.querySelector('.school-name').textContent = 'Új Iskola Létrehozása';
                     console.log('📝 No school assigned - showing empty dashboard');
