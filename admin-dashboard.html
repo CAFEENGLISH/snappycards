@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏫 ISKOLA ADMIN DASHBOARD</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="lib/favicon.js"></script>
@@ -1207,43 +1209,53 @@
                 return;
             }
 
-            // Check if email already exists (but not for current teacher)
-            const currentTeachers = getCurrentTeachers();
-            const existingTeacher = currentTeachers.find(t => t.email.toLowerCase() === email.toLowerCase() && t.id !== window.editingTeacherId);
-            if (existingTeacher) {
-                showError('Email foglalt', 'Ez az email cím már használatban van másik tanárnál!');
-                return;
-            }
+            try {
+                // Parse name into first and last name
+                const nameParts = name.split(' ');
+                const firstName = nameParts[0] || '';
+                const lastName = nameParts.slice(1).join(' ') || '';
 
-            // Find and update teacher in appropriate data source
-            const targetArray = isMockMode ? mockTeachers : teachers;
-            const teacherIndex = targetArray.findIndex(t => t.id === window.editingTeacherId);
-            if (teacherIndex !== -1) {
-                const originalEmail = targetArray[teacherIndex].email;
-                
-                targetArray[teacherIndex] = {
-                    ...targetArray[teacherIndex],
-                    name: name,
-                    email: email,
-                    password: password,
-                    note: note,
-                    updatedAt: new Date().toISOString().split('T')[0]
-                };
+                // Update teacher in Supabase user_profiles
+                const { data: profileData, error: profileError } = await supabase
+                    .from('user_profiles')
+                    .update({
+                        first_name: firstName,
+                        last_name: lastName,
+                        note: note
+                    })
+                    .eq('id', window.editingTeacherId);
 
-                // Simulate backend API call
-                console.log('📝 Tanár módosítva:', teachers[teacherIndex]);
-                
-                if (sendEmail && originalEmail !== email) {
-                    console.log('📧 Új bejelentkezési adatok küldése:', {
-                        to: email,
-                        name: name,
-                        loginUrl: `${window.location.origin}/login.html`,
-                        email: email,
-                        password: password
+                if (profileError) {
+                    console.error('Error updating teacher profile:', profileError);
+                    console.error('Query details:', {
+                        table: 'user_profiles',
+                        update: { first_name: firstName, last_name: lastName, note: note },
+                        filter: { id: window.editingTeacherId },
+                        editingTeacherId: window.editingTeacherId
                     });
-                    showSuccess('Tanár módosítva', `Tanár adatai frissítve! Új bejelentkezési adatok elküldve: ${email}`);
-                } else if (sendEmail) {
-                    console.log('📧 Módosított adatok küldése:', {
+                    showError('Hiba', `Nem sikerült frissíteni a tanár profilját! ${profileError.message}`);
+                    return;
+                }
+
+                // Note: Email and password updates require Supabase Auth Admin API
+                // These cannot be updated directly from frontend for security reasons
+                if (password && password !== '***') {
+                    console.log('🔐 Password change requested but requires backend implementation:', password);
+                }
+                
+                console.log('📧 Email change requested but requires backend implementation:', email);
+
+                console.log('📝 Tanár módosítva Supabase-ben:', {
+                    id: window.editingTeacherId,
+                    firstName,
+                    lastName,
+                    email,
+                    note
+                });
+                console.log('🔍 UPDATE RESULT:', { profileData, profileError });
+                
+                if (sendEmail) {
+                    console.log('📧 Értesítő email küldése:', {
                         to: email,
                         name: name,
                         message: 'Adatai módosítva lettek'
@@ -1259,6 +1271,10 @@
                 if (document.getElementById('teachersModal').style.display === 'flex') {
                     loadTeachers();
                 }
+                
+            } catch (error) {
+                console.error('Error in updateTeacher:', error);
+                showError('Hiba', 'Váratlan hiba történt a tanár módosítása során.');
             }
         }
 
@@ -1360,18 +1376,18 @@
                         </span>
                     </div>
                     <div class="teacher-actions">
-                        <button class="action-btn edit" onclick="editTeacher(${teacher.id})" title="Szerkesztés">
+                        <button class="action-btn edit" onclick="editTeacher('${teacher.id}')" title="Szerkesztés">
                             <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
                         </button>
                         ${teacher.status === 'active' ? 
-                            `<button class="action-btn archive" onclick="archiveTeacher(${teacher.id})" title="Archiválás">
+                            `<button class="action-btn archive" onclick="archiveTeacher('${teacher.id}')" title="Archiválás">
                                 <i data-lucide="archive" style="width: 12px; height: 12px;"></i>
                             </button>` :
-                            `<button class="action-btn activate" onclick="activateTeacher(${teacher.id})" title="Aktiválás">
+                            `<button class="action-btn activate" onclick="activateTeacher('${teacher.id}')" title="Aktiválás">
                                 <i data-lucide="user-check" style="width: 12px; height: 12px;"></i>
                             </button>`
                         }
-                        <button class="action-btn delete" onclick="deleteTeacher(${teacher.id})" title="Törlés">
+                        <button class="action-btn delete" onclick="deleteTeacher('${teacher.id}')" title="Törlés">
                             <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
                         </button>
                     </div>
