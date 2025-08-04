@@ -757,7 +757,7 @@
                 if (profile?.school_id) {
                     const { data: school } = await supabase
                         .from('schools')
-                        .select('id, name, is_mock')
+                        .select('id, name, address, phone, is_mock')
                         .eq('id', profile.school_id)
                         .single();
                         
