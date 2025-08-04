@@ -1283,6 +1283,14 @@
                         const passwordResult = await passwordResponse.json();
                         if (passwordResponse.ok) {
                             console.log('✅ Password updated successfully');
+                            // Show visual feedback for password change
+                            const passwordField = document.getElementById('teacherPassword');
+                            passwordField.placeholder = '✅ Jelszó sikeresen frissítve!';
+                            passwordField.style.borderColor = '#10b981';
+                            setTimeout(() => {
+                                passwordField.placeholder = 'Új jelszó beállítása (opcionális)';
+                                passwordField.style.borderColor = '';
+                            }, 3000);
                         } else {
                             console.error('❌ Password update failed:', passwordResult);
                         }
@@ -1509,7 +1517,8 @@
                 // Fill form with teacher data
                 document.getElementById('teacherName').value = teacher.name;
                 document.getElementById('teacherEmail').value = teacher.email;
-                document.getElementById('teacherPassword').value = teacher.password || '••••••••'; // Show actual password or placeholder
+                document.getElementById('teacherPassword').value = ''; // Empty for security - user can set new password
+                document.getElementById('teacherPassword').placeholder = 'Új jelszó beállítása (opcionális)';
                 document.getElementById('teacherNote').value = teacher.note || '';
                 document.getElementById('sendWelcomeEmail').checked = false; // Default to false for editing
                 
