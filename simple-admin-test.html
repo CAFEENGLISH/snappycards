@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIMPLE ADMIN TEST</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body style="background: red; color: white; padding: 50px; font-size: 24px;">
+    <h1>🔴 SIMPLE ADMIN TEST OLDAL</h1>
+    <p>Ha ezt látod, akkor az admin-dashboard.html BETÖLTŐDÖTT!</p>
+    <div id="user-info"></div>
+    
+    <script>
+        console.log('🔴 SIMPLE ADMIN TEST - Loading...');
+        
+        const supabaseUrl = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        async function checkUser() {
+            const { data: { user } } = await supabase.auth.getUser();
+            const userInfo = document.getElementById('user-info');
+            
+            if (user) {
+                console.log('🔴 SIMPLE ADMIN TEST - User:', user.email);
+                console.log('🔴 SIMPLE ADMIN TEST - Role:', user.user_metadata?.user_role);
+                
+                userInfo.innerHTML = `
+                    <h2>Felhasználó: ${user.email}</h2>
+                    <h2>Szerepkör: ${user.user_metadata?.user_role || 'undefined'}</h2>
+                `;
+            } else {
+                console.log('🔴 SIMPLE ADMIN TEST - No user');
+                userInfo.innerHTML = '<h2>Nincs bejelentkezett felhasználó</h2>';
+            }
+        }
+        
+        checkUser();
+    </script>
+</body>
+</html>

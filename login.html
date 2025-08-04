@@ -437,14 +437,21 @@
                 showSuccess(t.loginSuccess);
                 
                 // Redirect to appropriate dashboard based on user role
-                setTimeout(() => {
-                    const userRole = data.user.user_metadata?.user_role || 'student';
+                setTimeout(async () => {
+                    // Ensure user metadata is fresh
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const userRole = user?.user_metadata?.user_role || 'student';
+                    
+                    console.log('🔍 LOGIN DEBUG - userRole:', userRole);
                     
                     if (userRole === 'teacher') {
+                        console.log('🎯 Redirecting to teacher-dashboard.html');
                         window.location.href = '/teacher-dashboard.html';
                     } else if (userRole === 'school_admin') {
+                        console.log('🎯 Redirecting to admin-dashboard.html');
                         window.location.href = '/admin-dashboard.html';
                     } else {
+                        console.log('🎯 Redirecting to dashboard.html');
                         window.location.href = '/dashboard.html'; // student dashboard
                     }
                 }, 1500);
@@ -465,11 +472,16 @@
                 // Redirect to appropriate dashboard based on user role
                 const userRole = user.user_metadata?.user_role || 'student';
                 
+                console.log('🔍 CHECKAUTH DEBUG - userRole:', userRole);
+                
                 if (userRole === 'teacher') {
+                    console.log('🎯 CheckAuth redirecting to teacher-dashboard.html');
                     window.location.href = '/teacher-dashboard.html';
                 } else if (userRole === 'school_admin') {
+                    console.log('🎯 CheckAuth redirecting to admin-dashboard.html');
                     window.location.href = '/admin-dashboard.html';
                 } else {
+                    console.log('🎯 CheckAuth redirecting to dashboard.html');
                     window.location.href = '/dashboard.html'; // student dashboard
                 }
                 return;

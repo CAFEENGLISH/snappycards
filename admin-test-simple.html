@@ -56,28 +56,6 @@
             gap: 10px;
             font-weight: 600;
         }
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.6);
-        }
-        
-        @media (max-width: 768px) {
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .actions {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .stats {
-                grid-template-columns: 1fr;
-            }
-            .actions {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
@@ -140,7 +118,7 @@
         // Initialize Lucide icons
         lucide.createIcons();
         
-        // Simple auth check - NO REDIRECTS!
+        // Simple auth check
         const supabaseUrl = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -151,9 +129,6 @@
                 console.log('✅ User logged in:', user.email);
                 console.log('✅ User role:', user.user_metadata?.user_role);
                 document.getElementById('userName').textContent = user.user_metadata?.first_name || 'Admin';
-            } else {
-                console.log('❌ No user - but NOT redirecting!');
-                document.getElementById('userName').textContent = 'Guest';
             }
         }
         
