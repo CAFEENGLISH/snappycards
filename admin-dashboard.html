@@ -734,11 +734,34 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
         
+        let currentUser = null;
+        let currentSchool = null;
+        
         async function checkAuth() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 console.log('✅ User logged in:', user.email);
                 console.log('✅ User role:', user.user_metadata?.user_role);
+                currentUser = user;
+                
+                // Get user profile with school info
+                const { data: profile } = await supabase
+                    .from('user_profiles')
+                    .select(`*, schools(*)`)
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile?.schools) {
+                    currentSchool = profile.schools;
+                    document.querySelector('.school-name').textContent = currentSchool.name;
+                    console.log('🏫 School:', currentSchool.name);
+                    await loadSchoolStatistics();
+                } else {
+                    document.querySelector('.school-name').textContent = 'Új Iskola Létrehozása';
+                    console.log('📝 No school assigned - showing empty dashboard');
+                    showEmptyDashboard();
+                }
+                
                 const firstName = user.user_metadata?.first_name || 'Admin';
                 document.getElementById('userName').textContent = firstName;
                 document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
@@ -746,7 +769,53 @@
                 console.log('❌ No user - but NOT redirecting!');
                 document.getElementById('userName').textContent = 'Guest';
                 document.getElementById('userAvatar').textContent = 'G';
+                showEmptyDashboard();
             }
+        }
+        
+        async function loadSchoolStatistics() {
+            try {
+                // Load teachers count
+                const { count: teachersCount } = await supabase
+                    .from('user_profiles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('school_id', currentSchool.id)
+                    .eq('user_role', 'teacher')
+                    .eq('is_mock', true); // Only mock data for mock school
+                
+                // Load classrooms count  
+                const { count: classroomsCount } = await supabase
+                    .from('classrooms')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('school_id', currentSchool.id)
+                    .eq('is_mock', true);
+                
+                // Load sets count
+                const { count: setsCount } = await supabase
+                    .from('flashcard_sets')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('is_mock', true);
+                
+                // Update DOM
+                document.querySelector('.stats .stat-card:nth-child(1) .stat-number').textContent = teachersCount || 0;
+                document.querySelector('.stats .stat-card:nth-child(2) .stat-number').textContent = classroomsCount || 0;
+                document.querySelector('.stats .stat-card:nth-child(3) .stat-number').textContent = '156'; // Mock students
+                document.querySelector('.stats .stat-card:nth-child(4) .stat-number').textContent = setsCount || 0;
+                
+                console.log('📊 Statistics loaded:', { teachersCount, classroomsCount, setsCount });
+            } catch (error) {
+                console.error('❌ Error loading statistics:', error);
+                showEmptyDashboard();
+            }
+        }
+        
+        function showEmptyDashboard() {
+            // Show zeros for empty school
+            document.querySelector('.stats .stat-card:nth-child(1) .stat-number').textContent = '0';
+            document.querySelector('.stats .stat-card:nth-child(2) .stat-number').textContent = '0';
+            document.querySelector('.stats .stat-card:nth-child(3) .stat-number').textContent = '0';
+            document.querySelector('.stats .stat-card:nth-child(4) .stat-number').textContent = '0';
+            console.log('📊 Showing empty dashboard');
         }
         
         // Toggle user menu
@@ -2657,6 +2726,11 @@
         function getCurrentTeacherAssignments() {
             return teacherAssignments;
         }
+        
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkAuth();
+        });
         
     </script>
 
