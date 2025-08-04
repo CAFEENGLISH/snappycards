@@ -889,12 +889,12 @@
             if (currentSchool) {
                 document.getElementById('schoolName').value = currentSchool.name || '';
                 document.getElementById('schoolAddress').value = currentSchool.address || '';
-                document.getElementById('schoolPhone').value = currentSchool.phone || '';
+                document.getElementById('adminPhone').value = profile?.phone || currentSchool.phone || '';
             } else {
                 // Clear fields if no school
                 document.getElementById('schoolName').value = '';
                 document.getElementById('schoolAddress').value = '';
-                document.getElementById('schoolPhone').value = '';
+                document.getElementById('adminPhone').value = profile?.phone || '';
             }
             
             const modal = document.getElementById('schoolSettingsModal');
@@ -916,14 +916,15 @@
             const schoolAddress = document.getElementById('schoolAddress').value;
             const adminName = document.getElementById('adminName').value;
             const adminEmail = document.getElementById('adminEmail').value;
-            const schoolPhone = document.getElementById('schoolPhone').value;
+            const adminPhone = document.getElementById('adminPhone').value;
             
             try {
-                // Update user profile first_name
+                // Update user profile (first_name and phone)
                 const { error: profileError } = await supabase
                     .from('user_profiles')
                     .update({ 
-                        first_name: adminName
+                        first_name: adminName,
+                        phone: adminPhone
                     })
                     .eq('id', currentUser.id);
                 
@@ -941,7 +942,7 @@
                         .update({ 
                             name: schoolName,
                             address: schoolAddress,
-                            phone: schoolPhone
+                            phone: adminPhone  // Admin phone as school contact
                         })
                         .eq('id', currentSchool.id);
                     
@@ -954,7 +955,7 @@
                     // Update local school object
                     currentSchool.name = schoolName;
                     currentSchool.address = schoolAddress;
-                    currentSchool.phone = schoolPhone;
+                    currentSchool.phone = adminPhone;
                     
                 } else {
                     // Create new school if none exists
@@ -963,7 +964,7 @@
                         .insert({ 
                             name: schoolName,
                             address: schoolAddress,
-                            phone: schoolPhone,
+                            phone: adminPhone,  // Admin phone as school contact
                             is_mock: false,
                             is_active: true
                         })
@@ -1004,7 +1005,7 @@
                 currentUser.user_metadata.first_name = adminName;
                 
                 console.log('✅ Settings saved successfully:', {
-                    schoolName, schoolAddress, adminName, adminEmail, schoolPhone
+                    schoolName, schoolAddress, adminName, adminEmail, adminPhone
                 });
                 
                 showSuccess('Beállítások mentve', 'Az iskola beállítások sikeresen frissítve!');
@@ -2370,8 +2371,8 @@
             </div>
             
             <div class="form-group">
-                <label class="form-label">Iskola telefonszáma</label>
-                <input type="tel" class="form-input" id="schoolPhone" value="+36 1 234 5678">
+                <label class="form-label">Admin telefonszáma</label>
+                <input type="tel" class="form-input" id="adminPhone" value="+36 1 234 5678">
             </div>
             
 
