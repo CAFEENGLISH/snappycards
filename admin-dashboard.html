@@ -1381,7 +1381,7 @@
                 // Load teachers from Supabase for current school
                 const { data: teachersData, error } = await supabase
                     .from('user_profiles')
-                    .select('id, first_name, last_name, user_role, created_at, is_mock')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock, note')
                     .eq('school_id', currentSchool?.id)
                     .eq('user_role', 'teacher')
                     .eq('is_mock', currentSchool?.is_mock || false);
@@ -1402,9 +1402,7 @@
                     name: `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim(),
                     email: `${teacher.first_name?.toLowerCase() || 'teacher'}.${teacher.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
                     status: 'active', // Default status for now
-                    note: teacher.first_name === 'Sarah' ? 'IELTS examiner (visszatérés szabadság után)' : 
-                          teacher.first_name === 'Rebecca' ? 'Native English speaker, Cambridge CELTA qualified' :
-                          teacher.first_name === 'Michael' ? 'Business English specialist, TESOL certified' : '',
+                    note: teacher.note || '',
                     createdAt: teacher.created_at,
                     password: 'Teaching123' // Mock password for demo
                 }));
