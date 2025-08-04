@@ -26,7 +26,7 @@ if (!process.env.RESEND_API_KEY) {
     console.error('   export RESEND_API_KEY="your_api_key_here"');
     process.exit(1);
 } else {
-    console.log('✅ Resend API initialized');
+    console.log('✅ Resend API initialized - Version 2025.01.25');
 }
 
 // Verify Supabase Service Key
@@ -36,6 +36,7 @@ if (!process.env.SUPABASE_SERVICE_KEY) {
     process.exit(1);
 } else {
     console.log('✅ Supabase Admin API initialized');
+    console.log(`🔗 Using Supabase project: ${supabaseUrl}`);
 }
 
 // Elegant verification email templates (from lib/resend.ts)
