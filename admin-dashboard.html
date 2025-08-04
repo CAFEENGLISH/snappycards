@@ -821,6 +821,7 @@
                 id: 1,
                 name: 'Smith Rebecca',
                 email: 'rebecca.smith@cafeenglish.eu',
+                password: 'Teaching123',
                 status: 'active',
                 note: 'Native English speaker, Cambridge CELTA qualified',
                 createdAt: '2024-01-15'
@@ -829,6 +830,7 @@
                 id: 2,
                 name: 'Johnson Michael',
                 email: 'michael.johnson@cafeenglish.eu',
+                password: 'Business456',
                 status: 'active',
                 note: 'Business English specialist, TESOL certified',
                 createdAt: '2024-02-01'
@@ -837,6 +839,7 @@
                 id: 3,
                 name: 'Taylor Sarah',
                 email: 'sarah.taylor@cafeenglish.eu',
+                password: 'IELTS789',
                 status: 'archived',
                 note: 'IELTS examiner (visszatérés szabadság után)',
                 createdAt: '2023-09-01'
@@ -1109,12 +1112,14 @@
         }
 
         function editTeacher(id) {
+            console.log('🔧 EDIT TEACHER CLICKED - ID:', id);
             const teacher = teachers.find(t => t.id === id);
+            console.log('👨‍🏫 Found teacher:', teacher);
             if (teacher) {
                 // Fill form with teacher data
                 document.getElementById('teacherName').value = teacher.name;
                 document.getElementById('teacherEmail').value = teacher.email;
-                document.getElementById('teacherPassword').value = teacher.password; // Show actual password for editing
+                document.getElementById('teacherPassword').value = teacher.password || '••••••••'; // Show actual password or placeholder
                 document.getElementById('teacherNote').value = teacher.note || '';
                 document.getElementById('sendWelcomeEmail').checked = false; // Default to false for editing
                 
