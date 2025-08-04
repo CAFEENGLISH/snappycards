@@ -16,7 +16,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Supabase Admin Configuration
 const supabaseUrl = process.env.SUPABASE_URL || 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyMTY1MzgzMSwiZXhwIjoyMDM3MjI5ODMxfQ.z8F1qEOSCgn3gxw_UgKhz-H8YQrRJW39Zcd5WKNfxek';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzIwMzAzMSwiZXhwIjoyMDY4Nzc5MDMxfQ.0jZl6iSSz0BV9TlQhWOE5utuv71YetOWhsU0vQOdagM';
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 // Verify Resend API key
