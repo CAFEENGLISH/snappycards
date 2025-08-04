@@ -747,7 +747,14 @@
                 // Get user profile with school info
                 const { data: profile } = await supabase
                     .from('user_profiles')
-                    .select(`*, schools(*)`)
+                    .select(`
+                        *,
+                        schools (
+                            id,
+                            name,
+                            is_mock
+                        )
+                    `)
                     .eq('id', user.id)
                     .single();
                 
