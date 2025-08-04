@@ -570,17 +570,338 @@ async function createUserProfileAndSchool(user) {
     }
 }
 
+// ====================================
+// ADMIN ENDPOINTS (School Admin Only)
+// ====================================
+
+// Middleware to verify admin permissions
+async function verifyAdminAccess(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({
+                error: 'Missing or invalid authorization header',
+                details: 'Provide Bearer token in Authorization header'
+            });
+        }
+
+        const token = authHeader.split(' ')[1];
+        
+        // Verify the JWT token with Supabase
+        const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+        
+        if (authError || !user) {
+            return res.status(401).json({
+                error: 'Invalid or expired token',
+                details: authError?.message || 'Token verification failed'
+            });
+        }
+
+        // Check if user has school_admin role
+        const userRole = user.user_metadata?.user_role;
+        if (userRole !== 'school_admin') {
+            return res.status(403).json({
+                error: 'Insufficient permissions',
+                details: 'Only school administrators can perform this action',
+                userRole
+            });
+        }
+
+        // Get user's school info
+        const { data: adminProfile, error: profileError } = await supabaseAdmin
+            .from('user_profiles')
+            .select('school_id')
+            .eq('id', user.id)
+            .single();
+
+        if (profileError || !adminProfile?.school_id) {
+            return res.status(403).json({
+                error: 'Admin profile not found or no school assigned',
+                details: profileError?.message || 'Invalid admin profile'
+            });
+        }
+
+        // Add user and school info to request
+        req.adminUser = user;
+        req.adminSchoolId = adminProfile.school_id;
+        next();
+    } catch (error) {
+        console.error('Admin verification error:', error);
+        return res.status(500).json({
+            error: 'Internal server error during authentication',
+            details: error.message
+        });
+    }
+}
+
+// Admin endpoint: Update teacher profile
+app.post('/admin/update-teacher', verifyAdminAccess, async (req, res) => {
+    try {
+        const { teacherId, firstName, lastName, note } = req.body;
+
+        if (!teacherId || !firstName || !lastName) {
+            return res.status(400).json({
+                error: 'Missing required fields',
+                required: ['teacherId', 'firstName', 'lastName'],
+                received: { teacherId, firstName, lastName, note }
+            });
+        }
+
+        // Verify teacher belongs to admin's school
+        const { data: teacher, error: teacherError } = await supabaseAdmin
+            .from('user_profiles')
+            .select('id, school_id, user_role, first_name, last_name')
+            .eq('id', teacherId)
+            .eq('school_id', req.adminSchoolId)
+            .eq('user_role', 'teacher')
+            .single();
+
+        if (teacherError || !teacher) {
+            return res.status(404).json({
+                error: 'Teacher not found or access denied',
+                details: teacherError?.message || 'Teacher not in your school',
+                adminSchoolId: req.adminSchoolId,
+                teacherId
+            });
+        }
+
+        // Update teacher profile using service role (bypasses RLS)
+        const { data: updatedProfile, error: updateError } = await supabaseAdmin
+            .from('user_profiles')
+            .update({
+                first_name: firstName,
+                last_name: lastName,
+                note: note || null,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', teacherId)
+            .select()
+            .single();
+
+        if (updateError) {
+            console.error('Teacher update error:', updateError);
+            return res.status(500).json({
+                error: 'Failed to update teacher profile',
+                details: updateError.message
+            });
+        }
+
+        console.log(`✅ Admin ${req.adminUser.email} updated teacher ${teacherId}:`, {
+            before: { firstName: teacher.first_name, lastName: teacher.last_name },
+            after: { firstName, lastName, note }
+        });
+
+        res.json({
+            success: true,
+            message: 'Teacher profile updated successfully',
+            data: {
+                teacher: updatedProfile,
+                changes: {
+                    firstName: { from: teacher.first_name, to: firstName },
+                    lastName: { from: teacher.last_name, to: lastName },
+                    note: { to: note }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('Error in /admin/update-teacher:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
+        });
+    }
+});
+
+// Admin endpoint: Update teacher email (via Supabase Auth Admin API)
+app.post('/admin/update-teacher-email', verifyAdminAccess, async (req, res) => {
+    try {
+        const { teacherId, newEmail } = req.body;
+
+        if (!teacherId || !newEmail) {
+            return res.status(400).json({
+                error: 'Missing required fields',
+                required: ['teacherId', 'newEmail']
+            });
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(newEmail)) {
+            return res.status(400).json({
+                error: 'Invalid email format',
+                received: newEmail
+            });
+        }
+
+        // Verify teacher belongs to admin's school
+        const { data: teacher, error: teacherError } = await supabaseAdmin
+            .from('user_profiles')
+            .select('id, school_id, user_role, is_mock')
+            .eq('id', teacherId)
+            .eq('school_id', req.adminSchoolId)
+            .eq('user_role', 'teacher')
+            .single();
+
+        if (teacherError || !teacher) {
+            return res.status(404).json({
+                error: 'Teacher not found or access denied',
+                details: teacherError?.message || 'Teacher not in your school'
+            });
+        }
+
+        // Handle mock users differently (simulate email update)
+        if (teacher.is_mock) {
+            console.log(`✅ Admin ${req.adminUser.email} updated MOCK teacher email ${teacherId} to ${newEmail} (simulated)`);
+            
+            // For mock users, just return success without calling Auth API
+            return res.json({
+                success: true,
+                message: 'Teacher email updated successfully (demo mode)',
+                data: {
+                    teacherId,
+                    newEmail,
+                    isMock: true,
+                    updatedAt: new Date().toISOString()
+                }
+            });
+        }
+
+        // Update user email using Supabase Auth Admin API (for real users)
+        const { data: authUser, error: emailUpdateError } = await supabaseAdmin.auth.admin.updateUserById(
+            teacherId,
+            { email: newEmail }
+        );
+
+        if (emailUpdateError) {
+            console.error('Email update error:', emailUpdateError);
+            return res.status(500).json({
+                error: 'Failed to update teacher email',
+                details: emailUpdateError.message
+            });
+        }
+
+        console.log(`✅ Admin ${req.adminUser.email} updated teacher email ${teacherId} to ${newEmail}`);
+
+        res.json({
+            success: true,
+            message: 'Teacher email updated successfully',
+            data: {
+                teacherId,
+                newEmail,
+                updatedAt: new Date().toISOString()
+            }
+        });
+
+    } catch (error) {
+        console.error('Error in /admin/update-teacher-email:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
+        });
+    }
+});
+
+// Admin endpoint: Update teacher password
+app.post('/admin/update-teacher-password', verifyAdminAccess, async (req, res) => {
+    try {
+        const { teacherId, newPassword } = req.body;
+
+        if (!teacherId || !newPassword) {
+            return res.status(400).json({
+                error: 'Missing required fields',
+                required: ['teacherId', 'newPassword']
+            });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({
+                error: 'Password too short',
+                details: 'Password must be at least 6 characters long'
+            });
+        }
+
+        // Verify teacher belongs to admin's school
+        const { data: teacher, error: teacherError } = await supabaseAdmin
+            .from('user_profiles')
+            .select('id, school_id, user_role, is_mock')
+            .eq('id', teacherId)
+            .eq('school_id', req.adminSchoolId)
+            .eq('user_role', 'teacher')
+            .single();
+
+        if (teacherError || !teacher) {
+            return res.status(404).json({
+                error: 'Teacher not found or access denied',
+                details: teacherError?.message || 'Teacher not in your school'
+            });
+        }
+
+        // Handle mock users differently (simulate password update)
+        if (teacher.is_mock) {
+            console.log(`✅ Admin ${req.adminUser.email} updated MOCK teacher password for ${teacherId} (simulated)`);
+            
+            // For mock users, just return success without calling Auth API
+            return res.json({
+                success: true,
+                message: 'Teacher password updated successfully (demo mode)',
+                data: {
+                    teacherId,
+                    isMock: true,
+                    updatedAt: new Date().toISOString()
+                }
+            });
+        }
+
+        // Update user password using Supabase Auth Admin API (for real users)
+        const { data: authUser, error: passwordUpdateError } = await supabaseAdmin.auth.admin.updateUserById(
+            teacherId,
+            { password: newPassword }
+        );
+
+        if (passwordUpdateError) {
+            console.error('Password update error:', passwordUpdateError);
+            return res.status(500).json({
+                error: 'Failed to update teacher password',
+                details: passwordUpdateError.message
+            });
+        }
+
+        console.log(`✅ Admin ${req.adminUser.email} updated teacher password for ${teacherId}`);
+
+        res.json({
+            success: true,
+            message: 'Teacher password updated successfully',
+            data: {
+                teacherId,
+                updatedAt: new Date().toISOString()
+            }
+        });
+
+    } catch (error) {
+        console.error('Error in /admin/update-teacher-password:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
+        });
+    }
+});
+
 // CORS preflight for endpoints
 app.options('/register', cors());
 app.options('/send-confirmation', cors());
 app.options('/verify', cors());
+app.options('/admin/update-teacher', cors());
+app.options('/admin/update-teacher-email', cors());
+app.options('/admin/update-teacher-password', cors());
 
 // Start server
 app.listen(PORT, () => {
     console.log(`🚀 SnappyCards API Server running on port ${PORT}`);
     console.log(`📧 Email Provider: Resend API`);
     console.log(`📬 From: noreply@snappycards.io`);
-    console.log(`🎯 Endpoints: /register, /send-confirmation`);
+    console.log(`🎯 Endpoints: /register, /send-confirmation, /verify`);
+    console.log(`🏫 Admin Endpoints: /admin/update-teacher, /admin/update-teacher-email, /admin/update-teacher-password`);
 });
 
 module.exports = app; // Force deployment Mon Aug  4 15:19:08 CEST 2025

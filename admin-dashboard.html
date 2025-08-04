@@ -1217,50 +1217,104 @@
                 const firstName = nameParts[0] || '';
                 const lastName = nameParts.slice(1).join(' ') || '';
 
-                // Update teacher in Supabase user_profiles
-                const { data: profileData, error: profileError } = await supabase
-                    .from('user_profiles')
-                    .update({
-                        first_name: firstName,
-                        last_name: lastName,
-                        note: note
-                    })
-                    .eq('id', window.editingTeacherId)
-                    .select();
-
-                if (profileError) {
-                    console.error('Error updating teacher profile:', profileError);
-                    console.error('Query details:', {
-                        table: 'user_profiles',
-                        update: { first_name: firstName, last_name: lastName, note: note },
-                        filter: { id: window.editingTeacherId },
-                        editingTeacherId: window.editingTeacherId
-                    });
-                    showError('Hiba', `Nem sikerült frissíteni a tanár profilját! ${profileError.message}`);
+                // Get auth token for backend API call
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session?.access_token) {
+                    showError('Hiba', 'Nincs érvényes bejelentkezési token!');
                     return;
                 }
 
-                // Note: Email and password updates require Supabase Auth Admin API
-                // These cannot be updated directly from frontend for security reasons
-                if (password && password !== '***') {
-                    console.log('🔐 Password change requested but requires backend implementation:', password);
-                }
-                
-                console.log('📧 Email change requested but requires backend implementation:', email);
-
-                console.log('📝 Tanár módosítva Supabase-ben:', {
-                    id: window.editingTeacherId,
+                console.log('🔍 Calling backend API for teacher update:', {
+                    teacherId: window.editingTeacherId,
                     firstName,
                     lastName,
-                    email,
-                    note
+                    note,
+                    hasToken: !!session.access_token
                 });
-                console.log('🔍 UPDATE RESULT:', { 
-                    profileData, 
-                    profileError,
-                    updatedRowsCount: profileData?.length || 0,
-                    wasSuccessful: !profileError && profileData?.length > 0
+
+                // Call backend admin API instead of direct Supabase
+                const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? 'http://localhost:8080' 
+                    : 'https://snappycards-api.onrender.com';
+
+                const response = await fetch(`${backendUrl}/admin/update-teacher`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.access_token}`
+                    },
+                    body: JSON.stringify({
+                        teacherId: window.editingTeacherId,
+                        firstName,
+                        lastName,
+                        note
+                    })
                 });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    console.error('Backend API error:', result);
+                    showError('Hiba', `Nem sikerült frissíteni a tanár profilját! ${result.error || result.details || 'Ismeretlen hiba'}`);
+                    return;
+                }
+
+                const profileData = result.data?.teacher;
+                const profileError = null;
+
+                console.log('✅ Backend API Success:', result);
+
+                // Handle email and password updates via separate backend endpoints
+                if (password && password !== '***' && password !== 'Teaching123') {
+                    try {
+                        const passwordResponse = await fetch(`${backendUrl}/admin/update-teacher-password`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${session.access_token}`
+                            },
+                            body: JSON.stringify({
+                                teacherId: window.editingTeacherId,
+                                newPassword: password
+                            })
+                        });
+
+                        const passwordResult = await passwordResponse.json();
+                        if (passwordResponse.ok) {
+                            console.log('✅ Password updated successfully');
+                        } else {
+                            console.error('❌ Password update failed:', passwordResult);
+                        }
+                    } catch (error) {
+                        console.error('❌ Password update error:', error);
+                    }
+                }
+                
+                // Handle email update via backend
+                if (email && email !== profileData?.email) {
+                    try {
+                        const emailResponse = await fetch(`${backendUrl}/admin/update-teacher-email`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${session.access_token}`
+                            },
+                            body: JSON.stringify({
+                                teacherId: window.editingTeacherId,
+                                newEmail: email
+                            })
+                        });
+
+                        const emailResult = await emailResponse.json();
+                        if (emailResponse.ok) {
+                            console.log('✅ Email updated successfully');
+                        } else {
+                            console.error('❌ Email update failed:', emailResult);
+                        }
+                    } catch (error) {
+                        console.error('❌ Email update error:', error);
+                    }
+                }
                 
                 if (sendEmail) {
                     console.log('📧 Értesítő email küldése:', {
@@ -1275,10 +1329,11 @@
 
                 closeAddTeacher();
                 
-                // Refresh teachers list if open
-                if (document.getElementById('teachersModal').style.display === 'flex') {
-                    loadTeachers();
-                }
+                // Always refresh teachers list and statistics after update
+                loadTeachers(); // Refresh teachers modal content
+                loadSchoolStatistics(); // Refresh dashboard statistics
+                
+                console.log('🔄 Refreshed teachers list and dashboard statistics');
                 
             } catch (error) {
                 console.error('Error in updateTeacher:', error);
