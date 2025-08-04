@@ -795,6 +795,92 @@
                 cefrLevel: "B2",
                 cardsCount: 92,
                 lastUpdated: "2024-08-10"
+            },
+            // Zsolt's 7 sets from yesterday
+            {
+                id: 16,
+                setName: "IT English Vocabulary",
+                description: "Technical terms for software development",
+                className: "Professional IT English",
+                teacherName: "Zsolt Tasnadi",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth"],
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 89,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 17,
+                setName: "Database Terms",
+                description: "SQL and database management vocabulary",
+                className: "Professional IT English",
+                teacherName: "Zsolt Tasnadi",
+                studentsCount: 12,
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 67,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 18,
+                setName: "Web Development Phrases",
+                description: "Frontend and backend development terms",
+                className: "Professional IT English",
+                teacherName: "Zsolt Tasnadi",
+                studentsCount: 12,
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 94,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 19,
+                setName: "Project Management English",
+                description: "Agile, Scrum, and project coordination vocabulary",
+                className: "Professional IT English",
+                teacherName: "Zsolt Tasnadi",
+                studentsCount: 12,
+                difficulty: "B1",
+                cefrLevel: "B1",
+                cardsCount: 56,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 20,
+                setName: "Programming Concepts",
+                description: "Object-oriented programming and algorithms",
+                className: "Professional IT English",
+                teacherName: "Zsolt Tasnadi",
+                studentsCount: 12,
+                difficulty: "C1",
+                cefrLevel: "C1",
+                cardsCount: 78,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 21,
+                setName: "Software Testing Vocabulary",
+                description: "QA, testing methodologies, and bug tracking",
+                className: "Professional IT English",
+                teacherName: "Zsolt Tasnadi",
+                studentsCount: 12,
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 65,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 22,
+                setName: "DevOps and Cloud Computing",
+                description: "Cloud services, CI/CD, and infrastructure terms",
+                className: "Professional IT English",
+                teacherName: "Zsolt Tasnadi",
+                studentsCount: 12,
+                difficulty: "C1",
+                cefrLevel: "C1",
+                cardsCount: 82,
+                lastUpdated: "2024-08-03"
             }
         ];
 
@@ -992,52 +1078,12 @@
         // Global Mock Mode State (synchronized with admin dashboard)
         let isMockMode = localStorage.getItem('snappyCards_mockMode') === 'true';
         
-        // Mock data sets for sets management
-        const mockSetsData = [
-            {
-                id: 301,
-                setName: 'Business English Vocabulary DEMO',
-                description: 'Demo flashcard set - Essential business terms and phrases',
-                className: 'Advanced Business English B2+',
-                teacherName: 'Sarah Wilson',
-                studentsCount: 12,
-                cardsCount: 45,
-                difficulty: 'B2',
-                cefrLevel: 'B2',
-                lastUpdated: '2024-08-04',
-                students: ['Michael Brown', 'Emma Davis', 'James Wilson', 'Sophie Taylor']
-            },
-            {
-                id: 302,
-                setName: 'IELTS Writing Task 1 DEMO',
-                description: 'Demo flashcard set - IELTS Academic Writing vocabulary',
-                className: 'IELTS Preparation Course',
-                teacherName: 'James Martinez',
-                studentsCount: 8,
-                cardsCount: 38,
-                difficulty: 'B2',
-                cefrLevel: 'B2',
-                lastUpdated: '2024-08-03',
-                students: ['Anna Johnson', 'David Lee', 'Maria Garcia', 'Tom Anderson']
-            },
-            {
-                id: 303,
-                setName: 'Cambridge FCE Grammar DEMO',
-                description: 'Demo flashcard set - First Certificate grammar patterns',
-                className: 'FCE Preparation',
-                teacherName: 'Emma Thompson',
-                studentsCount: 15,
-                cardsCount: 62,
-                difficulty: 'B2',
-                cefrLevel: 'B2',
-                lastUpdated: '2024-08-02',
-                students: ['Peter Johnson', 'Lisa Brown', 'Alex Green', 'Kate White', 'John Smith']
-            }
-        ];
+        // Empty mock data - Mock mode will use the LIVE data above as "mock"
+        const mockSetsData = [];
         
         // Data access functions
         function getCurrentSetsData() {
-            return isMockMode ? mockSetsData : setsData;
+            return isMockMode ? setsData : []; // Mock mode shows live data, Live mode shows empty
         }
         
         function updateMockModeUI() {

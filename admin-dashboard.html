@@ -948,6 +948,15 @@
                 status: 'archived',
                 note: 'IELTS examiner (visszatérés szabadság után)',
                 createdAt: '2023-09-01'
+            },
+            {
+                id: 4,
+                name: 'Zsolt Tasnadi',
+                email: 'zsolt.tasnadi@gmail.com',
+                password: 'Zsolt2024!',
+                status: 'active',
+                note: 'System Administrator & English Teacher - IT szaknyelv specialista',
+                createdAt: '2024-01-01'
             }
         ];
         
@@ -1604,6 +1613,84 @@
                 cardCount: 48,
                 status: 'archived',
                 createdAt: '2023-11-15'
+            },
+            // Zsolt's 7 sets from yesterday
+            {
+                id: 4,
+                name: 'IT English Vocabulary',
+                subject: 'IT English',
+                difficulty: 'intermediate',
+                description: 'Technical terms for software development',
+                isPublic: false,
+                cardCount: 89,
+                status: 'active',
+                createdAt: '2024-08-03'
+            },
+            {
+                id: 5,
+                name: 'Database Terms',
+                subject: 'IT English',
+                difficulty: 'intermediate',
+                description: 'SQL and database management vocabulary',
+                isPublic: false,
+                cardCount: 67,
+                status: 'active',
+                createdAt: '2024-08-03'
+            },
+            {
+                id: 6,
+                name: 'Web Development Phrases',
+                subject: 'IT English',
+                difficulty: 'intermediate',
+                description: 'Frontend and backend development terms',
+                isPublic: false,
+                cardCount: 94,
+                status: 'active',
+                createdAt: '2024-08-03'
+            },
+            {
+                id: 7,
+                name: 'Project Management English',
+                subject: 'IT English',
+                difficulty: 'beginner',
+                description: 'Agile, Scrum, and project coordination vocabulary',
+                isPublic: false,
+                cardCount: 56,
+                status: 'active',
+                createdAt: '2024-08-03'
+            },
+            {
+                id: 8,
+                name: 'Programming Concepts',
+                subject: 'IT English',
+                difficulty: 'advanced',
+                description: 'Object-oriented programming and algorithms',
+                isPublic: false,
+                cardCount: 78,
+                status: 'active',
+                createdAt: '2024-08-03'
+            },
+            {
+                id: 9,
+                name: 'Software Testing Vocabulary',
+                subject: 'IT English',
+                difficulty: 'intermediate',
+                description: 'QA, testing methodologies, and bug tracking',
+                isPublic: false,
+                cardCount: 65,
+                status: 'active',
+                createdAt: '2024-08-03'
+            },
+            {
+                id: 10,
+                name: 'DevOps and Cloud Computing',
+                subject: 'IT English',
+                difficulty: 'advanced',
+                description: 'Cloud services, CI/CD, and infrastructure terms',
+                isPublic: false,
+                cardCount: 82,
+                status: 'active',
+                createdAt: '2024-08-03'
             }
         ];
 
@@ -2786,122 +2873,33 @@
         // const classrooms = [...]; // Keep existing  
         // const sets = [...]; // Keep existing
         
-        // Mock data sets for demo purposes
-        const mockTeachers = [
-            {
-                id: 101,
-                name: 'Sarah Wilson',
-                email: 'sarah.demo@mockschool.edu',
-                password: 'Demo123!',
-                status: 'active',
-                note: 'Demo teacher - Cambridge certified IELTS specialist',
-                archived: false
-            },
-            {
-                id: 102,
-                name: 'James Martinez',
-                email: 'james.demo@mockschool.edu',
-                password: 'Demo456!',
-                status: 'active',
-                note: 'Demo teacher - Business English expert',
-                archived: false
-            },
-            {
-                id: 103,
-                name: 'Emma Thompson',
-                email: 'emma.demo@mockschool.edu',
-                password: 'Demo789!',
-                status: 'archived',
-                note: 'Demo teacher - Academic Writing specialist (archived)',
-                archived: true
-            }
-        ];
+        // Empty mock data - Mock mode will use the LIVE data above as "mock"
+        const mockTeachers = [];
         
-        const mockClassrooms = [
-            {
-                id: 201,
-                name: 'Advanced Business English B2+',
-                grade: 'B2-C1',
-                subject: 'Business English',
-                size: 12,
-                description: 'Demo classroom - Advanced business communication skills',
-                status: 'active',
-                archived: false
-            },
-            {
-                id: 202,
-                name: 'IELTS Preparation Course',
-                grade: 'B2-C1',
-                subject: 'IELTS Prep',
-                size: 8,
-                description: 'Demo classroom - Intensive IELTS preparation program',
-                status: 'active',
-                archived: false
-            }
-        ];
+        const mockClassrooms = [];
         
-        const mockSets = [
-            {
-                id: 301,
-                name: 'Business English Vocabulary DEMO',
-                subject: 'Business English',
-                difficulty: 'B2',
-                description: 'Demo flashcard set - Essential business terms and phrases',
-                isPublic: false,
-                status: 'active',
-                archived: false
-            },
-            {
-                id: 302,
-                name: 'IELTS Writing Task 1 DEMO',
-                subject: 'IELTS',
-                difficulty: 'B2',
-                description: 'Demo flashcard set - IELTS Academic Writing vocabulary',
-                isPublic: false,
-                status: 'active',
-                archived: false
-            }
-        ];
+        const mockSets = [];
         
-        const mockTeacherAssignments = [
-            {
-                id: 401,
-                teacherId: 101,
-                classroomId: 201,
-                startDate: '2024-01-15',
-                endDate: '2024-06-30',
-                note: 'Demo assignment - Leading business English course',
-                status: 'active'
-            },
-            {
-                id: 402,
-                teacherId: 102,
-                classroomId: 202,
-                startDate: '2024-02-01',
-                endDate: '2024-05-31',
-                note: 'Demo assignment - IELTS preparation specialist',
-                status: 'active'
-            }
-        ];
+        const mockTeacherAssignments = [];
         
         // =============================================================================
         // DATA ACCESS FUNCTIONS
         // =============================================================================
         
         function getCurrentTeachers() {
-            return getDataSource(teachers, mockTeachers);
+            return isMockMode ? teachers : []; // Mock mode shows live data, Live mode shows empty
         }
         
         function getCurrentClassrooms() {
-            return getDataSource(classrooms, mockClassrooms);
+            return isMockMode ? classrooms : [];
         }
         
         function getCurrentSets() {
-            return getDataSource(sets, mockSets);
+            return isMockMode ? sets : [];
         }
         
         function getCurrentTeacherAssignments() {
-            return getDataSource(teacherAssignments, mockTeacherAssignments);
+            return isMockMode ? teacherAssignments : [];
         }
         
     </script>
