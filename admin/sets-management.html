@@ -221,19 +221,52 @@
             text-transform: uppercase;
         }
 
-        .difficulty-beginner {
+        .difficulty-A1 {
             background: rgba(34, 197, 94, 0.1);
             color: #059669;
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
 
-        .difficulty-intermediate {
+        .difficulty-A2 {
+            background: rgba(16, 185, 129, 0.1);
+            color: #047857;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .difficulty-B1 {
             background: rgba(251, 191, 36, 0.1);
             color: #d97706;
+            border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
-        .difficulty-advanced {
+        .difficulty-B2 {
+            background: rgba(245, 158, 11, 0.1);
+            color: #b45309;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .difficulty-C1 {
             background: rgba(239, 68, 68, 0.1);
             color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .difficulty-C2 {
+            background: rgba(147, 51, 234, 0.1);
+            color: #7c2d12;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+        }
+
+        .difficulty-mixed {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .difficulty-none {
+            background: rgba(156, 163, 175, 0.1);
+            color: #6b7280;
+            border: 1px solid rgba(156, 163, 175, 0.3);
         }
 
         .actions {
@@ -352,7 +385,7 @@
                 <h3>Összes Szett</h3>
                 <div class="stat-number">
                     <i data-lucide="layers" style="width: 24px; height: 24px; color: #6366f1;"></i>
-                    <span id="totalSets">15</span>
+                    <span id="totalSets">12</span>
                 </div>
             </div>
             <div class="stat-card">
@@ -399,6 +432,10 @@
                     <option value="Business English">Business English</option>
                     <option value="Elementary A1-A2">Elementary A1-A2</option>
                     <option value="IELTS Preparation">IELTS Preparation</option>
+                    <option value="Intermediate B1">Intermediate B1</option>
+                    <option value="Proficiency Course">Proficiency Course</option>
+                    <option value="General English">General English</option>
+                    <option value="Pre-A1 Starter">Pre-A1 Starter</option>
                 </select>
 
                 <select class="filter-select" id="teacherFilter" onchange="filterSets()">
@@ -410,9 +447,14 @@
 
                 <select class="filter-select" id="difficultyFilter" onchange="filterSets()">
                     <option value="">Minden Szint</option>
-                    <option value="beginner">Kezdő</option>
-                    <option value="intermediate">Középfok</option>
-                    <option value="advanced">Haladó</option>
+                    <option value="A1">A1 - Kezdő</option>
+                    <option value="A2">A2 - Elemi</option>
+                    <option value="B1">B1 - Középfok</option>
+                    <option value="B2">B2 - Felsőfok</option>
+                    <option value="C1">C1 - Haladó</option>
+                    <option value="C2">C2 - Mesterfok</option>
+                    <option value="mixed">Vegyes szint</option>
+                    <option value="">Nincs megadva</option>
                 </select>
             </div>
 
@@ -435,7 +477,7 @@
     </div>
 
     <script>
-        // Mock data for sets management
+        // Mock data for sets management with CEFR levels
         const setsData = [
             {
                 id: 1,
@@ -444,7 +486,8 @@
                 className: "Business English",
                 teacherName: "Johnson Michael",
                 studentsCount: 24,
-                difficulty: "intermediate",
+                difficulty: "B2",
+                cefrLevel: "B2",
                 cardsCount: 85,
                 lastUpdated: "2024-08-01"
             },
@@ -455,7 +498,8 @@
                 className: "IELTS Preparation",
                 teacherName: "Smith Rebecca",
                 studentsCount: 18,
-                difficulty: "advanced",
+                difficulty: "C1",
+                cefrLevel: "C1",
                 cardsCount: 62,
                 lastUpdated: "2024-07-28"
             },
@@ -466,7 +510,8 @@
                 className: "Elementary A1-A2",
                 teacherName: "Taylor Sarah",
                 studentsCount: 32,
-                difficulty: "beginner",
+                difficulty: "A1",
+                cefrLevel: "A1",
                 cardsCount: 48,
                 lastUpdated: "2024-07-25"
             },
@@ -477,7 +522,8 @@
                 className: "Advanced English B2",
                 teacherName: "Smith Rebecca",
                 studentsCount: 16,
-                difficulty: "advanced",
+                difficulty: "B2",
+                cefrLevel: "B2",
                 cardsCount: 74,
                 lastUpdated: "2024-08-02"
             },
@@ -488,7 +534,8 @@
                 className: "Elementary A1-A2",
                 teacherName: "Johnson Michael",
                 studentsCount: 28,
-                difficulty: "beginner",
+                difficulty: "A2",
+                cefrLevel: "A2",
                 cardsCount: 56,
                 lastUpdated: "2024-07-30"
             },
@@ -499,7 +546,8 @@
                 className: "Business English",
                 teacherName: "Johnson Michael",
                 studentsCount: 22,
-                difficulty: "advanced",
+                difficulty: "C1",
+                cefrLevel: "C1",
                 cardsCount: 68,
                 lastUpdated: "2024-07-26"
             },
@@ -510,7 +558,8 @@
                 className: "Advanced English B2",
                 teacherName: "Smith Rebecca",
                 studentsCount: 20,
-                difficulty: "intermediate",
+                difficulty: "B2",
+                cefrLevel: "B2",
                 cardsCount: 92,
                 lastUpdated: "2024-08-03"
             },
@@ -521,9 +570,58 @@
                 className: "Elementary A1-A2",
                 teacherName: "Taylor Sarah",
                 studentsCount: 26,
-                difficulty: "beginner",
+                difficulty: "A2",
+                cefrLevel: "A2",
                 cardsCount: 42,
                 lastUpdated: "2024-07-29"
+            },
+            {
+                id: 9,
+                setName: "Intermediate Speaking Practice",
+                description: "Conversation topics for intermediate learners",
+                className: "Intermediate B1",
+                teacherName: "Johnson Michael",
+                studentsCount: 19,
+                difficulty: "B1",
+                cefrLevel: "B1",
+                cardsCount: 65,
+                lastUpdated: "2024-08-04"
+            },
+            {
+                id: 10,
+                setName: "Proficiency Vocabulary",
+                description: "Advanced vocabulary for C2 level",
+                className: "Proficiency Course",
+                teacherName: "Smith Rebecca",
+                studentsCount: 8,
+                difficulty: "C2",
+                cefrLevel: "C2",
+                cardsCount: 95,
+                lastUpdated: "2024-08-05"
+            },
+            {
+                id: 11,
+                setName: "Mixed Level Phrasal Verbs",
+                description: "Essential phrasal verbs for all levels",
+                className: "General English",
+                teacherName: "Taylor Sarah",
+                studentsCount: 45,
+                difficulty: "mixed",
+                cefrLevel: "mixed",
+                cardsCount: 120,
+                lastUpdated: "2024-08-06"
+            },
+            {
+                id: 12,
+                setName: "Basic Vocabulary",
+                description: "First words for absolute beginners",
+                className: "Pre-A1 Starter",
+                teacherName: "Johnson Michael",
+                studentsCount: 35,
+                difficulty: "",
+                cefrLevel: null,
+                cardsCount: 30,
+                lastUpdated: "2024-08-07"
             }
         ];
 
@@ -569,7 +667,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="difficulty-badge difficulty-${set.difficulty}">
+                        <span class="difficulty-badge ${getDifficultyClass(set.difficulty)}">
                             ${getDifficultyText(set.difficulty)}
                         </span>
                     </td>
@@ -596,12 +694,23 @@
         }
 
         function getDifficultyText(difficulty) {
+            if (!difficulty) return 'Nincs megadva';
+            
             const difficultyMap = {
-                'beginner': 'Kezdő',
-                'intermediate': 'Középfok',
-                'advanced': 'Haladó'
+                'A1': 'A1',
+                'A2': 'A2', 
+                'B1': 'B1',
+                'B2': 'B2',
+                'C1': 'C1',
+                'C2': 'C2',
+                'mixed': 'Vegyes'
             };
             return difficultyMap[difficulty] || difficulty;
+        }
+
+        function getDifficultyClass(difficulty) {
+            if (!difficulty) return 'difficulty-none';
+            return `difficulty-${difficulty}`;
         }
 
         function filterSets() {
@@ -637,7 +746,8 @@
         function viewSet(id) {
             const set = setsData.find(s => s.id === id);
             if (set) {
-                alert(`Szett megtekintése: ${set.setName}\n\nRészletek:\n- ${set.cardsCount} kártya\n- ${set.studentsCount} diák\n- Szint: ${getDifficultyText(set.difficulty)}\n- Utoljára frissítve: ${set.lastUpdated}`);
+                const cefrLevel = set.cefrLevel ? `CEFR szint: ${set.cefrLevel}` : 'CEFR szint: Nincs megadva';
+                alert(`Szett megtekintése: ${set.setName}\n\nRészletek:\n- ${set.cardsCount} kártya\n- ${set.studentsCount} diák\n- ${cefrLevel}\n- Csoport: ${set.className}\n- Tanár: ${set.teacherName}\n- Leírás: ${set.description}\n- Utoljára frissítve: ${set.lastUpdated}`);
             }
         }
 
