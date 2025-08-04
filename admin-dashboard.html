@@ -889,12 +889,12 @@
             if (currentSchool) {
                 document.getElementById('schoolName').value = currentSchool.name || '';
                 document.getElementById('schoolAddress').value = currentSchool.address || '';
-                document.getElementById('adminPhone').value = currentSchool.phone || '';
+                document.getElementById('schoolPhone').value = currentSchool.phone || '';
             } else {
                 // Clear fields if no school
                 document.getElementById('schoolName').value = '';
                 document.getElementById('schoolAddress').value = '';
-                document.getElementById('adminPhone').value = '';
+                document.getElementById('schoolPhone').value = '';
             }
             
             const modal = document.getElementById('schoolSettingsModal');
@@ -916,7 +916,7 @@
             const schoolAddress = document.getElementById('schoolAddress').value;
             const adminName = document.getElementById('adminName').value;
             const adminEmail = document.getElementById('adminEmail').value;
-            const adminPhone = document.getElementById('adminPhone').value;
+            const schoolPhone = document.getElementById('schoolPhone').value;
             
             try {
                 // Update user profile first_name
@@ -941,7 +941,7 @@
                         .update({ 
                             name: schoolName,
                             address: schoolAddress,
-                            phone: adminPhone
+                            phone: schoolPhone
                         })
                         .eq('id', currentSchool.id);
                     
@@ -954,7 +954,7 @@
                     // Update local school object
                     currentSchool.name = schoolName;
                     currentSchool.address = schoolAddress;
-                    currentSchool.phone = adminPhone;
+                    currentSchool.phone = schoolPhone;
                     
                 } else {
                     // Create new school if none exists
@@ -963,7 +963,7 @@
                         .insert({ 
                             name: schoolName,
                             address: schoolAddress,
-                            phone: adminPhone,
+                            phone: schoolPhone,
                             is_mock: false,
                             is_active: true
                         })
@@ -1004,7 +1004,7 @@
                 currentUser.user_metadata.first_name = adminName;
                 
                 console.log('✅ Settings saved successfully:', {
-                    schoolName, schoolAddress, adminName, adminEmail, adminPhone
+                    schoolName, schoolAddress, adminName, adminEmail, schoolPhone
                 });
                 
                 showSuccess('Beállítások mentve', 'Az iskola beállítások sikeresen frissítve!');
@@ -2370,8 +2370,8 @@
             </div>
             
             <div class="form-group">
-                <label class="form-label">Telefon</label>
-                <input type="tel" class="form-input" id="adminPhone" value="+36 1 234 5678">
+                <label class="form-label">Iskola telefonszáma</label>
+                <input type="tel" class="form-input" id="schoolPhone" value="+36 1 234 5678">
             </div>
             
 
