@@ -563,6 +563,105 @@
             color: #6b7280;
         }
 
+        /* Mock Mode Toggle Styles */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            border-radius: 30px;
+            transition: 0.3s;
+            border: 2px solid #e2e8f0;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .mock-status-indicator {
+            display: flex;
+            align-items: center;
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #d1fae5;
+        }
+
+        .mock-status-indicator.mock-active {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        /* Global Mock Mode Banner */
+        .mock-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .mock-banner.active {
+            display: block;
+        }
+
+        .mock-banner i {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Adjust body padding when mock banner is active */
+        body.mock-mode-active {
+            padding-top: 50px;
+        }
+
         /* Modal buttons should stay at bottom */
         .modal-buttons {
             margin-top: 20px;
@@ -610,6 +709,12 @@
     </style>
 </head>
 <body>
+    <!-- Mock Mode Banner -->
+    <div id="mockBanner" class="mock-banner">
+        <i data-lucide="database"></i>
+        <span>🎭 DEMO ÜZEMMÓD AKTÍV - Csak bemutató adatok láthatóak</span>
+    </div>
+
     <!-- Header -->
     <div class="header">
         <div>
@@ -923,14 +1028,15 @@
             }
 
             // Check if email already exists
-            if (teachers.find(t => t.email.toLowerCase() === email.toLowerCase())) {
+            const currentTeachers = getCurrentTeachers();
+            if (currentTeachers.find(t => t.email.toLowerCase() === email.toLowerCase())) {
                 showError('Email foglalt', 'Ez az email cím már használatban van!');
                 return;
             }
 
             // Add teacher to list
             const newTeacher = {
-                id: Math.max(...teachers.map(t => t.id), 0) + 1,
+                id: Math.max(...currentTeachers.map(t => t.id), 0) + 1,
                 name: name,
                 email: email,
                 password: password, // In real app, this should be hashed
@@ -939,7 +1045,12 @@
                 createdAt: new Date().toISOString().split('T')[0]
             };
 
-            teachers.push(newTeacher);
+            // Add to appropriate data source
+            if (isMockMode) {
+                mockTeachers.push(newTeacher);
+            } else {
+                teachers.push(newTeacher);
+            }
 
             // Simulate backend API call
             console.log('📧 Új tanár hozzáadva:', newTeacher);
@@ -985,19 +1096,21 @@
             }
 
             // Check if email already exists (but not for current teacher)
-            const existingTeacher = teachers.find(t => t.email.toLowerCase() === email.toLowerCase() && t.id !== window.editingTeacherId);
+            const currentTeachers = getCurrentTeachers();
+            const existingTeacher = currentTeachers.find(t => t.email.toLowerCase() === email.toLowerCase() && t.id !== window.editingTeacherId);
             if (existingTeacher) {
                 showError('Email foglalt', 'Ez az email cím már használatban van másik tanárnál!');
                 return;
             }
 
-            // Find and update teacher
-            const teacherIndex = teachers.findIndex(t => t.id === window.editingTeacherId);
+            // Find and update teacher in appropriate data source
+            const targetArray = isMockMode ? mockTeachers : teachers;
+            const teacherIndex = targetArray.findIndex(t => t.id === window.editingTeacherId);
             if (teacherIndex !== -1) {
-                const originalEmail = teachers[teacherIndex].email;
+                const originalEmail = targetArray[teacherIndex].email;
                 
-                teachers[teacherIndex] = {
-                    ...teachers[teacherIndex],
+                targetArray[teacherIndex] = {
+                    ...targetArray[teacherIndex],
                     name: name,
                     email: email,
                     password: password,
@@ -1064,7 +1177,8 @@
 
         function loadTeachers() {
             const container = document.getElementById('teachersContainer');
-            const filteredTeachers = teachers.filter(teacher => {
+            const currentTeachers = getCurrentTeachers();
+            const filteredTeachers = currentTeachers.filter(teacher => {
                 if (currentFilter === 'all') return true;
                 return teacher.status === currentFilter;
             });
@@ -1119,7 +1233,8 @@
         }
 
         function editTeacher(id) {
-            const teacher = teachers.find(t => t.id === id);
+            const currentTeachers = getCurrentTeachers();
+            const teacher = currentTeachers.find(t => t.id === id);
             if (teacher) {
                 // Fill form with teacher data
                 document.getElementById('teacherName').value = teacher.name;
@@ -1159,7 +1274,8 @@
         }
 
         function archiveTeacher(id) {
-            const teacher = teachers.find(t => t.id === id);
+            const currentTeachers = getCurrentTeachers();
+            const teacher = currentTeachers.find(t => t.id === id);
             if (teacher) {
                 showWarning('Tanár archiválása', `Biztosan archiválja ${teacher.name} tanárt? Az archivált tanárok nem fognak megjelenni az aktív listában.`);
                 
@@ -1174,7 +1290,8 @@
         }
 
         function activateTeacher(id) {
-            const teacher = teachers.find(t => t.id === id);
+            const currentTeachers = getCurrentTeachers();
+            const teacher = currentTeachers.find(t => t.id === id);
             if (teacher) {
                 teacher.status = 'active';
                 loadTeachers();
@@ -1183,14 +1300,22 @@
         }
 
         function deleteTeacher(id) {
-            const teacher = teachers.find(t => t.id === id);
+            const currentTeachers = getCurrentTeachers();
+            const teacher = currentTeachers.find(t => t.id === id);
             if (teacher) {
                 showError('Tanár törlése', `FIGYELEM! Biztosan törli ${teacher.name} tanárt? Ez a művelet nem vonható vissza! (Automatikus törlés 3 másodperc múlva a demo kedvéért)`);
                 
                 // In real implementation, this would be handled by a proper confirmation dialog
                 // For now, we'll auto-proceed after showing the error/warning
                 setTimeout(() => {
-                    teachers = teachers.filter(t => t.id !== id);
+                    // Remove from appropriate data source
+                    if (isMockMode) {
+                        const index = mockTeachers.findIndex(t => t.id === id);
+                        if (index !== -1) mockTeachers.splice(index, 1);
+                    } else {
+                        const index = teachers.findIndex(t => t.id === id);
+                        if (index !== -1) teachers.splice(index, 1);
+                    }
                     loadTeachers();
                     showSuccess('Tanár törölve', `${teacher.name} sikeresen törölve a rendszerből!`);
                 }, 3000);
@@ -1357,7 +1482,8 @@
 
         function loadClassrooms() {
             const container = document.getElementById('classroomsContainer');
-            const filteredClassrooms = classrooms.filter(classroom => {
+            const currentClassrooms = getCurrentClassrooms();
+            const filteredClassrooms = currentClassrooms.filter(classroom => {
                 if (currentClassroomFilter === 'all') return true;
                 return classroom.status === currentClassroomFilter;
             });
@@ -1567,7 +1693,8 @@
 
         function loadSets() {
             const container = document.getElementById('setsContainer');
-            const filteredSets = sets.filter(set => {
+            const currentSets = getCurrentSets();
+            const filteredSets = currentSets.filter(set => {
                 if (currentSetFilter === 'all') return true;
                 return set.status === currentSetFilter;
             });
@@ -1680,7 +1807,8 @@
 
         function loadClassroomTeachers() {
             const container = document.getElementById('currentTeachersContainer');
-            const assignments = teacherAssignments
+            const currentAssignments = getCurrentTeacherAssignments();
+            const assignments = currentAssignments
                 .filter(assignment => assignment.classroomId === selectedClassroomId)
                 .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
@@ -1696,7 +1824,8 @@
             }
 
             container.innerHTML = assignments.map(assignment => {
-                const teacher = teachers.find(t => t.id === assignment.teacherId);
+                const currentTeachers = getCurrentTeachers();
+                const teacher = currentTeachers.find(t => t.id === assignment.teacherId);
                 const today = new Date();
                 const startDate = new Date(assignment.startDate);
                 const endDate = assignment.endDate ? new Date(assignment.endDate) : null;
@@ -1788,8 +1917,9 @@
 
         function loadTeachersIntoSelect() {
             const teacherSelect = document.getElementById('selectedTeacher');
+            const currentTeachers = getCurrentTeachers();
             teacherSelect.innerHTML = '<option value="">Válasszon tanárt</option>' +
-                teachers.filter(t => t.status === 'active').map(teacher => 
+                currentTeachers.filter(t => t.status === 'active').map(teacher => 
                     `<option value="${teacher.id}">${teacher.name} (${teacher.email})</option>`
                 ).join('');
         }
@@ -1834,7 +1964,8 @@
             loadClassroomTeachers();
             closeAssignTeacher();
 
-            const teacher = teachers.find(t => t.id == teacherId);
+            const currentTeachers = getCurrentTeachers();
+            const teacher = currentTeachers.find(t => t.id == teacherId);
             showSuccess('Tanár hozzárendelve', `${teacher.name} sikeresen hozzárendelve az osztályhoz!`);
         }
 
@@ -1880,8 +2011,9 @@
             performUpdate();
 
             function performUpdate() {
-                const teacher = teachers.find(t => t.id == teacherId);
-                const originalTeacher = teachers.find(t => t.id == assignment.teacherId);
+                const currentTeachers = getCurrentTeachers();
+                const teacher = currentTeachers.find(t => t.id == teacherId);
+                const originalTeacher = currentTeachers.find(t => t.id == assignment.teacherId);
 
                 // Update assignment
                 teacherAssignments[assignmentIndex] = {
@@ -1958,8 +2090,10 @@
         function deleteAssignment(assignmentId) {
             const assignment = teacherAssignments.find(a => a.id === assignmentId);
             if (assignment) {
-                const teacher = teachers.find(t => t.id === assignment.teacherId);
-                const classroom = classrooms.find(c => c.id === assignment.classroomId);
+                const currentTeachers = getCurrentTeachers();
+                const currentClassrooms = getCurrentClassrooms();
+                const teacher = currentTeachers.find(t => t.id === assignment.teacherId);
+                const classroom = currentClassrooms.find(c => c.id === assignment.classroomId);
                 
                 showError('Hozzárendelés törlése', `FIGYELEM! Biztosan törli ${teacher?.name || 'Ismeretlen tanár'} hozzárendelését a ${classroom?.name || 'Ismeretlen osztály'}-hoz? Ez a művelet nem vonható vissza! (Automatikus törlés 3 másodperc múlva a demo kedvéért)`);
                 
@@ -2127,6 +2261,31 @@
             <div class="form-group">
                 <label class="form-label">Telefon</label>
                 <input type="tel" class="form-input" id="adminPhone" value="+36 1 234 5678">
+            </div>
+            
+            <!-- Mock Mode Toggle -->
+            <div class="form-group" style="border-top: 2px solid #e2e8f0; padding-top: 20px; margin-top: 20px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <label class="form-label" style="margin-bottom: 4px; font-weight: 600; color: #374151;">
+                            <i data-lucide="database" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle; color: #6366f1;"></i>
+                            Rendszer üzemmód
+                        </label>
+                        <p style="font-size: 14px; color: #6b7280; margin: 0; line-height: 1.4;">
+                            Mock üzemmódban csak demo adatok látszanak, az éles adatok védettek maradnak.
+                        </p>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="mockModeToggle" onchange="toggleMockMode()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="mockModeStatus" class="mock-status-indicator">
+                    <i data-lucide="shield-check" style="width: 16px; height: 16px; margin-right: 6px;"></i>
+                    <span id="mockModeText">Éles üzemmód</span>
+                </div>
             </div>
             
             <div class="modal-buttons">
@@ -2521,6 +2680,231 @@
     <div class="toast-container" id="toastContainer">
         <!-- Toasts will be dynamically added here -->
     </div>
+
+    <script>
+        // =============================================================================
+        // GLOBAL MOCK MODE SYSTEM
+        // =============================================================================
+        
+        // Global Mock Mode State
+        let isMockMode = localStorage.getItem('snappyCards_mockMode') === 'true';
+        
+        // Mock Mode Functions
+        function toggleMockMode() {
+            isMockMode = !isMockMode;
+            localStorage.setItem('snappyCards_mockMode', isMockMode.toString());
+            updateMockModeUI();
+            
+            // Show confirmation toast
+            if (isMockMode) {
+                showWarning(
+                    'Demo üzemmód bekapcsolva', 
+                    'Mostantól csak bemutató adatok láthatóak. Az éles adatok védettek.'
+                );
+            } else {
+                showSuccess(
+                    'Éles üzemmód visszaállítva', 
+                    'Mostantól az éles adatok láthatóak és szerkeszthetőek.'
+                );
+            }
+            
+            // Reload data with new mode
+            setTimeout(() => {
+                reloadAllData();
+            }, 1000);
+        }
+        
+        function updateMockModeUI() {
+            const toggle = document.getElementById('mockModeToggle');
+            const statusIndicator = document.getElementById('mockModeStatus');
+            const statusText = document.getElementById('mockModeText');
+            const mockBanner = document.getElementById('mockBanner');
+            const body = document.body;
+            
+            if (toggle) toggle.checked = isMockMode;
+            
+            if (statusIndicator) {
+                if (isMockMode) {
+                    statusIndicator.classList.add('mock-active');
+                    statusText.textContent = 'Demo üzemmód';
+                    statusIndicator.querySelector('i').setAttribute('data-lucide', 'database');
+                } else {
+                    statusIndicator.classList.remove('mock-active');
+                    statusText.textContent = 'Éles üzemmód';
+                    statusIndicator.querySelector('i').setAttribute('data-lucide', 'shield-check');
+                }
+                lucide.createIcons(statusIndicator);
+            }
+            
+            // Show/hide mock banner
+            if (mockBanner) {
+                if (isMockMode) {
+                    mockBanner.classList.add('active');
+                    body.classList.add('mock-mode-active');
+                } else {
+                    mockBanner.classList.remove('active');
+                    body.classList.remove('mock-mode-active');
+                }
+                lucide.createIcons(mockBanner);
+            }
+        }
+        
+        function reloadAllData() {
+            // Reload all data with current mock mode
+            if (typeof loadTeachers === 'function') loadTeachers();
+            if (typeof loadClassrooms === 'function') loadClassrooms();
+            if (typeof loadSets === 'function') loadSets();
+            
+            console.log(`🔄 Adatok újratöltve - ${isMockMode ? 'Mock' : 'Éles'} üzemmód`);
+        }
+        
+        function getMockPrefix() {
+            return isMockMode ? 'mock_' : '';
+        }
+        
+        function getDataSource(liveData, mockData) {
+            return isMockMode ? mockData : liveData;
+        }
+        
+        // Initialize Mock Mode on page load
+        function initializeMockMode() {
+            updateMockModeUI();
+            console.log(`🎭 Mock Mode initialized: ${isMockMode ? 'ACTIVE' : 'DISABLED'}`);
+        }
+        
+        // Call initialization when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMockMode();
+        });
+        
+        // =============================================================================
+        // MOCK DATA SETS
+        // =============================================================================
+        
+        // Live data (current data arrays stay as they are)
+        // const teachers = [...]; // Keep existing
+        // const classrooms = [...]; // Keep existing  
+        // const sets = [...]; // Keep existing
+        
+        // Mock data sets for demo purposes
+        const mockTeachers = [
+            {
+                id: 101,
+                name: 'Sarah Wilson',
+                email: 'sarah.demo@mockschool.edu',
+                password: 'Demo123!',
+                status: 'active',
+                note: 'Demo teacher - Cambridge certified IELTS specialist',
+                archived: false
+            },
+            {
+                id: 102,
+                name: 'James Martinez',
+                email: 'james.demo@mockschool.edu',
+                password: 'Demo456!',
+                status: 'active',
+                note: 'Demo teacher - Business English expert',
+                archived: false
+            },
+            {
+                id: 103,
+                name: 'Emma Thompson',
+                email: 'emma.demo@mockschool.edu',
+                password: 'Demo789!',
+                status: 'archived',
+                note: 'Demo teacher - Academic Writing specialist (archived)',
+                archived: true
+            }
+        ];
+        
+        const mockClassrooms = [
+            {
+                id: 201,
+                name: 'Advanced Business English B2+',
+                grade: 'B2-C1',
+                subject: 'Business English',
+                size: 12,
+                description: 'Demo classroom - Advanced business communication skills',
+                status: 'active',
+                archived: false
+            },
+            {
+                id: 202,
+                name: 'IELTS Preparation Course',
+                grade: 'B2-C1',
+                subject: 'IELTS Prep',
+                size: 8,
+                description: 'Demo classroom - Intensive IELTS preparation program',
+                status: 'active',
+                archived: false
+            }
+        ];
+        
+        const mockSets = [
+            {
+                id: 301,
+                name: 'Business English Vocabulary DEMO',
+                subject: 'Business English',
+                difficulty: 'B2',
+                description: 'Demo flashcard set - Essential business terms and phrases',
+                isPublic: false,
+                status: 'active',
+                archived: false
+            },
+            {
+                id: 302,
+                name: 'IELTS Writing Task 1 DEMO',
+                subject: 'IELTS',
+                difficulty: 'B2',
+                description: 'Demo flashcard set - IELTS Academic Writing vocabulary',
+                isPublic: false,
+                status: 'active',
+                archived: false
+            }
+        ];
+        
+        const mockTeacherAssignments = [
+            {
+                id: 401,
+                teacherId: 101,
+                classroomId: 201,
+                startDate: '2024-01-15',
+                endDate: '2024-06-30',
+                note: 'Demo assignment - Leading business English course',
+                status: 'active'
+            },
+            {
+                id: 402,
+                teacherId: 102,
+                classroomId: 202,
+                startDate: '2024-02-01',
+                endDate: '2024-05-31',
+                note: 'Demo assignment - IELTS preparation specialist',
+                status: 'active'
+            }
+        ];
+        
+        // =============================================================================
+        // DATA ACCESS FUNCTIONS
+        // =============================================================================
+        
+        function getCurrentTeachers() {
+            return getDataSource(teachers, mockTeachers);
+        }
+        
+        function getCurrentClassrooms() {
+            return getDataSource(classrooms, mockClassrooms);
+        }
+        
+        function getCurrentSets() {
+            return getDataSource(sets, mockSets);
+        }
+        
+        function getCurrentTeacherAssignments() {
+            return getDataSource(teacherAssignments, mockTeacherAssignments);
+        }
+        
+    </script>
 
 </body>
 </html>
