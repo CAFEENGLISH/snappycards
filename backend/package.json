@@ -1,6 +1,6 @@
 {
   "name": "snappycards-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SnappyCards Email API Backend",
   "main": "server.js",
   "scripts": {
