@@ -749,7 +749,7 @@
                     .from('user_profiles')
                     .select(`
                         *,
-                        schools (
+                        school:schools!school_id (
                             id,
                             name,
                             is_mock
@@ -759,11 +759,11 @@
                     .single();
                 
                 console.log('🔍 DEBUG Profile:', profile);
-                console.log('🔍 DEBUG Profile.schools:', profile?.schools);
+                console.log('🔍 DEBUG Profile.school:', profile?.school);
                 console.log('🔍 DEBUG Profile.school_id:', profile?.school_id);
                 
-                if (profile?.school_id && profile?.schools) {
-                    currentSchool = profile.schools;
+                if (profile?.school_id && profile?.school) {
+                    currentSchool = profile.school;
                     document.querySelector('.school-name').textContent = currentSchool.name;
                     console.log('🏫 School:', currentSchool.name);
                     await loadSchoolStatistics();
