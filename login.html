@@ -436,9 +436,17 @@
 
                 showSuccess(t.loginSuccess);
                 
-                // Redirect to dashboard or main app
+                // Redirect to appropriate dashboard based on user role
                 setTimeout(() => {
-                    window.location.href = '/dashboard.html';
+                    const userRole = data.user.user_metadata?.user_role || 'student';
+                    
+                    if (userRole === 'teacher') {
+                        window.location.href = '/teacher-dashboard.html';
+                    } else if (userRole === 'school_admin') {
+                        window.location.href = '/admin-dashboard.html';
+                    } else {
+                        window.location.href = '/dashboard.html'; // student dashboard
+                    }
                 }, 1500);
 
             } catch (error) {
@@ -454,7 +462,16 @@
         async function checkAuth() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                window.location.href = '/dashboard.html';
+                // Redirect to appropriate dashboard based on user role
+                const userRole = user.user_metadata?.user_role || 'student';
+                
+                if (userRole === 'teacher') {
+                    window.location.href = '/teacher-dashboard.html';
+                } else if (userRole === 'school_admin') {
+                    window.location.href = '/admin-dashboard.html';
+                } else {
+                    window.location.href = '/dashboard.html'; // student dashboard
+                }
                 return;
             }
 

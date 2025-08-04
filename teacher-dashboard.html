@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanár Dashboard - SnappyCards</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#7c3aed">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Snappy Cards Logo Component -->
+    <link rel="stylesheet" href="components/snappy-cards-logo.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="lib/i18n.js"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #c7d2fe 100%);
+            color: #1a202c;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-small {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-details h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 16px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 32px;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 16px;
+        }
+
+        .feature-description {
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .feature-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .feature-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo-small">
+                    <div class="snappy-cards-logo">
+                        🧠 SnappyCards
+                    </div>
+                </a>
+                
+                <div class="user-info">
+                    <div class="user-details">
+                        <h3 id="userName">Tanár</h3>
+                        <p id="userRole">Tanár</p>
+                    </div>
+                    <div class="user-avatar" id="userAvatar">T</div>
+                    <button class="logout-btn" onclick="logout()">Kijelentkezés</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 class="welcome-title" id="welcomeTitle">Üdvözöljük a Tanár Dashboard-ban!</h1>
+                <p class="welcome-subtitle">Kezelje szettjeit, csoportjait és kövesse nyomon diákjainak haladását</p>
+            </div>
+
+            <!-- Teacher Features -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <h3 class="feature-title">Szettek Kezelése</h3>
+                    <p class="feature-description">Hozzon létre és szerkessze tanulókártyáit. Rendezze őket témák szerint.</p>
+                    <a href="manage-sets-cards.html" class="feature-btn">Szettek Kezelése</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3 class="feature-title">Csoportok</h3>
+                    <p class="feature-description">Hozzon létre osztályokat és rendeljen hozzájuk szetteket a közös tanuláshoz.</p>
+                    <a href="#" class="feature-btn">Csoportok Kezelése</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="user-plus"></i>
+                    </div>
+                    <h3 class="feature-title">Diákok Meghívása</h3>
+                    <p class="feature-description">Küldjön meghívókat diákjainak, hogy csatlakozhassanak a csoportjaihoz.</p>
+                    <a href="#" class="feature-btn">Meghívók Küldése</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="bar-chart"></i>
+                    </div>
+                    <h3 class="feature-title">Statisztikák</h3>
+                    <p class="feature-description">Kövesse nyomon diákjainak haladását és teljesítményét részletes jelentésekkel.</p>
+                    <a href="#" class="feature-btn">Statisztikák Megtekintése</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let currentUser = null;
+
+        // Initialize page
+        async function initPage() {
+            try {
+                // Check authentication
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    console.error('Auth error:', error);
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                if (!session) {
+                    console.log('No session found');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                currentUser = session.user;
+                console.log('Current user:', currentUser);
+                
+                // Check if user is teacher
+                const userRole = currentUser.user_metadata?.user_role || 'student';
+                if (userRole !== 'teacher') {
+                    console.log('User is not a teacher, redirecting...');
+                    // Redirect to appropriate dashboard
+                    if (userRole === 'school_admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                    return;
+                }
+                
+                updateUserInfo();
+                
+                // Initialize Lucide icons
+                lucide.createIcons();
+                
+            } catch (error) {
+                console.error('Error initializing page:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Update user info in header
+        function updateUserInfo() {
+            if (!currentUser) return;
+
+            const userName = document.getElementById('userName');
+            const userRole = document.getElementById('userRole');
+            const userAvatar = document.getElementById('userAvatar');
+            const welcomeTitle = document.getElementById('welcomeTitle');
+
+            const firstName = currentUser.user_metadata?.first_name || 'Tanár';
+            
+            userName.textContent = firstName;
+            userRole.textContent = 'Tanár';
+            userAvatar.textContent = firstName.charAt(0).toUpperCase();
+            
+            welcomeTitle.textContent = `Üdvözöljük, ${firstName}!`;
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) {
+                    console.error('Logout error:', error);
+                    return;
+                }
+                
+                console.log('User logged out successfully');
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error during logout:', error);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
