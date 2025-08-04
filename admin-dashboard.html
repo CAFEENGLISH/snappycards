@@ -22,6 +22,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1000;
         }
         .stats {
             display: grid;
@@ -116,15 +118,15 @@
                 position: absolute;
                 top: 60px;
                 right: 0;
-                background: rgba(255,255,255,0.95);
-                backdrop-filter: blur(12px);
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(16px);
                 border-radius: 16px;
-                padding: 10px;
-                min-width: 200px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-                border: 1px solid rgba(255,255,255,0.2);
+                padding: 8px;
+                min-width: 220px;
+                box-shadow: 0 16px 64px rgba(0,0,0,0.2);
+                border: 1px solid rgba(255,255,255,0.3);
                 display: none;
-                z-index: 1000;
+                z-index: 9999;
             ">
                 <div class="menu-item" onclick="openSchoolSettings()" style="
                     display: flex;
