@@ -751,10 +751,14 @@ app.post('/admin/update-teacher-email', verifyAdminAccess, async (req, res) => {
         }
 
         // Update email in user_profiles table for all users (mock and real)
+        console.log(`🔄 Updating email in database for teacherId: ${teacherId} to: ${newEmail}`);
         const { data: profileUpdate, error: profileUpdateError } = await supabaseAdmin
             .from('user_profiles')
             .update({ email: newEmail })
-            .eq('id', teacherId);
+            .eq('id', teacherId)
+            .select();
+
+        console.log(`🔍 Database update result:`, { profileUpdate, profileUpdateError });
 
         if (profileUpdateError) {
             console.error('Profile email update error:', profileUpdateError);
