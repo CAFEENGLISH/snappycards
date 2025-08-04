@@ -181,6 +181,154 @@
             background: rgba(148, 163, 184, 0.3);
         }
 
+        /* Filter Buttons */
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .filter-btn.active {
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+        }
+
+        /* Teachers Table */
+        .teacher-card {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .teacher-card:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .teacher-card:last-child {
+            border-bottom: none;
+        }
+
+        .teacher-info {
+            flex: 1;
+        }
+
+        .teacher-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .teacher-email {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .teacher-note {
+            color: #64748b;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .teacher-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: 16px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-archived {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .teacher-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn.edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .action-btn.edit:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .action-btn.archive {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .action-btn.archive:hover {
+            background: #64748b;
+            color: white;
+        }
+
+        .action-btn.delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .action-btn.delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .action-btn.activate {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .action-btn.activate:hover {
+            background: #16a34a;
+            color: white;
+        }
+
         /* Mobile responsive for modal */
         @media (max-width: 768px) {
             .modal {
@@ -201,6 +349,17 @@
             
             .btn {
                 width: 100%;
+            }
+
+            .teacher-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .teacher-actions {
+                width: 100%;
+                justify-content: flex-end;
             }
         }
     </style>
@@ -301,15 +460,15 @@
     <!-- Quick Actions -->
     <h2 style="color: #1e293b;">⚡ Gyors Műveletek</h2>
     <div class="actions">
-        <button class="action-btn">
+        <button class="action-btn" onclick="openAddTeacher()">
             <i data-lucide="user-plus"></i>
             Tanár Hozzáadása
         </button>
-        <button class="action-btn">
+        <button class="action-btn" onclick="openTeachersModal()">
             <i data-lucide="users"></i>
-            Új Osztály
+            Tanárok Kezelése
         </button>
-        <button class="action-btn">
+        <button class="action-btn" onclick="alert('Jelentések funkció fejlesztés alatt...')">
             <i data-lucide="bar-chart"></i>
             Jelentések
         </button>
@@ -411,6 +570,281 @@
             }
         });
         
+        // Teachers management functions
+        let teachers = [
+            {
+                id: 1,
+                name: 'Dr. Nagy Péter',
+                email: 'nagy.peter@iskola.hu',
+                status: 'active',
+                note: 'Matematika és fizika tanár',
+                createdAt: '2024-01-15'
+            },
+            {
+                id: 2,
+                name: 'Kis Anna',
+                email: 'kis.anna@iskola.hu',
+                status: 'active',
+                note: 'Magyar irodalom és nyelvtan',
+                createdAt: '2024-02-01'
+            },
+            {
+                id: 3,
+                name: 'Varga József',
+                email: 'varga.jozsef@iskola.hu',
+                status: 'archived',
+                note: 'Történelem tanár (nyugdíjazott)',
+                createdAt: '2023-09-01'
+            }
+        ];
+        
+        let currentFilter = 'all';
+
+        function openAddTeacher() {
+            // Reset form
+            document.getElementById('teacherName').value = '';
+            document.getElementById('teacherEmail').value = '';
+            document.getElementById('teacherPassword').value = '';
+            document.getElementById('teacherNote').value = '';
+            document.getElementById('sendWelcomeEmail').checked = true;
+            
+            // Generate initial password
+            generatePassword();
+            
+            // Show modal
+            const modal = document.getElementById('addTeacherModal');
+            modal.style.display = 'flex';
+            
+            // Focus on name field
+            setTimeout(() => {
+                document.getElementById('teacherName').focus();
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function closeAddTeacher() {
+            document.getElementById('addTeacherModal').style.display = 'none';
+        }
+
+        function generatePassword() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+            let password = '';
+            for (let i = 0; i < 8; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('teacherPassword').value = password;
+        }
+
+        async function addTeacher() {
+            const name = document.getElementById('teacherName').value.trim();
+            const email = document.getElementById('teacherEmail').value.trim();
+            const password = document.getElementById('teacherPassword').value.trim();
+            const note = document.getElementById('teacherNote').value.trim();
+            const sendEmail = document.getElementById('sendWelcomeEmail').checked;
+
+            if (!name || !email || !password) {
+                alert('Kérjük töltse ki a kötelező mezőket!');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Kérjük adjon meg egy érvényes email címet!');
+                return;
+            }
+
+            // Check if email already exists
+            if (teachers.find(t => t.email.toLowerCase() === email.toLowerCase())) {
+                alert('Ez az email cím már használatban van!');
+                return;
+            }
+
+            // Add teacher to list
+            const newTeacher = {
+                id: Math.max(...teachers.map(t => t.id), 0) + 1,
+                name: name,
+                email: email,
+                password: password, // In real app, this should be hashed
+                status: 'active',
+                note: note,
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+
+            teachers.push(newTeacher);
+
+            // Simulate backend API call
+            console.log('📧 Új tanár hozzáadva:', newTeacher);
+            
+            if (sendEmail) {
+                console.log('📧 Üdvözlő email küldése:', {
+                    to: email,
+                    name: name,
+                    loginUrl: `${window.location.origin}/login.html`,
+                    email: email,
+                    password: password
+                });
+                alert(`✅ Tanár sikeresen hozzáadva!\n📧 Üdvözlő email elküldve: ${email}`);
+            } else {
+                alert('✅ Tanár sikeresen hozzáadva!');
+            }
+
+            closeAddTeacher();
+            
+            // Refresh teachers list if open
+            if (document.getElementById('teachersModal').style.display === 'flex') {
+                loadTeachers();
+            }
+        }
+
+        function openTeachersModal() {
+            const modal = document.getElementById('teachersModal');
+            modal.style.display = 'flex';
+            loadTeachers();
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function closeTeachersModal() {
+            document.getElementById('teachersModal').style.display = 'none';
+        }
+
+        function filterTeachers(filter) {
+            currentFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            
+            loadTeachers();
+        }
+
+        function loadTeachers() {
+            const container = document.getElementById('teachersContainer');
+            const filteredTeachers = teachers.filter(teacher => {
+                if (currentFilter === 'all') return true;
+                return teacher.status === currentFilter;
+            });
+
+            if (filteredTeachers.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #64748b;">
+                        <i data-lucide="users" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>Nincs megjeleníthető tanár.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredTeachers.map(teacher => `
+                <div class="teacher-card">
+                    <div class="teacher-info">
+                        <div class="teacher-name">${teacher.name}</div>
+                        <div class="teacher-email">${teacher.email}</div>
+                        ${teacher.note ? `<div class="teacher-note">${teacher.note}</div>` : ''}
+                    </div>
+                    <div class="teacher-status">
+                        <span class="status-badge ${teacher.status === 'active' ? 'status-active' : 'status-archived'}">
+                            ${teacher.status === 'active' ? 'Aktív' : 'Archivált'}
+                        </span>
+                    </div>
+                    <div class="teacher-actions">
+                        <button class="action-btn edit" onclick="editTeacher(${teacher.id})" title="Szerkesztés">
+                            <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
+                        </button>
+                        ${teacher.status === 'active' ? 
+                            `<button class="action-btn archive" onclick="archiveTeacher(${teacher.id})" title="Archiválás">
+                                <i data-lucide="archive" style="width: 12px; height: 12px;"></i>
+                            </button>` :
+                            `<button class="action-btn activate" onclick="activateTeacher(${teacher.id})" title="Aktiválás">
+                                <i data-lucide="user-check" style="width: 12px; height: 12px;"></i>
+                            </button>`
+                        }
+                        <button class="action-btn delete" onclick="deleteTeacher(${teacher.id})" title="Törlés">
+                            <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Reinitialize icons
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function editTeacher(id) {
+            const teacher = teachers.find(t => t.id === id);
+            if (teacher) {
+                // Fill form with teacher data
+                document.getElementById('teacherName').value = teacher.name;
+                document.getElementById('teacherEmail').value = teacher.email;
+                document.getElementById('teacherPassword').value = '••••••••'; // Hide password
+                document.getElementById('teacherNote').value = teacher.note || '';
+                document.getElementById('sendWelcomeEmail').checked = false;
+                
+                // Store editing teacher ID
+                window.editingTeacherId = id;
+                
+                // Show modal
+                openAddTeacher();
+                
+                // Update button text
+                setTimeout(() => {
+                    const btn = document.querySelector('#addTeacherModal .btn-primary');
+                    btn.innerHTML = '<i data-lucide="save" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>Módosítások Mentése';
+                    lucide.createIcons();
+                }, 100);
+            }
+        }
+
+        function archiveTeacher(id) {
+            if (confirm('Biztosan archiválja ezt a tanárt?')) {
+                const teacher = teachers.find(t => t.id === id);
+                if (teacher) {
+                    teacher.status = 'archived';
+                    loadTeachers();
+                    alert('✅ Tanár sikeresen archiválva!');
+                }
+            }
+        }
+
+        function activateTeacher(id) {
+            const teacher = teachers.find(t => t.id === id);
+            if (teacher) {
+                teacher.status = 'active';
+                loadTeachers();
+                alert('✅ Tanár sikeresen aktiválva!');
+            }
+        }
+
+        function deleteTeacher(id) {
+            const teacher = teachers.find(t => t.id === id);
+            if (teacher && confirm(`Biztosan törli ${teacher.name} tanárt?\n\nEz a művelet nem vonható vissza!`)) {
+                teachers = teachers.filter(t => t.id !== id);
+                loadTeachers();
+                alert('✅ Tanár sikeresen törölve!');
+            }
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(event) {
+            // Add teacher modal
+            const addModal = document.getElementById('addTeacherModal');
+            if (event.target === addModal) {
+                closeAddTeacher();
+            }
+            
+            // Teachers list modal
+            const listModal = document.getElementById('teachersModal');
+            if (event.target === listModal) {
+                closeTeachersModal();
+            }
+        });
+
         checkAuth();
     </script>
 
@@ -455,6 +889,95 @@
                 <button class="btn btn-primary" onclick="saveSchoolSettings()">
                     <i data-lucide="save" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
                     Mentés
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Teacher Modal -->
+    <div id="addTeacherModal" class="modal-overlay">
+        <div class="modal">
+            <h2>
+                <i data-lucide="user-plus" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                Tanár Hozzáadása
+            </h2>
+            
+            <div class="form-group">
+                <label class="form-label">Tanár neve *</label>
+                <input type="text" class="form-input" id="teacherName" placeholder="Teljes név" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Email cím *</label>
+                <input type="email" class="form-input" id="teacherEmail" placeholder="email@domain.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Ideiglenes jelszó *</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" class="form-input" id="teacherPassword" placeholder="Automatikusan generált" style="flex: 1;">
+                    <button type="button" class="btn btn-secondary" onclick="generatePassword()" style="white-space: nowrap; padding: 12px 16px;">
+                        <i data-lucide="shuffle" style="width: 16px; height: 16px; margin-right: 8px;"></i>
+                        Generálás
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Megjegyzés</label>
+                <textarea class="form-input" id="teacherNote" placeholder="Opcionális megjegyzés..." rows="3" style="resize: vertical; min-height: 80px;"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="sendWelcomeEmail" checked style="width: 18px; height: 18px;">
+                    <span class="form-label" style="margin: 0;">Üdvözlő email küldése belépési adatokkal</span>
+                </label>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeAddTeacher()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Mégse
+                </button>
+                <button class="btn btn-primary" onclick="addTeacher()">
+                    <i data-lucide="user-plus" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Tanár Hozzáadása
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teachers List Modal -->
+    <div id="teachersModal" class="modal-overlay">
+        <div class="modal" style="max-width: 900px;">
+            <h2>
+                <i data-lucide="users" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>
+                Tanárok Kezelése
+            </h2>
+            
+            <!-- Filter Toggles -->
+            <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="filter-btn active" data-filter="all" onclick="filterTeachers('all')">
+                    <i data-lucide="users"></i> Mind
+                </button>
+                <button class="filter-btn" data-filter="active" onclick="filterTeachers('active')">
+                    <i data-lucide="user-check"></i> Aktív
+                </button>
+                <button class="filter-btn" data-filter="archived" onclick="filterTeachers('archived')">
+                    <i data-lucide="archive"></i> Archivált
+                </button>
+            </div>
+            
+            <!-- Teachers Table -->
+            <div id="teachersContainer" style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px;">
+                <!-- Teachers will be loaded here -->
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeTeachersModal()">
+                    <i data-lucide="x" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
+                    Bezárás
                 </button>
             </div>
         </div>
