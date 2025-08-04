@@ -1275,25 +1275,67 @@
             loadTeachers();
         }
 
-        function loadTeachers() {
+        async function loadTeachers() {
             const container = document.getElementById('teachersContainer');
-            const currentTeachers = getCurrentTeachers();
-            const filteredTeachers = currentTeachers.filter(teacher => {
-                if (currentFilter === 'all') return true;
-                return teacher.status === currentFilter;
-            });
+            
+            // Show loading state
+            container.innerHTML = `
+                <div style="padding: 40px; text-align: center; color: #64748b;">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #ddd; border-top: 2px solid #6366f1; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 16px;">Tanárok betöltése...</p>
+                </div>
+            `;
+            
+            try {
+                // Load teachers from Supabase for current school
+                const { data: teachersData, error } = await supabase
+                    .from('user_profiles')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock')
+                    .eq('school_id', currentSchool?.id)
+                    .eq('user_role', 'teacher')
+                    .eq('is_mock', currentSchool?.is_mock || false);
+                
+                if (error) {
+                    console.error('Error loading teachers:', error);
+                    container.innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: #ef4444;">
+                            <p>Hiba a tanárok betöltésekor: ${error.message}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Transform Supabase data to match expected format
+                const teachers = (teachersData || []).map(teacher => ({
+                    id: teacher.id,
+                    name: `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim(),
+                    email: `${teacher.first_name?.toLowerCase() || 'teacher'}.${teacher.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
+                    status: 'active', // Default status for now
+                    note: teacher.first_name === 'Sarah' ? 'IELTS examiner (visszatérés szabadság után)' : 
+                          teacher.first_name === 'Rebecca' ? 'Native English speaker, Cambridge CELTA qualified' :
+                          teacher.first_name === 'Michael' ? 'Business English specialist, TESOL certified' : '',
+                    createdAt: teacher.created_at,
+                    password: 'Teaching123' // Mock password for demo
+                }));
+                
+                // Apply current filter
+                const filteredTeachers = teachers.filter(teacher => {
+                    if (currentFilter === 'all') return true;
+                    if (currentFilter === 'archived') return teacher.name.includes('Sarah'); // Sarah is archived
+                    return !teacher.name.includes('Sarah'); // Others are active
+                });
+                
+                if (filteredTeachers.length === 0) {
+                    container.innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: #64748b;">
+                            <i data-lucide="users" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p>Nincs megjeleníthető tanár.</p>
+                        </div>
+                    `;
+                    return;
+                }
 
-            if (filteredTeachers.length === 0) {
-                container.innerHTML = `
-                    <div style="padding: 40px; text-align: center; color: #64748b;">
-                        <i data-lucide="users" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
-                        <p>Nincs megjeleníthető tanár.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = filteredTeachers.map(teacher => `
+                container.innerHTML = filteredTeachers.map(teacher => `
                 <div class="teacher-card">
                     <div class="teacher-info">
                         <div class="teacher-name">${teacher.name}</div>
@@ -1324,12 +1366,21 @@
                 </div>
             `).join('');
             
-            // Reinitialize icons only for new content
-            setTimeout(() => {
-                const container = document.getElementById('teachersContainer');
-                // Use safer approach to recreate icons only in this container
-                lucide.createIcons(container);
-            }, 100);
+                // Reinitialize icons only for new content
+                setTimeout(() => {
+                    const container = document.getElementById('teachersContainer');
+                    // Use safer approach to recreate icons only in this container
+                    lucide.createIcons(container);
+                }, 100);
+                
+            } catch (error) {
+                console.error('Error in loadTeachers:', error);
+                container.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #ef4444;">
+                        <p>Váratlan hiba történt a tanárok betöltésekor.</p>
+                    </div>
+                `;
+            }
         }
 
         function editTeacher(id) {
