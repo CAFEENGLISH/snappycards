@@ -1396,16 +1396,23 @@
                     return;
                 }
                 
+                console.log('🔍 RAW TEACHERS DATA from Supabase:', teachersData);
+                
                 // Transform Supabase data to match expected format
-                const teachers = (teachersData || []).map(teacher => ({
-                    id: teacher.id,
-                    name: `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim(),
-                    email: `${teacher.first_name?.toLowerCase() || 'teacher'}.${teacher.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
-                    status: 'active', // Default status for now
-                    note: teacher.note || '',
-                    createdAt: teacher.created_at,
-                    password: 'Teaching123' // Mock password for demo
-                }));
+                const teachers = (teachersData || []).map(teacher => {
+                    console.log(`🔍 Processing teacher: ${teacher.first_name} ${teacher.last_name}, note: "${teacher.note}"`);
+                    return {
+                        id: teacher.id,
+                        name: `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim(),
+                        email: `${teacher.first_name?.toLowerCase() || 'teacher'}.${teacher.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
+                        status: 'active', // Default status for now
+                        note: teacher.note || '',
+                        createdAt: teacher.created_at,
+                        password: 'Teaching123' // Mock password for demo
+                    };
+                });
+                
+                console.log('🔍 TRANSFORMED TEACHERS:', teachers);
                 
                 // Apply current filter
                 const filteredTeachers = teachers.filter(teacher => {
