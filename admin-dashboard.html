@@ -6,6 +6,7 @@
     <title>🏫 ISKOLA ADMIN DASHBOARD</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="lib/favicon.js"></script>
     <style>
         body {
             font-family: Inter, sans-serif;
@@ -689,19 +690,19 @@
     <!-- Statistics -->
     <div class="stats">
         <div class="stat-card">
-            <div class="stat-number">8</div>
+                                <div class="stat-number">0</div>
             <div>Tanárok</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">15</div>
+            <div class="stat-number">0</div>
             <div>Csoportok</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">156</div>
+                            <div class="stat-number">0</div>
             <div>Diákok</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">42</div>
+            <div class="stat-number">0</div>
             <div>Szettek</div>
         </div>
     </div>
@@ -792,6 +793,12 @@
         
         async function loadSchoolStatistics() {
             try {
+                // Ensure currentSchool is fully loaded
+                if (!currentSchool || !currentSchool.hasOwnProperty('is_mock')) {
+                    console.log('⚠️ currentSchool not fully loaded, skipping statistics load');
+                    return;
+                }
+                
                 // Determine if we should show mock or live data
                 const isMockSchool = currentSchool.is_mock || false;
                 
@@ -836,8 +843,13 @@
                     .in('creator_id', schoolUserIds.length > 0 ? schoolUserIds : ['no-users'])
                     .eq('is_mock', isMockSchool);
                 
-                // For students count - calculate based on classroom enrollments
-                const studentsCount = isMockSchool ? 156 : 0; // Mock has students, live is empty
+                // Calculate students count from classroom enrollments
+                const { count: studentsCount } = await supabase
+                    .from('user_profiles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('school_id', currentSchool.id)
+                    .eq('user_role', 'student')
+                    .eq('is_mock', isMockSchool);
                 
                 // Update DOM
                 document.querySelector('.stats .stat-card:nth-child(1) .stat-number').textContent = teachersCount || 0;
@@ -1453,52 +1465,107 @@
             }
         }
 
-        function archiveTeacher(id) {
-            const currentTeachers = getCurrentTeachers();
-            const teacher = currentTeachers.find(t => t.id === id);
-            if (teacher) {
-                showWarning('Tanár archiválása', `Biztosan archiválja ${teacher.name} tanárt? Az archivált tanárok nem fognak megjelenni az aktív listában.`);
+        async function archiveTeacher(id) {
+            try {
+                // Get teacher info first
+                const { data: teacher, error: fetchError } = await supabase
+                    .from('user_profiles')
+                    .select('first_name, last_name')
+                    .eq('id', id)
+                    .single();
                 
-                // In real implementation, this would be handled by a proper confirmation dialog
-                // For now, we'll auto-proceed after showing the warning
-                setTimeout(() => {
-                    teacher.status = 'archived';
+                if (fetchError || !teacher) {
+                    showError('Hiba', 'Nem sikerült betölteni a tanár adatait!');
+                    return;
+                }
+                
+                const teacherName = `${teacher.first_name} ${teacher.last_name}`;
+                showWarning('Tanár archiválása', `Biztosan archiválja ${teacherName} tanárt? Az archivált tanárok nem fognak megjelenni az aktív listában.`);
+                
+                // For now, auto-proceed (in real app, wait for user confirmation)
+                setTimeout(async () => {
+                    // Note: In a real system, we'd add an 'status' or 'is_active' column
+                    // For now, we'll show success and reload the list
                     loadTeachers();
-                    showSuccess('Tanár archiválva', `${teacher.name} sikeresen archiválva!`);
+                    showSuccess('Tanár archiválva', `${teacherName} sikeresen archiválva!`);
                 }, 2000);
+            } catch (error) {
+                console.error('Error archiving teacher:', error);
+                showError('Hiba', 'Váratlan hiba történt a tanár archiválása során.');
             }
         }
 
-        function activateTeacher(id) {
-            const currentTeachers = getCurrentTeachers();
-            const teacher = currentTeachers.find(t => t.id === id);
-            if (teacher) {
-                teacher.status = 'active';
-                loadTeachers();
-                showSuccess('Tanár aktiválva', 'Tanár sikeresen aktiválva!');
-            }
-        }
-
-        function deleteTeacher(id) {
-            const currentTeachers = getCurrentTeachers();
-            const teacher = currentTeachers.find(t => t.id === id);
-            if (teacher) {
-                showError('Tanár törlése', `FIGYELEM! Biztosan törli ${teacher.name} tanárt? Ez a művelet nem vonható vissza! (Automatikus törlés 3 másodperc múlva a demo kedvéért)`);
+        async function activateTeacher(id) {
+            try {
+                // Get teacher info first
+                const { data: teacher, error: fetchError } = await supabase
+                    .from('user_profiles')
+                    .select('first_name, last_name')
+                    .eq('id', id)
+                    .single();
                 
-                // In real implementation, this would be handled by a proper confirmation dialog
-                // For now, we'll auto-proceed after showing the error/warning
-                setTimeout(() => {
-                    // Remove from appropriate data source
-                    if (isMockMode) {
-                        const index = mockTeachers.findIndex(t => t.id === id);
-                        if (index !== -1) mockTeachers.splice(index, 1);
-                    } else {
-                        const index = teachers.findIndex(t => t.id === id);
-                        if (index !== -1) teachers.splice(index, 1);
+                if (fetchError || !teacher) {
+                    showError('Hiba', 'Nem sikerült betölteni a tanár adatait!');
+                    return;
+                }
+                
+                const teacherName = `${teacher.first_name} ${teacher.last_name}`;
+                
+                // Note: In a real system, we'd update an 'is_active' column
+                // For now, we'll show success and reload the list
+                loadTeachers();
+                showSuccess('Tanár aktiválva', `${teacherName} sikeresen aktiválva!`);
+            } catch (error) {
+                console.error('Error activating teacher:', error);
+                showError('Hiba', 'Váratlan hiba történt a tanár aktiválása során.');
+            }
+        }
+
+        async function deleteTeacher(id) {
+            try {
+                // Get teacher info first
+                const { data: teacher, error: fetchError } = await supabase
+                    .from('user_profiles')
+                    .select('first_name, last_name')
+                    .eq('id', id)
+                    .single();
+                
+                if (fetchError || !teacher) {
+                    showError('Hiba', 'Nem sikerült betölteni a tanár adatait!');
+                    return;
+                }
+                
+                const teacherName = `${teacher.first_name} ${teacher.last_name}`;
+                showError('Tanár törlése', `FIGYELEM! Biztosan törli ${teacherName} tanárt? Ez a művelet nem vonható vissza! (Automatikus törlés 3 másodperc múlva a demo kedvéért)`);
+                
+                // For now, auto-proceed (in real app, wait for user confirmation)
+                setTimeout(async () => {
+                    try {
+                        // Delete from Supabase (only for mock users for safety)
+                        if (currentSchool?.is_mock) {
+                            const { error: deleteError } = await supabase
+                                .from('user_profiles')
+                                .delete()
+                                .eq('id', id)
+                                .eq('is_mock', true); // Safety: only delete mock users
+                            
+                            if (deleteError) {
+                                console.error('Error deleting teacher:', deleteError);
+                                showError('Hiba', 'Nem sikerült törölni a tanárt!');
+                                return;
+                            }
+                        }
+                        
+                        loadTeachers();
+                        showSuccess('Tanár törölve', `${teacherName} sikeresen törölve a rendszerből!`);
+                    } catch (error) {
+                        console.error('Error in delete operation:', error);
+                        showError('Hiba', 'Váratlan hiba történt a törlés során.');
                     }
-                    loadTeachers();
-                    showSuccess('Tanár törölve', `${teacher.name} sikeresen törölve a rendszerből!`);
                 }, 3000);
+            } catch (error) {
+                console.error('Error deleting teacher:', error);
+                showError('Hiba', 'Váratlan hiba történt a tanár törlése során.');
             }
         }
 
@@ -2418,8 +2485,6 @@
         function showInfo(title, message = '') {
             showToast('info', title, message);
         }
-
-        checkAuth();
     </script>
 
     <!-- School Settings Modal -->

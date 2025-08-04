@@ -697,7 +697,7 @@
             <div>Csoportok</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">156</div>
+                            <div class="stat-number">0</div>
             <div>Diákok</div>
         </div>
         <div class="stat-card">
@@ -799,7 +799,7 @@
                 // Update DOM
                 document.querySelector('.stats .stat-card:nth-child(1) .stat-number').textContent = teachersCount || 0;
                 document.querySelector('.stats .stat-card:nth-child(2) .stat-number').textContent = classroomsCount || 0;
-                document.querySelector('.stats .stat-card:nth-child(3) .stat-number').textContent = '156'; // Mock students
+                // Students count will be calculated dynamically from database
                 document.querySelector('.stats .stat-card:nth-child(4) .stat-number').textContent = setsCount || 0;
                 
                 console.log('📊 Statistics loaded:', { teachersCount, classroomsCount, setsCount });
