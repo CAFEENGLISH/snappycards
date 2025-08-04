@@ -1393,7 +1393,7 @@
                 // Load teachers from Supabase for current school
                 const { data: teachersData, error } = await supabase
                     .from('user_profiles')
-                    .select('id, first_name, last_name, user_role, created_at, is_mock, note')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock, note, email')
                     .eq('school_id', currentSchool?.id)
                     .eq('user_role', 'teacher')
                     .eq('is_mock', currentSchool?.is_mock || false);
@@ -1412,13 +1412,13 @@
                 
                 // Transform Supabase data to match expected format
                 const teachers = (teachersData || []).map(teacher => {
-                    console.log(`🔍 Processing teacher: ${teacher.first_name} ${teacher.last_name}, note: "${teacher.note}"`);
+                    console.log(`🔍 Processing teacher: ${teacher.first_name} ${teacher.last_name}, note: "${teacher.note}", email: "${teacher.email}"`);
                     // Get stored password or default
                     const storedPassword = localStorage.getItem(`teacher_password_${teacher.id}`) || 'Teaching123';
                     return {
                         id: teacher.id,
                         name: `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim(),
-                        email: `${teacher.first_name?.toLowerCase() || 'teacher'}.${teacher.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
+                        email: teacher.email || `${teacher.first_name?.toLowerCase() || 'teacher'}.${teacher.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
                         status: 'active', // Default status for now
                         note: teacher.note || '',
                         createdAt: teacher.created_at,
@@ -1498,7 +1498,7 @@
             try {
                 const { data: teacherData, error } = await supabase
                     .from('user_profiles')
-                    .select('id, first_name, last_name, user_role, created_at, is_mock, note')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock, note, email')
                     .eq('id', id)
                     .single();
                 
@@ -1515,7 +1515,7 @@
                 const teacher = {
                     id: teacherData.id,
                     name: `${teacherData.first_name || ''} ${teacherData.last_name || ''}`.trim(),
-                    email: `${teacherData.first_name?.toLowerCase() || 'teacher'}.${teacherData.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
+                                            email: teacherData.email || `${teacherData.first_name?.toLowerCase() || 'teacher'}.${teacherData.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
                     status: teacherData.first_name === 'Sarah' ? 'archived' : 'active',
                     note: teacherData.note || '',
                     password: storedPassword // Real password stored locally

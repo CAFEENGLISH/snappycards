@@ -750,7 +750,21 @@ app.post('/admin/update-teacher-email', verifyAdminAccess, async (req, res) => {
             });
         }
 
-        // Handle mock users differently (simulate email update)
+        // Update email in user_profiles table for all users (mock and real)
+        const { data: profileUpdate, error: profileUpdateError } = await supabaseAdmin
+            .from('user_profiles')
+            .update({ email: newEmail })
+            .eq('id', teacherId);
+
+        if (profileUpdateError) {
+            console.error('Profile email update error:', profileUpdateError);
+            return res.status(500).json({
+                error: 'Failed to update teacher email in profile',
+                details: profileUpdateError.message
+            });
+        }
+
+        // Handle mock users differently (simulate auth email update)
         if (teacher.is_mock) {
             console.log(`✅ Admin ${req.adminUser.email} updated MOCK teacher email ${teacherId} to ${newEmail} (simulated)`);
             
