@@ -1303,6 +1303,7 @@
                 }
                 
                 // Handle email update via backend
+                console.log(`🔍 Email update check: email="${email}", profileData?.email="${profileData?.email}", will update: ${email && email !== profileData?.email}`);
                 if (email && email !== profileData?.email) {
                     try {
                         const emailResponse = await fetch(`${backendUrl}/admin/update-teacher-email`, {
