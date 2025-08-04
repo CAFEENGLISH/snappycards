@@ -303,13 +303,6 @@
             opacity: 0.5;
         }
 
-        .filters {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-            align-items: center;
-        }
-
         .filter-select {
             padding: 10px 14px;
             border: 1px solid #e2e8f0;
@@ -412,41 +405,42 @@
                 </button>
             </div>
 
-            <!-- Search -->
-            <div class="search-box" style="margin-bottom: 20px; position: relative;">
-                <input type="text" id="searchInput" placeholder="Keresés szett névben..." 
-                       onkeyup="filterSets()" style="
-                    width: 100%;
-                    padding: 12px 16px;
-                    padding-right: 40px;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    background: white;
-                    outline: none;
-                    transition: border-color 0.2s;
-                " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
-                <button onclick="clearSearch()" style="
-                    position: absolute;
-                    right: 8px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    background: none;
-                    border: none;
-                    color: #6b7280;
-                    cursor: pointer;
-                    padding: 4px;
-                    border-radius: 4px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
-                    <i data-lucide="x" style="width: 16px; height: 16px;"></i>
-                </button>
-            </div>
+            <!-- Search and Filters in one row -->
+            <div class="search-and-filters" style="display: flex; gap: 16px; margin-bottom: 20px; align-items: center;">
+                <!-- Search Box -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="searchInput" placeholder="Keresés szett névben..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
 
-            <!-- Filters -->
-            <div class="filters">
+                <!-- Filters -->
                 <select class="filter-select" id="classFilter" onchange="filterSets()">
                     <option value="">Minden Csoport</option>
                     <option value="Advanced English B2">Advanced English B2</option>
