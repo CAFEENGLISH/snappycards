@@ -853,6 +853,9 @@
             document.getElementById('teacherNote').value = '';
             document.getElementById('sendWelcomeEmail').checked = true;
             
+            // Reset editing state
+            window.editingTeacherId = null;
+            
             // Generate initial password
             generatePassword();
             
@@ -860,11 +863,23 @@
             const modal = document.getElementById('addTeacherModal');
             modal.style.display = 'flex';
             
-            // Focus on name field
-            setTimeout(() => {
-                document.getElementById('teacherName').focus();
-                lucide.createIcons();
-            }, 100);
+                            // Reset modal title and button for adding
+                setTimeout(() => {
+                    const title = document.querySelector('#addTeacherModal h2');
+                    title.innerHTML = '<i data-lucide="user-plus" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>Új Tanár Hozzáadása';
+                    
+                    const btn = document.querySelector('#addTeacherModal .btn-primary');
+                    btn.innerHTML = '<i data-lucide="user-plus" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>Tanár Hozzáadása';
+                    btn.onclick = addTeacher;
+                    
+                    // Reset checkbox label for adding mode
+                    const checkboxLabel = document.querySelector('#addTeacherModal label span');
+                    checkboxLabel.textContent = 'Üdvözlő email küldése belépési adatokkal';
+                    
+                    // Focus on name field
+                    document.getElementById('teacherName').focus();
+                    lucide.createIcons();
+                }, 100);
         }
 
         function closeAddTeacher() {
@@ -939,6 +954,78 @@
             // Refresh teachers list if open
             if (document.getElementById('teachersModal').style.display === 'flex') {
                 loadTeachers();
+            }
+        }
+
+        async function updateTeacher() {
+            const name = document.getElementById('teacherName').value.trim();
+            const email = document.getElementById('teacherEmail').value.trim();
+            const password = document.getElementById('teacherPassword').value.trim();
+            const note = document.getElementById('teacherNote').value.trim();
+            const sendEmail = document.getElementById('sendWelcomeEmail').checked;
+
+            if (!name || !email || !password) {
+                showError('Hiányzó adatok', 'Kérjük töltse ki a kötelező mezőket!');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Érvénytelen email', 'Kérjük adjon meg egy érvényes email címet!');
+                return;
+            }
+
+            // Check if email already exists (but not for current teacher)
+            const existingTeacher = teachers.find(t => t.email.toLowerCase() === email.toLowerCase() && t.id !== window.editingTeacherId);
+            if (existingTeacher) {
+                showError('Email foglalt', 'Ez az email cím már használatban van másik tanárnál!');
+                return;
+            }
+
+            // Find and update teacher
+            const teacherIndex = teachers.findIndex(t => t.id === window.editingTeacherId);
+            if (teacherIndex !== -1) {
+                const originalEmail = teachers[teacherIndex].email;
+                
+                teachers[teacherIndex] = {
+                    ...teachers[teacherIndex],
+                    name: name,
+                    email: email,
+                    password: password,
+                    note: note,
+                    updatedAt: new Date().toISOString().split('T')[0]
+                };
+
+                // Simulate backend API call
+                console.log('📝 Tanár módosítva:', teachers[teacherIndex]);
+                
+                if (sendEmail && originalEmail !== email) {
+                    console.log('📧 Új bejelentkezési adatok küldése:', {
+                        to: email,
+                        name: name,
+                        loginUrl: `${window.location.origin}/login.html`,
+                        email: email,
+                        password: password
+                    });
+                    showSuccess('Tanár módosítva', `Tanár adatai frissítve! Új bejelentkezési adatok elküldve: ${email}`);
+                } else if (sendEmail) {
+                    console.log('📧 Módosított adatok küldése:', {
+                        to: email,
+                        name: name,
+                        message: 'Adatai módosítva lettek'
+                    });
+                    showSuccess('Tanár módosítva', 'Tanár adatai frissítve! Értesítő email elküldve.');
+                } else {
+                    showSuccess('Tanár módosítva', 'Tanár adatai sikeresen frissítve!');
+                }
+
+                closeAddTeacher();
+                
+                // Refresh teachers list if open
+                if (document.getElementById('teachersModal').style.display === 'flex') {
+                    loadTeachers();
+                }
             }
         }
 
@@ -1027,33 +1114,49 @@
                 // Fill form with teacher data
                 document.getElementById('teacherName').value = teacher.name;
                 document.getElementById('teacherEmail').value = teacher.email;
-                document.getElementById('teacherPassword').value = '••••••••'; // Hide password
+                document.getElementById('teacherPassword').value = teacher.password; // Show actual password for editing
                 document.getElementById('teacherNote').value = teacher.note || '';
-                document.getElementById('sendWelcomeEmail').checked = false;
+                document.getElementById('sendWelcomeEmail').checked = false; // Default to false for editing
                 
                 // Store editing teacher ID
                 window.editingTeacherId = id;
                 
                 // Show modal
-                openAddTeacher();
+                const modal = document.getElementById('addTeacherModal');
+                modal.style.display = 'flex';
                 
-                // Update button text
+                // Update modal title and button
                 setTimeout(() => {
+                    const title = document.querySelector('#addTeacherModal h2');
+                    title.innerHTML = '<i data-lucide="edit-3" style="width: 24px; height: 24px; margin-right: 12px; vertical-align: middle;"></i>Tanár Szerkesztése';
+                    
                     const btn = document.querySelector('#addTeacherModal .btn-primary');
                     btn.innerHTML = '<i data-lucide="save" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>Módosítások Mentése';
+                    btn.onclick = updateTeacher;
+                    
+                    // Update checkbox label for editing mode
+                    const checkboxLabel = document.querySelector('#addTeacherModal label span');
+                    checkboxLabel.textContent = 'Értesítő email küldése a módosításokról';
+                    
+                    // Focus on name field
+                    document.getElementById('teacherName').focus();
                     lucide.createIcons();
                 }, 100);
             }
         }
 
         function archiveTeacher(id) {
-            if (confirm('Biztosan archiválja ezt a tanárt?')) {
-                const teacher = teachers.find(t => t.id === id);
-                if (teacher) {
+            const teacher = teachers.find(t => t.id === id);
+            if (teacher) {
+                showWarning('Tanár archiválása', `Biztosan archiválja ${teacher.name} tanárt? Az archivált tanárok nem fognak megjelenni az aktív listában.`);
+                
+                // In real implementation, this would be handled by a proper confirmation dialog
+                // For now, we'll auto-proceed after showing the warning
+                setTimeout(() => {
                     teacher.status = 'archived';
                     loadTeachers();
-                    showSuccess('Tanár archiválva', 'Tanár sikeresen archiválva!');
-                }
+                    showSuccess('Tanár archiválva', `${teacher.name} sikeresen archiválva!`);
+                }, 2000);
             }
         }
 
@@ -1068,10 +1171,16 @@
 
         function deleteTeacher(id) {
             const teacher = teachers.find(t => t.id === id);
-            if (teacher && confirm(`Biztosan törli ${teacher.name} tanárt?\n\nEz a művelet nem vonható vissza!`)) {
-                teachers = teachers.filter(t => t.id !== id);
-                loadTeachers();
-                showSuccess('Tanár törölve', 'Tanár sikeresen törölve!');
+            if (teacher) {
+                showError('Tanár törlése', `FIGYELEM! Biztosan törli ${teacher.name} tanárt? Ez a művelet nem vonható vissza! (Automatikus törlés 3 másodperc múlva a demo kedvéért)`);
+                
+                // In real implementation, this would be handled by a proper confirmation dialog
+                // For now, we'll auto-proceed after showing the error/warning
+                setTimeout(() => {
+                    teachers = teachers.filter(t => t.id !== id);
+                    loadTeachers();
+                    showSuccess('Tanár törölve', `${teacher.name} sikeresen törölve a rendszerből!`);
+                }, 3000);
             }
         }
 
