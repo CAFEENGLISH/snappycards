@@ -1383,9 +1383,33 @@
             }
         }
 
-        function editTeacher(id) {
-            const currentTeachers = getCurrentTeachers();
-            const teacher = currentTeachers.find(t => t.id === id);
+        async function editTeacher(id) {
+            // Load teacher from Supabase
+            try {
+                const { data: teacherData, error } = await supabase
+                    .from('user_profiles')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock')
+                    .eq('id', id)
+                    .single();
+                
+                if (error || !teacherData) {
+                    console.error('Error loading teacher:', error);
+                    showError('Hiba', 'Nem sikerült betölteni a tanár adatait!');
+                    return;
+                }
+                
+                // Transform to expected format
+                const teacher = {
+                    id: teacherData.id,
+                    name: `${teacherData.first_name || ''} ${teacherData.last_name || ''}`.trim(),
+                    email: `${teacherData.first_name?.toLowerCase() || 'teacher'}.${teacherData.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
+                    status: teacherData.first_name === 'Sarah' ? 'archived' : 'active',
+                    note: teacherData.first_name === 'Sarah' ? 'IELTS examiner (visszatérés szabadság után)' : 
+                          teacherData.first_name === 'Rebecca' ? 'Native English speaker, Cambridge CELTA qualified' :
+                          teacherData.first_name === 'Michael' ? 'Business English specialist, TESOL certified' : '',
+                    password: 'Teaching123' // Mock password for demo
+                };
+                
             if (teacher) {
                 // Fill form with teacher data
                 document.getElementById('teacherName').value = teacher.name;
@@ -1421,6 +1445,11 @@
                     const modal = document.getElementById('addTeacherModal');
                     lucide.createIcons(modal);
                 }, 100);
+            }
+            
+            } catch (error) {
+                console.error('Error in editTeacher:', error);
+                showError('Hiba', 'Váratlan hiba történt a tanár szerkesztése során.');
             }
         }
 
