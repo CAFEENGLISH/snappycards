@@ -758,7 +758,11 @@
                     .eq('id', user.id)
                     .single();
                 
-                if (profile?.schools) {
+                console.log('🔍 DEBUG Profile:', profile);
+                console.log('🔍 DEBUG Profile.schools:', profile?.schools);
+                console.log('🔍 DEBUG Profile.school_id:', profile?.school_id);
+                
+                if (profile?.school_id && profile?.schools) {
                     currentSchool = profile.schools;
                     document.querySelector('.school-name').textContent = currentSchool.name;
                     console.log('🏫 School:', currentSchool.name);
