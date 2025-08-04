@@ -583,4 +583,4 @@ app.listen(PORT, () => {
     console.log(`🎯 Endpoints: /register, /send-confirmation`);
 });
 
-module.exports = app; 
+module.exports = app; // Force deployment Mon Aug  4 15:19:08 CEST 2025
