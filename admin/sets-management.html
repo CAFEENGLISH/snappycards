@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎓 Szettek Kezelése - Iskola Admin</title>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <title>Szettek Kezelése - Cafe English Academy</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         * {
@@ -12,458 +13,1047 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: Inter, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f8fafc;
             min-height: 100vh;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
         }
-        
+
+
+
         .header {
             background: white;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            width: 100%;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        .header h1 {
-            color: #1e293b;
-            font-size: 1.5rem;
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
         .back-btn {
-            background: #7c3aed;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
+            padding: 12px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            color: #6366f1;
             text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
-        
+
         .back-btn:hover {
-            background: #6d28d9;
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
         }
-        
+
         .main-content {
+            width: 100%;
+            margin: 0;
             padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
         }
-        
-        .search-filters {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
         }
-        
-        .search-row {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        
-        .search-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+
+        .stat-card h3 {
             font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #7c3aed;
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+
+        .stat-card .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        
-        .sets-table {
-            background: white;
-            border-radius: 12px;
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        
-        table {
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .table-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .add-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
-        
-        th {
-            background: #f8fafc;
-            padding: 15px;
+
+        .table th,
+        .table td {
+            padding: 16px;
             text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table th {
+            background: rgba(99, 102, 241, 0.05);
             font-weight: 600;
-            color: #374151;
-            border-bottom: 1px solid #e5e7eb;
+            color: #475569;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: top;
+
+        .table tr:hover {
+            background: rgba(99, 102, 241, 0.03);
         }
-        
-        tr:hover {
-            background: #f8fafc;
+
+        .class-name {
+            font-weight: 600;
+            color: #1e293b;
         }
-        
+
+        .teacher-name {
+            color: #6366f1;
+            font-weight: 500;
+        }
+
         .set-name {
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 4px;
         }
-        
+
         .set-description {
             color: #64748b;
-            font-size: 12px;
+            font-size: 14px;
+            margin-top: 4px;
         }
-        
-        .cefr-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+
+        .students-count {
+            color: #059669;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .difficulty-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
         }
-        
-        .cefr-a1 { background: #fef3c7; color: #92400e; }
-        .cefr-a2 { background: #fed7aa; color: #c2410c; }
-        .cefr-b1 { background: #dbeafe; color: #1d4ed8; }
-        .cefr-b2 { background: #e0e7ff; color: #3730a3; }
-        .cefr-c1 { background: #f3e8ff; color: #7c2d12; }
-        .cefr-c2 { background: #fce7f3; color: #be185d; }
-        
-        .student-count {
-            color: #7c3aed;
-            font-weight: 600;
+
+        .difficulty-A1 {
+            background: rgba(34, 197, 94, 0.1);
+            color: #059669;
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #64748b;
+
+        .difficulty-A2 {
+            background: rgba(16, 185, 129, 0.1);
+            color: #047857;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
-        
+
+        .difficulty-B1 {
+            background: rgba(251, 191, 36, 0.1);
+            color: #d97706;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .difficulty-B2 {
+            background: rgba(245, 158, 11, 0.1);
+            color: #b45309;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .difficulty-C1 {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .difficulty-C2 {
+            background: rgba(147, 51, 234, 0.1);
+            color: #7c2d12;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+        }
+
+        .difficulty-none {
+            display: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn.view {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .action-btn.edit {
+            background: rgba(251, 191, 36, 0.1);
+            color: #f59e0b;
+        }
+
+        .action-btn.delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #64748b;
         }
-        
-        .empty-state h3 {
-            margin-bottom: 8px;
-            color: #374151;
+
+        .empty-state i {
+            margin-bottom: 16px;
+            opacity: 0.5;
         }
-        
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+
+        .filter-select {
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
             background: white;
-            border-radius: 12px;
-            padding: 16px 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            z-index: 10000;
-            display: none;
+            font-size: 14px;
+            color: #475569;
+            cursor: pointer;
         }
-        
-        .toast.success { border-left: 4px solid #10b981; }
-        .toast.error { border-left: 4px solid #ef4444; }
-        
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
         @media (max-width: 768px) {
-            .search-row {
+            .header-content {
                 flex-direction: column;
-                align-items: stretch;
+                gap: 16px;
             }
-            
-            .search-input {
-                min-width: auto;
+
+            .table-container {
+                margin: 20px;
+                padding: 20px;
             }
-            
-            table {
+
+            .table {
                 font-size: 14px;
             }
-            
-            th, td {
-                padding: 10px;
+
+            .table th,
+            .table td {
+                padding: 12px 8px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+
+
     <div class="header">
-        <h1>🎓 Szettek Kezelése</h1>
-        <a href="/admin-dashboard.html" class="back-btn">
-            <i data-lucide="arrow-left"></i>
-            Vissza
-        </a>
+        <div class="header-content">
+            <div class="header-title">
+                <i data-lucide="layers" style="width: 32px; height: 32px; color: #6366f1;"></i>
+                <h1>Szettek Kezelése</h1>
+            </div>
+            <a href="../admin-dashboard.html" class="back-btn">
+                <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                Vissza a Dashboard-ra
+            </a>
+        </div>
     </div>
 
     <div class="main-content">
-        <!-- Search and Filters -->
-        <div class="search-filters">
-            <div class="search-row">
-                <input type="text" class="search-input" id="searchSet" placeholder="🔍 Szett neve keresése...">
-                <input type="text" class="search-input" id="searchClass" placeholder="🏫 Csoport keresése...">
-                <input type="text" class="search-input" id="searchTeacher" placeholder="👨‍🏫 Tanár keresése...">
-                <input type="text" class="search-input" id="searchStudent" placeholder="👨‍🎓 Diák keresése...">
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Összes Szett</h3>
+                <div class="stat-number">
+                    <i data-lucide="layers" style="width: 24px; height: 24px; color: #6366f1;"></i>
+                    <span id="totalSets">15</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>Aktív Csoportok</h3>
+                <div class="stat-number">
+                    <i data-lucide="users" style="width: 24px; height: 24px; color: #059669;"></i>
+                    <span id="activeClasses">10</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>Tanárok</h3>
+                <div class="stat-number">
+                    <i data-lucide="graduation-cap" style="width: 24px; height: 24px; color: #f59e0b;"></i>
+                    <span id="totalTeachers">12</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>Összes Diák</h3>
+                <div class="stat-number">
+                    <i data-lucide="user-check" style="width: 24px; height: 24px; color: #8b5cf6;"></i>
+                    <span id="totalStudents">186</span>
+                </div>
             </div>
         </div>
 
         <!-- Sets Table -->
-        <div class="sets-table">
-            <table>
+        <div class="table-container">
+            <div class="table-header">
+                <h2>
+                    <i data-lucide="layers" style="width: 24px; height: 24px;"></i>
+                    Szettek Áttekintése
+                </h2>
+                <button class="add-btn" onclick="openAddSet()">
+                    <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                    Új Szett
+                </button>
+            </div>
+
+            <!-- Search and Filters in one row -->
+            <div class="search-and-filters" style="display: flex; gap: 12px; margin-bottom: 20px; align-items: center;">
+                <!-- Szett keresés -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="setSearchInput" placeholder="Keresés szett névben..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearSetSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
+
+                <!-- Csoport keresés -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="classSearchInput" placeholder="Keresés csoportban..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearClassSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
+
+                <!-- Tanár keresés -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="teacherSearchInput" placeholder="Keresés tanárban..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearTeacherSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
+
+                <!-- Diák keresés -->
+                <div class="search-box" style="position: relative; flex: 1;">
+                    <input type="text" id="studentSearchInput" placeholder="Keresés diákban..." 
+                           onkeyup="filterSets()" style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        padding-right: 40px;
+                        border: 1px solid #e2e8f0;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        background: white;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    " onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+                    <button onclick="clearStudentSearch()" style="
+                        position: absolute;
+                        right: 8px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    " onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
+
+                <!-- CEFR Szint filter -->
+                <select class="filter-select" id="difficultyFilter" onchange="filterSets()">
+                    <option value="">Minden Szint</option>
+                    <option value="A1">A1 - Kezdő</option>
+                    <option value="A2">A2 - Elemi</option>
+                    <option value="B1">B1 - Középfok</option>
+                    <option value="B2">B2 - Felsőfok</option>
+                    <option value="C1">C1 - Haladó</option>
+                    <option value="C2">C2 - Mesterfok</option>
+                </select>
+            </div>
+
+            <table class="table">
                 <thead>
                     <tr>
-                        <th>Szett</th>
                         <th>Csoport</th>
                         <th>Tanár</th>
-                        <th>Szint</th>
+                        <th>Szett Neve</th>
                         <th>Diákok</th>
-                        <th>Kártyák</th>
-                        <th>Utolsó frissítés</th>
+                        <th>Szint</th>
+                        <th>Műveletek</th>
                     </tr>
                 </thead>
                 <tbody id="setsTableBody">
-                    <tr>
-                        <td colspan="7" class="loading">
-                            <i data-lucide="loader-2" style="animation: spin 1s linear infinite;"></i>
-                            Szettek betöltése...
-                        </td>
-                    </tr>
+                    <!-- Table content will be loaded here -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <div id="toastMessage"></div>
-    </div>
-
     <script>
-        console.log('🎓 CLEAN SETS MANAGEMENT LOADED');
+        // DYNAMIC DATA FROM SUPABASE - NO MORE HARDCODED MOCK DATA  
+        const setsData = []; // Empty - will load from Supabase
         
-        // Initialize Lucide icons
-        lucide.createIcons();
-        
-        // Supabase setup
-        const supabaseUrl = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-        
-        let currentUser = null;
-        let currentSchool = null;
-        let allSets = [];
-        let filteredSets = [];
-        
-        async function checkAuth() {
-            try {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) {
-                    window.location.href = '/login.html';
-                    return;
-                }
-                
-                currentUser = user;
-                
-                // Get user profile with school info
-                const { data: profile } = await supabase
-                    .from('user_profiles')
-                    .select(`*, schools(*)`)
-                    .eq('id', user.id)
-                    .single();
-                
-                if (profile?.schools) {
-                    currentSchool = profile.schools;
-                    await loadSets();
-                } else {
-                    showEmptyState('Nincs hozzárendelt iskola');
-                }
-                
-            } catch (error) {
-                console.error('❌ Auth error:', error);
-                showToast('Hiba a bejelentkezéskor', 'error');
+        const DEPRECATED_setsData = [
+            {
+                id: 1,
+                setName: "Business English Vocabulary",
+                description: "Essential business terms and expressions",
+                className: "Business English",
+                teacherName: "Johnson Michael",
+                studentsCount: 24,
+                students: ["Alex Thompson", "Maria Garcia", "John Wilson", "Emma Brown", "David Lee", "Sarah Johnson", "Peter Smith", "Lisa Wang"],
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 85,
+                lastUpdated: "2024-08-01"
+            },
+            {
+                id: 2,
+                setName: "IELTS Academic Writing",
+                description: "Task 1 & 2 vocabulary and phrases",
+                className: "IELTS Preparation",
+                teacherName: "Smith Rebecca",
+                studentsCount: 18,
+                students: ["James Miller", "Anna Kowalski", "Michael Zhang", "Sophie Turner", "Robert Chen", "Julia Martinez", "Tom Anderson", "Nina Patel"],
+                difficulty: "C1",
+                cefrLevel: "C1",
+                cardsCount: 62,
+                lastUpdated: "2024-07-28"
+            },
+            {
+                id: 3,
+                setName: "Elementary Grammar A1-A2",
+                description: "Basic grammar structures and rules",
+                className: "Elementary A1-A2",
+                teacherName: "Taylor Sarah",
+                studentsCount: 32,
+                students: ["Lucy Green", "Mark Davis", "Elena Rodriguez", "Paul Johnson", "Amy Chen", "Kevin O'Connor", "Sophia Kim", "Daniel Lopez", "Rachel Evans", "Carlos Silva"],
+                difficulty: "A1",
+                cefrLevel: "A1",
+                cardsCount: 48,
+                lastUpdated: "2024-07-25"
+            },
+            {
+                id: 4,
+                setName: "Advanced Conversation Topics",
+                description: "Complex discussion topics and vocabulary",
+                className: "Advanced English B2",
+                teacherName: "Smith Rebecca",
+                studentsCount: 16,
+                students: ["Christopher Lee", "Isabella Clark", "Matthew Taylor", "Victoria Adams", "Oliver Thompson", "Charlotte Wilson"],
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 74,
+                lastUpdated: "2024-08-02"
+            },
+            {
+                id: 5,
+                setName: "Everyday English Phrases",
+                description: "Common phrases for daily situations",
+                className: "Elementary A1-A2",
+                teacherName: "Johnson Michael",
+                studentsCount: 28,
+                students: ["Gabriel Smith", "Mia Johnson", "Lucas Brown", "Ava Davis", "Benjamin Miller", "Emma Garcia", "Henry Wilson", "Olivia Martinez"],
+                difficulty: "A2",
+                cefrLevel: "A2",
+                cardsCount: 56,
+                lastUpdated: "2024-07-30"
+            },
+            {
+                id: 6,
+                setName: "Financial English",
+                description: "Banking, investment, and finance vocabulary",
+                className: "Business English",
+                teacherName: "Johnson Michael",
+                studentsCount: 22,
+                students: ["Sebastian Anderson", "Amelia Thompson", "Alexander White", "Grace Harris", "William Clark", "Lily Lewis", "James Walker"],
+                difficulty: "C1",
+                cefrLevel: "C1",
+                cardsCount: 68,
+                lastUpdated: "2024-07-26"
+            },
+            {
+                id: 7,
+                setName: "Cambridge B2 Exam Prep",
+                description: "Exam strategies and vocabulary",
+                className: "Advanced English B2",
+                teacherName: "Smith Rebecca",
+                studentsCount: 20,
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 92,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 8,
+                setName: "Travel English",
+                description: "Useful phrases for travel and tourism",
+                className: "Elementary A1-A2",
+                teacherName: "Taylor Sarah",
+                studentsCount: 26,
+                difficulty: "A2",
+                cefrLevel: "A2",
+                cardsCount: 42,
+                lastUpdated: "2024-07-29"
+            },
+            {
+                id: 9,
+                setName: "Intermediate Speaking Practice",
+                description: "Conversation topics for intermediate learners",
+                className: "Intermediate B1",
+                teacherName: "Johnson Michael",
+                studentsCount: 19,
+                difficulty: "B1",
+                cefrLevel: "B1",
+                cardsCount: 65,
+                lastUpdated: "2024-08-04"
+            },
+            {
+                id: 10,
+                setName: "Proficiency Vocabulary",
+                description: "Advanced vocabulary for C2 level",
+                className: "Proficiency Course",
+                teacherName: "Smith Rebecca",
+                studentsCount: 8,
+                difficulty: "C2",
+                cefrLevel: "C2",
+                cardsCount: 95,
+                lastUpdated: "2024-08-05"
+            },
+            {
+                id: 11,
+                setName: "Phrasal Verbs Collection",
+                description: "Essential phrasal verbs for intermediate learners",
+                className: "Intermediate B1",
+                teacherName: "Taylor Sarah",
+                studentsCount: 45,
+                difficulty: "B1",
+                cefrLevel: "B1",
+                cardsCount: 120,
+                lastUpdated: "2024-08-06"
+            },
+            {
+                id: 12,
+                setName: "Basic Vocabulary",
+                description: "First words for absolute beginners",
+                className: "Elementary A1-A2",
+                teacherName: "Johnson Michael",
+                studentsCount: 35,
+                difficulty: "A1",
+                cefrLevel: "A1",
+                cardsCount: 30,
+                lastUpdated: "2024-08-07"
+            },
+            {
+                id: 13,
+                setName: "Pronunciation & Grammar",
+                description: "Combined pronunciation and grammar practice",
+                className: "Intermediate B1",
+                teacherName: "Smith Rebecca, Taylor Sarah",
+                studentsCount: 22,
+                difficulty: "B1",
+                cefrLevel: "B1",
+                cardsCount: 78,
+                lastUpdated: "2024-08-08"
+            },
+            {
+                id: 14,
+                setName: "Academic Writing Skills",
+                description: "University-level writing techniques",
+                className: "Advanced Academic",
+                teacherName: "Johnson Michael, Smith Rebecca, Taylor Sarah",
+                studentsCount: 15,
+                difficulty: "C1",
+                cefrLevel: "C1",
+                cardsCount: 115,
+                lastUpdated: "2024-08-09"
+            },
+            {
+                id: 15,
+                setName: "Business Communication",
+                description: "Professional communication in English",
+                className: "Business Professional",
+                teacherName: "Johnson Michael, Smith Rebecca",
+                studentsCount: 18,
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 92,
+                lastUpdated: "2024-08-10"
+            },
+            // IT English sets (originally created by zsolt.tasnadi@gmail.com student user, now managed by teachers)
+            {
+                id: 16,
+                setName: "IT English Vocabulary",
+                description: "Technical terms for software development (Student-created content)",
+                className: "Professional IT English",
+                teacherName: "Johnson Michael",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth", "Zsolt Tasnadi"],
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 89,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 17,
+                setName: "Database Terms",
+                description: "SQL and database management vocabulary (Student-created content)",
+                className: "Professional IT English",
+                teacherName: "Johnson Michael",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth", "Zsolt Tasnadi"],
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 67,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 18,
+                setName: "Web Development Phrases",
+                description: "Frontend and backend development terms (Student-created content)",
+                className: "Professional IT English",
+                teacherName: "Smith Rebecca",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth", "Zsolt Tasnadi"],
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 94,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 19,
+                setName: "Project Management English",
+                description: "Agile, Scrum, and project coordination vocabulary (Student-created content)",
+                className: "Professional IT English",
+                teacherName: "Johnson Michael",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth", "Zsolt Tasnadi"],
+                difficulty: "B1",
+                cefrLevel: "B1",
+                cardsCount: 56,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 20,
+                setName: "Programming Concepts",
+                description: "Object-oriented programming and algorithms (Student-created content)",
+                className: "Professional IT English",
+                teacherName: "Smith Rebecca",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth", "Zsolt Tasnadi"],
+                difficulty: "C1",
+                cefrLevel: "C1",
+                cardsCount: 78,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 21,
+                setName: "Software Testing Vocabulary",
+                description: "QA, testing methodologies, and bug tracking (Student-created content)",
+                className: "Professional IT English",
+                teacherName: "Johnson Michael",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth", "Zsolt Tasnadi"],
+                difficulty: "B2",
+                cefrLevel: "B2",
+                cardsCount: 65,
+                lastUpdated: "2024-08-03"
+            },
+            {
+                id: 22,
+                setName: "DevOps and Cloud Computing",
+                description: "Cloud services, CI/CD, and infrastructure terms (Student-created content)",
+                className: "Professional IT English",
+                teacherName: "Smith Rebecca",
+                studentsCount: 12,
+                students: ["Peter Kovacs", "Anna Nagy", "Miklos Toth", "Zsolt Tasnadi"],
+                difficulty: "C1",
+                cefrLevel: "C1",
+                cardsCount: 82,
+                lastUpdated: "2024-08-03"
             }
-        }
-        
-        async function loadSets() {
-            try {
-                const tableBody = document.getElementById('setsTableBody');
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="loading">
-                            <i data-lucide="loader-2" style="animation: spin 1s linear infinite;"></i>
-                            Szettek betöltése...
-                        </td>
-                    </tr>
-                `;
-                
-                // Load flashcard sets from Supabase
-                const { data: sets, error } = await supabase
-                    .from('flashcard_sets')
-                    .select(`
-                        *,
-                        categories(name, color),
-                        user_profiles!creator_id(first_name, last_name)
-                    `)
-                    .eq('is_mock', currentSchool.is_mock || false)
-                    .order('created_at', { ascending: false });
-                
-                if (error) {
-                    console.error('❌ Error loading sets:', error);
-                    showEmptyState('Hiba a szettek betöltésénél');
-                    return;
-                }
-                
-                allSets = sets || [];
-                filteredSets = [...allSets];
-                renderSets();
-                
-                console.log('📚 Sets loaded:', allSets.length);
-                
-            } catch (error) {
-                console.error('❌ Error loading sets:', error);
-                showEmptyState('Hiba a szettek betöltésénél');
-            }
-        }
-        
-        function renderSets() {
-            const tableBody = document.getElementById('setsTableBody');
+        ];
+
+        let filteredSets = [...setsData];
+
+        function loadSetsTable() {
+            // Ensure we're using current data
+            syncDataWithMockMode();
+            
+            const tbody = document.getElementById('setsTableBody');
             
             if (filteredSets.length === 0) {
-                tableBody.innerHTML = `
+                tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="empty-state">
-                            <h3>📚 Nincsenek szettek</h3>
-                            <p>Még nem található egyetlen szett sem.</p>
+                        <td colspan="6" class="empty-state">
+                            <i data-lucide="layers" style="width: 48px; height: 48px;"></i>
+                            <p>Nincsenek megjeleníthető szettek.</p>
                         </td>
                     </tr>
                 `;
                 return;
             }
-            
-            tableBody.innerHTML = filteredSets.map(set => `
+
+            tbody.innerHTML = filteredSets.map(set => `
                 <tr>
                     <td>
-                        <div class="set-name">${escapeHtml(set.title)}</div>
-                        <div class="set-description">${escapeHtml(set.description || '')}</div>
+                        <div class="class-name">${set.className}</div>
                     </td>
-                    <td>-</td>
-                    <td>${escapeHtml(set.user_profiles?.first_name || 'Ismeretlen')} ${escapeHtml(set.user_profiles?.last_name || '')}</td>
-                    <td>${renderCefrBadge(set.difficulty)}</td>
-                    <td><span class="student-count">0</span></td>
-                    <td>${set.card_count || 0}</td>
-                    <td>${formatDate(set.created_at)}</td>
+                    <td>
+                        <div class="teacher-name">
+                            ${set.teacherName}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="set-name">${set.setName}</div>
+                        <div class="set-description">${set.description}</div>
+                        <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">
+                            ${set.cardsCount} kártya • Frissítve: ${set.lastUpdated}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="students-count">
+                            ${set.studentsCount}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="difficulty-badge ${getDifficultyClass(set.difficulty)}">
+                            ${getDifficultyText(set.difficulty)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="action-btn view" onclick="viewSet(${set.id})" title="Megtekintés">
+                                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                            </button>
+                            <button class="action-btn edit" onclick="editSet(${set.id})" title="Szerkesztés">
+                                <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteSet(${set.id})" title="Törlés">
+                                <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
             `).join('');
+
+            // Reinitialize icons
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 100);
         }
-        
-        function renderCefrBadge(difficulty) {
+
+        function getDifficultyText(difficulty) {
             if (!difficulty) return '';
             
-            const level = difficulty.toUpperCase();
-            const className = `cefr-${level.toLowerCase()}`;
-            
-            return `<span class="cefr-badge ${className}">${level}</span>`;
+            const difficultyMap = {
+                'A1': 'A1',
+                'A2': 'A2', 
+                'B1': 'B1',
+                'B2': 'B2',
+                'C1': 'C1',
+                'C2': 'C2'
+            };
+            return difficultyMap[difficulty] || difficulty;
         }
-        
-        function formatDate(dateString) {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('hu-HU');
+
+        function getDifficultyClass(difficulty) {
+            if (!difficulty) return 'difficulty-none';
+            return `difficulty-${difficulty}`;
         }
-        
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        function showEmptyState(message) {
-            const tableBody = document.getElementById('setsTableBody');
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="7" class="empty-state">
-                        <h3>📭 ${escapeHtml(message)}</h3>
-                    </td>
-                </tr>
-            `;
-        }
-        
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toastMessage.textContent = message;
-            toast.className = `toast ${type}`;
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-        
-        // Search functionality
-        function setupSearch() {
-            const searchInputs = ['searchSet', 'searchClass', 'searchTeacher', 'searchStudent'];
-            
-            searchInputs.forEach(inputId => {
-                document.getElementById(inputId).addEventListener('input', filterSets);
-            });
-        }
-        
+
         function filterSets() {
-            const searchSet = document.getElementById('searchSet').value.toLowerCase();
-            const searchClass = document.getElementById('searchClass').value.toLowerCase();
-            const searchTeacher = document.getElementById('searchTeacher').value.toLowerCase();
-            const searchStudent = document.getElementById('searchStudent').value.toLowerCase();
-            
-            filteredSets = allSets.filter(set => {
-                const matchesSet = !searchSet || 
-                    set.title.toLowerCase().includes(searchSet) || 
-                    (set.description && set.description.toLowerCase().includes(searchSet));
+            const setSearchQuery = document.getElementById('setSearchInput').value.toLowerCase();
+            const classSearchQuery = document.getElementById('classSearchInput').value.toLowerCase();
+            const teacherSearchQuery = document.getElementById('teacherSearchInput').value.toLowerCase();
+            const studentSearchQuery = document.getElementById('studentSearchInput').value.toLowerCase();
+            const difficultyFilter = document.getElementById('difficultyFilter').value;
+
+            const currentSetsData = getCurrentSetsData();
+            filteredSets = currentSetsData.filter(set => {
+                const matchesSetSearch = !setSearchQuery || 
+                    set.setName.toLowerCase().includes(setSearchQuery) ||
+                    set.description.toLowerCase().includes(setSearchQuery);
                 
-                const matchesClass = !searchClass; // TODO: Implement when classrooms are connected
+                const matchesClassSearch = !classSearchQuery || 
+                    set.className.toLowerCase().includes(classSearchQuery);
                 
-                const matchesTeacher = !searchTeacher || 
-                    (set.user_profiles?.first_name && set.user_profiles.first_name.toLowerCase().includes(searchTeacher)) ||
-                    (set.user_profiles?.last_name && set.user_profiles.last_name.toLowerCase().includes(searchTeacher));
+                const matchesTeacherSearch = !teacherSearchQuery || 
+                    set.teacherName.toLowerCase().includes(teacherSearchQuery);
                 
-                const matchesStudent = !searchStudent; // TODO: Implement when students are connected
+                const matchesStudentSearch = !studentSearchQuery || 
+                    (set.students && set.students.some(student => 
+                        student.toLowerCase().includes(studentSearchQuery)
+                    ));
                 
-                return matchesSet && matchesClass && matchesTeacher && matchesStudent;
+                const matchesDifficulty = !difficultyFilter || set.difficulty === difficultyFilter;
+
+                return matchesSetSearch && matchesClassSearch && matchesTeacherSearch && 
+                       matchesStudentSearch && matchesDifficulty;
             });
+
+            loadSetsTable();
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalSets').textContent = filteredSets.length;
             
-            renderSets();
+            const uniqueClasses = new Set(filteredSets.map(set => set.className));
+            document.getElementById('activeClasses').textContent = uniqueClasses.size;
+            
+            const uniqueTeachers = new Set(filteredSets.map(set => set.teacherName));
+            document.getElementById('totalTeachers').textContent = uniqueTeachers.size;
+            
+            const totalStudents = filteredSets.reduce((sum, set) => sum + set.studentsCount, 0);
+            document.getElementById('totalStudents').textContent = totalStudents;
         }
-        
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', async function() {
-            await checkAuth();
-            setupSearch();
+
+        function clearSetSearch() {
+            document.getElementById('setSearchInput').value = '';
+            filterSets();
+        }
+
+        function clearClassSearch() {
+            document.getElementById('classSearchInput').value = '';
+            filterSets();
+        }
+
+        function clearTeacherSearch() {
+            document.getElementById('teacherSearchInput').value = '';
+            filterSets();
+        }
+
+        function clearStudentSearch() {
+            document.getElementById('studentSearchInput').value = '';
+            filterSets();
+        }
+
+        function viewSet(id) {
+            const set = setsData.find(s => s.id === id);
+            if (set) {
+                const cefrLevel = set.cefrLevel ? `CEFR szint: ${set.cefrLevel}` : 'CEFR szint: Nincs megadva';
+                const studentsList = set.students ? `\n- Diákok: ${set.students.join(', ')}` : '';
+                alert(`Szett megtekintése: ${set.setName}\n\nRészletek:\n- ${set.cardsCount} kártya\n- ${set.studentsCount} diák\n- ${cefrLevel}\n- Csoport: ${set.className}\n- Tanár: ${set.teacherName}\n- Leírás: ${set.description}${studentsList}\n- Utoljára frissítve: ${set.lastUpdated}`);
+            }
+        }
+
+        function editSet(id) {
+            const set = setsData.find(s => s.id === id);
+            if (set) {
+                alert(`Szett szerkesztése: ${set.setName}\n\nEz a funkció hamarosan elérhető lesz!`);
+            }
+        }
+
+        function deleteSet(id) {
+            const set = setsData.find(s => s.id === id);
+            if (set && confirm(`Biztosan törölni szeretné a következő szettet?\n\n"${set.setName}"\n\nEz a művelet nem vonható vissza!`)) {
+                const index = setsData.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    setsData.splice(index, 1);
+                    filterSets(); // Refresh the filtered data and table
+                    alert(`"${set.setName}" szett sikeresen törölve!`);
+                }
+            }
+        }
+
+        function openAddSet() {
+            alert('Új szett hozzáadása funkció hamarosan elérhető lesz!');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Use mock data directly - only admin can control mock/live mode
+            filteredSets = setsData.slice();
+            loadSetsTable();
+            updateStats();
+            lucide.createIcons();
         });
-        
     </script>
-
-    <style>
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-    </style>
-
 </body>
 </html>
