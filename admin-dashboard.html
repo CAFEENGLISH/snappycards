@@ -798,12 +798,20 @@
                 console.log('🔍 Loading statistics for school:', currentSchool.name, 'isMock:', isMockSchool);
                 
                 // Load teachers count
-                const { count: teachersCount } = await supabase
+                console.log('🔍 TEACHERS QUERY:', {
+                    school_id: currentSchool.id,
+                    user_role: 'teacher', 
+                    is_mock: isMockSchool
+                });
+                
+                const { count: teachersCount, error: teachersError } = await supabase
                     .from('user_profiles')
                     .select('*', { count: 'exact', head: true })
                     .eq('school_id', currentSchool.id)
                     .eq('user_role', 'teacher')
                     .eq('is_mock', isMockSchool);
+                    
+                console.log('🔍 TEACHERS RESULT:', { teachersCount, teachersError });
                 
                 // Load classrooms count  
                 const { count: classroomsCount } = await supabase
