@@ -862,9 +862,6 @@
         let filteredSets = [...setsData];
 
         function loadSetsTable() {
-            // Ensure we're using current data
-            syncDataWithMockMode();
-            
             const tbody = document.getElementById('setsTableBody');
             
             if (filteredSets.length === 0) {
@@ -1048,7 +1045,6 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            // Use mock data directly - only admin can control mock/live mode
             filteredSets = setsData.slice();
             loadSetsTable();
             updateStats();

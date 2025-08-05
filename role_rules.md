@@ -244,6 +244,8 @@ teacher_classroom_assignments:
 3. **Fokozatos jogosultságok**: Diák < Tanár < Iskola Admin
 4. **Adatvédelem**: Mindenki csak a saját adataihoz fér hozzá (+ jogosultságok szerint)
 5. **Skálázhatóság**: Egy diáktól több ezer fős iskoláig
+6. **🔑 EGY EMAIL = EGY SZEREPKÖR**: Minden email cím csak egyetlen szerepkörrel rendelkezhet
+7. **🚀 EGYSZER DÖNTÉS**: Auth során egyszer eldöntjük a dashboard célt, nincs átirányítgatás
 
 ---
 
@@ -262,5 +264,56 @@ teacher_classroom_assignments:
 2. Admin regisztrál tanárokat → emailek
 3. Tanárok létrehozzák osztályaikat → meghívják diákjaikat
 4. Admin teljes rálátással irányít
+
+---
+
+## ⚠️ KRITIKUS: AUTHENTICATION LOGIKA
+
+### 🔑 Alapelv: EGY EMAIL = EGY SZEREPKÖR
+- **Minden email cím** pontosan **egy szerepkörrel** rendelkezik
+- **Nincs szerepkör váltás** ugyanazon email címen
+- **Nincs többszörös dashboard hozzáférés**
+
+### 🚀 HELYES AUTHENTICATION FLOW:
+```javascript
+// ✅ HELYES - Login során egyszer döntünk
+async function handleLogin(email, password) {
+    const { user } = await supabase.auth.signInWithPassword({email, password});
+    const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('user_role')
+        .eq('id', user.id)
+        .single();
+    
+    // EGYSZER döntünk, melyik dashboard-ra irányítjuk
+    switch(profile.user_role) {
+        case 'student': 
+            window.location.href = '/student-dashboard.html';
+            break;
+        case 'teacher': 
+            window.location.href = '/teacher-dashboard.html';
+            break;
+        case 'school_admin': 
+            window.location.href = '/admin-dashboard.html';
+            break;
+    }
+}
+```
+
+### ❌ ROSSZ MEGOLDÁS (jelenlegi):
+```javascript
+// ❌ ROSSZ - Dashboard-okban role ellenőrzés és átirányítás
+// Ez felesleges complexity és rossz UX!
+if (userRole !== 'teacher') {
+    // Miért irányítjuk át? Hogyan került ide?
+    window.location.href = 'student-dashboard.html';
+}
+```
+
+### 🎯 KÖVETKEZMÉNY:
+- **🚫 NINCS** role-based redirect a dashboard-okban
+- **✅ CSAK** authentication során döntünk egyszer
+- **✅ EGYSZERŰ** és logikus user experience
+- **✅ BIZTONSÁGOS** - mindenki oda kerül, ahova való
 
 Ez a szabályrendszer biztosítja, hogy a SnappyCards rugalmasan alkalmazkodjon minden oktatási környezethez, a magántanároktól a nagy iskolákig.

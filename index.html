@@ -12,10 +12,15 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Snappy Cards Logo Component -->
+    <!-- Snappy Cards Components -->
+    <link rel="stylesheet" href="components/common.css">
     <link rel="stylesheet" href="components/snappy-cards-logo.css">
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
+    <script src="lib/helpers.js"></script>
+    <script src="lib/auth.js"></script>
+    <script src="lib/api.js"></script>
     <script src="lib/favicon.js"></script>
     <style>
         * {
@@ -1079,7 +1084,7 @@
             
             <div class="multimodal-content">
                 <div class="multimodal-hero fade-in">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=600&fit=crop&crop=center" alt="Multimodal learning with various content types" loading="lazy">
+                    <img src="images/create-a-sleek--futuristic-hero-illustration-symbo.png" alt="Multimodal learning with various content types" loading="lazy">
                 </div>
                 <div class="content-types">
                     <div class="content-type fade-in">
@@ -1190,11 +1195,8 @@
             });
         }
 
-        // Supabase configuration
-        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase client from central configuration
+        const supabase = window.supabaseClient;
 
         // Form submission
         async function handleSubmit(event) {
@@ -1234,7 +1236,7 @@
                 }
 
                 // Send email via Node.js backend API on Render
-                const emailResponse = await fetch('https://snappycards-api.onrender.com/send-confirmation', {
+                const emailResponse = await fetch(window.SNAPPY_CONFIG.api.baseUrl + window.SNAPPY_CONFIG.api.endpoints.sendConfirmation, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

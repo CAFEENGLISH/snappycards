@@ -13,6 +13,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
     <style>
         * {
             margin: 0;
@@ -144,11 +145,8 @@
     </div>
 
     <script>
-        // Supabase configuration
-        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase client from central configuration
+        const supabase = window.supabaseClient;
 
         // Get token from URL
         const urlParams = new URLSearchParams(window.location.search);

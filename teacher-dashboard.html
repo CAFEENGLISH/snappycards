@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="components/snappy-cards-logo.css">
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
     <script src="lib/favicon.js"></script>
     <script src="lib/i18n.js"></script>
     
@@ -614,11 +615,8 @@
     </div>
 
     <script>
-        // Supabase configuration
-        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase client from central configuration
+        const supabase = window.supabaseClient;
         let currentUser = null;
 
         // Initialize page
@@ -642,18 +640,8 @@
                 currentUser = session.user;
                 console.log('Current user:', currentUser);
                 
-                // Check if user is teacher
-                const userRole = currentUser.user_metadata?.user_role || 'student';
-                if (userRole !== 'teacher') {
-                    console.log('User is not a teacher, redirecting...');
-                    // Redirect to appropriate dashboard
-                    if (userRole === 'school_admin') {
-                        window.location.href = 'admin-dashboard.html';
-                    } else {
-                        window.location.href = 'dashboard.html';
-                    }
-                    return;
-                }
+                // ✅ NINCS ROLE CHECK - user már a helyes dashboardon van!
+                // Auth során eldöntöttük, hogy ide irányítsuk
                 
                 updateUserInfo();
                 
@@ -742,82 +730,34 @@
             const studentsList = document.getElementById('studentsList');
             studentsList.innerHTML = '<p>🔄 Diákok betöltése...</p>';
             
-            // Mock data for now
-            const mockStudents = [
-                { id: 1, name: 'Nagy Péter', email: 'peter.nagy@example.com', class: '9.A Magyar' },
-                { id: 2, name: 'Kiss Anna', email: 'anna.kiss@example.com', class: '9.B Angol' },
-                { id: 3, name: 'Kovács János', email: 'janos.kovacs@example.com', class: '9.A Magyar' }
-            ];
-            
-            studentsList.innerHTML = '';
-            mockStudents.forEach(student => {
-                const studentDiv = document.createElement('div');
-                studentDiv.className = 'student-item';
-                studentDiv.innerHTML = `
-                    <div class="student-info">
-                        <div class="student-avatar">${student.name.charAt(0)}</div>
-                        <div>
-                            <div style="font-weight: 600;">${student.name}</div>
-                            <div style="font-size: 12px; color: #64748b;">${student.email} • ${student.class}</div>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="small-btn" onclick="viewStudentDetails(${student.id})">Részletek</button>
-                    </div>
-                `;
-                studentsList.appendChild(studentDiv);
-            });
+            // TODO: Load students from Supabase for current teacher's classrooms
+            studentsList.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #64748b;">
+                    <i data-lucide="users" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                    <p>A diákok kezelése hamarosan elérhető lesz!</p>
+                </div>
+            `;
         }
 
         async function loadClasses() {
             const classesList = document.getElementById('classesList');
             classesList.innerHTML = '<p>🔄 Osztályok betöltése...</p>';
             
-            // Mock data for now
-            const mockClasses = [
-                { id: 1, name: '9.A Magyar', description: 'Magyar nyelv és irodalom', students: 25 },
-                { id: 2, name: '9.B Angol', description: 'Angol nyelv haladó', students: 22 },
-                { id: 3, name: '10.A Matematika', description: 'Matematika emelt szint', students: 18 }
-            ];
-            
-            classesList.innerHTML = '';
-            mockClasses.forEach(cls => {
-                const classDiv = document.createElement('div');
-                classDiv.className = 'class-item';
-                classDiv.innerHTML = `
-                    <div class="class-info">
-                        <div class="class-avatar">${cls.name.charAt(0)}</div>
-                        <div>
-                            <div style="font-weight: 600;">${cls.name}</div>
-                            <div style="font-size: 12px; color: #64748b;">${cls.description} • ${cls.students} diák</div>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="small-btn" onclick="viewClassDetails(${cls.id})">Diákok Megtekintése</button>
-                    </div>
-                `;
-                classesList.appendChild(classDiv);
-            });
+            // TODO: Load classes from Supabase for current teacher
+            classesList.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #64748b;">
+                    <i data-lucide="school" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                    <p>A csoportok kezelése hamarosan elérhető lesz!</p>
+                </div>
+            `;
         }
 
         function loadClassesForSelect() {
-            const mockClasses = [
-                { id: 1, name: '9.A Magyar' },
-                { id: 2, name: '9.B Angol' },
-                { id: 3, name: '10.A Matematika' }
-            ];
-            
+            // TODO: Load classes from Supabase for current teacher
             const selects = ['studentClass', 'inviteClass'];
             selects.forEach(selectId => {
                 const select = document.getElementById(selectId);
-                // Clear existing options except first
-                select.innerHTML = '<option value="">Válasszon osztályt...</option>';
-                mockClasses.forEach(cls => {
-                    const option = document.createElement('option');
-                    option.value = cls.id;
-                    option.textContent = cls.name;
-                    select.appendChild(option);
-                });
+                select.innerHTML = '<option value="">Nincs elérhető csoport</option>';
             });
         }
 

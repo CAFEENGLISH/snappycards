@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="components/snappy-cards-logo.css">
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
     
     <style>
         * {
@@ -487,7 +488,7 @@
                 </a>
                 
                 <div class="header-actions">
-                    <a href="dashboard.html" class="back-btn">← Vissza a Dashboard-ra</a>
+                    <a href="student-dashboard.html" class="back-btn">← Vissza a Dashboard-ra</a>
                 </div>
             </div>
         </div>
@@ -584,11 +585,8 @@
     </div>
 
     <script>
-        // Supabase configuration
-        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase client from central configuration
+        const supabase = window.supabaseClient;
 
         let currentUser = null;
         let currentSet = null;
@@ -617,7 +615,7 @@
 
                 if (!setId) {
                     alert('Nincs kiválasztott szett!');
-                    window.location.href = '/dashboard.html';
+                    window.location.href = '/student-dashboard.html';
                     return;
                 }
 
@@ -631,7 +629,7 @@
             } catch (error) {
                 console.error('Error initializing study session:', error);
                 alert('Hiba történt a tanulási szesszió indításakor');
-                window.location.href = '/dashboard.html';
+                                        window.location.href = '/student-dashboard.html';
             }
         }
 
@@ -806,13 +804,13 @@
                     const iframe = document.getElementById('cardYoutube');
                     // Convert YouTube URL to embed format
                     let embedUrl = mediaUrl;
-                    if (mediaUrl.includes('youtube.com/watch?v=')) {
-                        const videoId = mediaUrl.split('v=')[1].split('&')[0];
-                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                    } else if (mediaUrl.includes('youtu.be/')) {
-                        const videoId = mediaUrl.split('youtu.be/')[1].split('?')[0];
-                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                    }
+                                if (mediaUrl.includes('youtube.com/watch?v=')) {
+                const videoId = mediaUrl.split('v=')[1].split('&')[0];
+                embedUrl = window.SNAPPY_CONFIG.external.youtube.embedBase + videoId;
+            } else if (mediaUrl.includes('youtu.be/')) {
+                const videoId = mediaUrl.split('youtu.be/')[1].split('?')[0];
+                embedUrl = window.SNAPPY_CONFIG.external.youtube.embedBase + videoId;
+            }
                     iframe.src = embedUrl;
                     iframe.style.display = 'block';
                     break;

@@ -590,7 +590,7 @@
     <div class="container">
         <!-- Hero Section -->
         <div class="hero-section">
-            <div class="hero-glass-container" onclick="window.location.href='dashboard.html'" style="cursor: pointer;" title="Vissza a Dashboard-ra">
+            <div class="hero-glass-container" onclick="window.location.href='student-dashboard.html'" style="cursor: pointer;" title="Vissza a Dashboard-ra">
                 <div class="hero-glass-card">
                     <h1 class="hero-title">
                         <span class="hero-gradient-text">Snappy</span>
@@ -721,14 +721,12 @@
     </div>
 
     <!-- Include Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
     
     <script>
-        // Supabase configuration  
-        const SUPABASE_URL = 'https://ycxqxdhaxehspypqbnpi.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase client from central configuration
+        const supabase = window.supabaseClient;
         // Global Variables
         let currentSetId = null;
         let currentUserId = null;
@@ -1405,7 +1403,7 @@
                             ${statistics.tudom} tudom • ${statistics.bizonytalan} bizonytalan • ${statistics.tanulandó} tanulandó
                         </p>
                     </div>
-                    <button onclick="window.location.href='dashboard.html'" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    <button onclick="window.location.href='student-dashboard.html'" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                         Vissza a Dashboard-ra
                     </button>
                 </div>
@@ -2083,7 +2081,7 @@
             await saveStudyProgress();
             
             console.log('✅ Haladás mentve, átirányítás dashboard-ra');
-            window.location.href = 'dashboard.html';
+                            window.location.href = 'student-dashboard.html';
         }
 
         // Text-to-Speech function (for future audio implementation)
@@ -2112,7 +2110,7 @@
                 <div style="text-align: center; padding: 3rem; background: rgba(239, 68, 68, 0.1); backdrop-filter: blur(20px); border-radius: 1.5rem; border: 1px solid rgba(239, 68, 68, 0.3); color: #dc2626;">
                     <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">❌ Hiba</h2>
                     <p style="margin-bottom: 2rem;">${message}</p>
-                    <button onclick="window.location.href='dashboard.html'" style="background: #dc2626; color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                    <button onclick="window.location.href='student-dashboard.html'" style="background: #dc2626; color: white; border: none; padding: 1rem 2rem; border-radius: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer;">
                         Vissza a Dashboard-ra
                     </button>
                 </div>
