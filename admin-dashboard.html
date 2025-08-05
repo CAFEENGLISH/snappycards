@@ -746,8 +746,7 @@
         async function checkAuth() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                console.log('✅ User logged in:', user.email);
-                console.log('✅ User role:', user.user_metadata?.user_role);
+
                 currentUser = user;
                 
                 // Get user profile
@@ -757,7 +756,7 @@
                     .eq('id', user.id)
                     .single();
                 
-                console.log('🔍 DEBUG Profile:', profile);
+
                 
                 // Get school if user has school_id
                 if (profile?.school_id) {
@@ -767,21 +766,21 @@
                         .eq('id', profile.school_id)
                         .single();
                         
-                    console.log('🔍 DEBUG School:', school);
+    
                     
                     if (school) {
                         currentSchool = school;
                         document.querySelector('.school-name').textContent = currentSchool.name;
-                        console.log('🏫 School:', currentSchool.name);
+
                         await loadSchoolStatistics();
                     } else {
                         document.querySelector('.school-name').textContent = 'Új Iskola Létrehozása';
-                        console.log('📝 School not found - showing empty dashboard');
+
                         showEmptyDashboard();
                     }
                 } else {
                     document.querySelector('.school-name').textContent = 'Új Iskola Létrehozása';
-                    console.log('📝 No school assigned - showing empty dashboard');
+
                     showEmptyDashboard();
                 }
                 
@@ -789,7 +788,7 @@
                 document.getElementById('userName').textContent = firstName;
                 document.getElementById('userAvatar').textContent = firstName.charAt(0).toUpperCase();
             } else {
-                console.log('❌ No user - but NOT redirecting!');
+
                 document.getElementById('userName').textContent = 'Guest';
                 document.getElementById('userAvatar').textContent = 'G';
                 showEmptyDashboard();
@@ -800,21 +799,17 @@
             try {
                 // Ensure currentSchool is fully loaded
                 if (!currentSchool || !currentSchool.hasOwnProperty('is_mock')) {
-                    console.log('⚠️ currentSchool not fully loaded, skipping statistics load');
+    
                     return;
                 }
                 
                 // Determine if we should show mock or live data
                 const isMockSchool = currentSchool.is_mock || false;
                 
-                console.log('🔍 Loading statistics for school:', currentSchool.name, 'isMock:', isMockSchool);
+    
                 
                 // Load teachers count
-                console.log('🔍 TEACHERS QUERY:', {
-                    school_id: currentSchool.id,
-                    user_role: 'teacher', 
-                    is_mock: isMockSchool
-                });
+
                 
                 const { count: teachersCount, error: teachersError } = await supabase
                     .from('user_profiles')
@@ -823,7 +818,7 @@
                     .eq('user_role', 'teacher')
                     .eq('is_mock', isMockSchool);
                     
-                console.log('🔍 TEACHERS RESULT:', { teachersCount, teachersError });
+
                 
                 // Load classrooms count  
                 const { count: classroomsCount } = await supabase
@@ -862,7 +857,7 @@
                 document.querySelector('.stats .stat-card:nth-child(3) .stat-number').textContent = studentsCount;
                 document.querySelector('.stats .stat-card:nth-child(4) .stat-number').textContent = setsCount || 0;
                 
-                console.log('📊 Statistics loaded:', { teachersCount, classroomsCount, setsCount, studentsCount, isMockSchool });
+    
             } catch (error) {
                 console.error('❌ Error loading statistics:', error);
                 showEmptyDashboard();
@@ -875,7 +870,7 @@
             document.querySelector('.stats .stat-card:nth-child(2) .stat-number').textContent = '0';
             document.querySelector('.stats .stat-card:nth-child(3) .stat-number').textContent = '0';
             document.querySelector('.stats .stat-card:nth-child(4) .stat-number').textContent = '0';
-            console.log('📊 Showing empty dashboard');
+
         }
         
         // Toggle user menu
@@ -1008,7 +1003,7 @@
                     
                     // Update local objects
                     currentSchool = newSchool;
-                    console.log('✅ New school created:', newSchool);
+    
                 }
                 
                 // Update header with new school name
@@ -1021,9 +1016,7 @@
                 currentUser.user_metadata = currentUser.user_metadata || {};
                 currentUser.user_metadata.first_name = adminName;
                 
-                console.log('✅ Settings saved successfully:', {
-                    schoolName, schoolAddress, adminName, adminEmail, adminPhone
-                });
+
                 
                 showSuccess('Beállítások mentve', 'Az iskola beállítások sikeresen frissítve!');
                 closeSchoolSettings();
@@ -1225,13 +1218,7 @@
                     return;
                 }
 
-                console.log('🔍 Calling backend API for teacher update:', {
-                    teacherId: window.editingTeacherId,
-                    firstName,
-                    lastName,
-                    note,
-                    hasToken: !!session.access_token
-                });
+
 
                 // Call backend admin API instead of direct Supabase
                 // FORCE PRODUCTION: Always use Render.com backend for testing
@@ -1265,7 +1252,7 @@
                 const profileData = result.data?.teacher;
                 const profileError = null;
 
-                console.log('✅ Backend API Success:', result);
+
 
                 // Handle email and password updates via separate backend endpoints
                 // Always update password if it's changed (including back to default Teaching123)
@@ -1285,7 +1272,7 @@
 
                         const passwordResult = await passwordResponse.json();
                         if (passwordResponse.ok) {
-                            console.log('✅ Password updated successfully');
+
                             // Password is now stored in database via backend API
                             // Show visual feedback for password change
                             const passwordField = document.getElementById('teacherPassword');
@@ -1305,7 +1292,7 @@
                 }
                 
                 // Handle email update via backend
-                console.log(`🔍 Email update check: email="${email}", profileData?.email="${profileData?.email}", will update: ${email && email !== profileData?.email}`);
+
                 if (email && email !== profileData?.email) {
                     try {
                         const emailResponse = await fetch(`${backendUrl}/admin/update-teacher-email`, {
@@ -1322,7 +1309,7 @@
 
                         const emailResult = await emailResponse.json();
                         if (emailResponse.ok) {
-                            console.log('✅ Email updated successfully');
+
                         } else {
                             console.error('❌ Email update failed:', emailResult);
                         }
@@ -1348,7 +1335,7 @@
                 loadTeachers(); // Refresh teachers modal content
                 loadSchoolStatistics(); // Refresh dashboard statistics
                 
-                console.log('🔄 Refreshed teachers list and dashboard statistics');
+
                 
             } catch (error) {
                 console.error('Error in updateTeacher:', error);
@@ -1411,11 +1398,11 @@
                     return;
                 }
                 
-                console.log('🔍 RAW TEACHERS DATA from Supabase:', teachersData);
+    
                 
                 // Transform Supabase data to match expected format
                 const teachers = (teachersData || []).map(teacher => {
-                    console.log(`🔍 Processing teacher: ${teacher.first_name} ${teacher.last_name}, note: "${teacher.note}", email: "${teacher.email}", password: "${teacher.stored_password}"`);
+
                     // Get stored password from database or default
                     const realPassword = teacher.stored_password || 'Teaching123';
                     return {
@@ -1429,7 +1416,7 @@
                     };
                 });
                 
-                console.log('🔍 TRANSFORMED TEACHERS:', teachers);
+
                 
                 // Apply current filter
                 const filteredTeachers = teachers.filter(teacher => {

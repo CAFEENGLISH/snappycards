@@ -30,8 +30,7 @@ const backendUrl = process.env.BACKEND_URL ||
         : 'http://localhost:8080');
 
 // Debug URLs
-console.log(`🌐 Frontend URL: ${frontendUrl}`);
-console.log(`🔗 Backend URL: ${backendUrl}`);
+
 
 // Verify Resend API key
 if (!process.env.RESEND_API_KEY) {
@@ -231,7 +230,7 @@ app.post('/register', async (req, res) => {
                 }
                 
                 actualSupabaseUserId = newUser.user.id;
-                console.log(`✅ Supabase user created: ${actualSupabaseUserId}`);
+        
                 
             } catch (supabaseError) {
                 console.error('❌ Failed to create Supabase user:', supabaseError);
@@ -247,12 +246,7 @@ app.post('/register', async (req, res) => {
         const verificationUrl = `${backendUrl}/verify?email=${encodeURIComponent(email)}&supabase_user_id=${actualSupabaseUserId || 'pending'}`;
         const template = createVerificationEmailTemplate(firstName, verificationUrl, language);
 
-        console.log(`📧 Sending beautiful Resend email to: ${email}`);
-        console.log(`👤 User Role: ${userRole}`);
-        console.log(`🔗 Verification URL: ${verificationUrl}`);
-        if (actualSupabaseUserId) {
-            console.log(`👤 Supabase User ID: ${actualSupabaseUserId}`);
-        }
+
 
         // Send email via Resend
         const { data, error } = await resend.emails.send({
@@ -267,7 +261,7 @@ app.post('/register', async (req, res) => {
             throw new Error('Failed to send verification email');
         }
 
-        console.log('✅ Beautiful verification email sent successfully:', data.id);
+
 
         res.json({
             success: true,
@@ -325,8 +319,7 @@ app.post('/send-confirmation', async (req, res) => {
         // Get email template for waitlist
         const template = createVerificationEmailTemplate('Kedves felhasználó', confirmationUrl, 'hu');
 
-        console.log(`📧 Sending waitlist confirmation to: ${email}`);
-        console.log(`🔗 Confirmation URL: ${confirmationUrl}`);
+
 
         // Send email via Resend
         const { data, error } = await resend.emails.send({
@@ -341,7 +334,7 @@ app.post('/send-confirmation', async (req, res) => {
             throw new Error('Failed to send confirmation email');
         }
         
-        console.log('✅ Waitlist email sent successfully:', data.id);
+
 
         res.json({
             success: true,
@@ -382,8 +375,7 @@ app.get('/verify', async (req, res) => {
             `);
         }
 
-        console.log(`✅ Email verification successful for: ${email}`);
-        console.log(`👤 Supabase User ID: ${supabase_user_id}`);
+
 
         // Confirm the user in Supabase using Admin API
         if (supabase_user_id && supabase_user_id !== 'pending') {
@@ -399,7 +391,7 @@ app.get('/verify', async (req, res) => {
                 if (confirmError) {
                     console.error('⚠️ Supabase confirmation error:', confirmError);
                 } else {
-                    console.log('✅ Supabase user email confirmed:', userData.user?.email);
+    
                     
                     // Create user profile and school if needed
                     await createUserProfileAndSchool(userData.user);
@@ -517,13 +509,13 @@ async function createUserProfileAndSchool(user) {
         const { id: userId, user_metadata } = user;
         const { first_name, user_role, school_name } = user_metadata || {};
         
-        console.log(`📝 Creating user profile for: ${user.email} (Role: ${user_role})`);
+    
         
         let schoolId = null;
         
         // If school_admin, create school first
         if (user_role === 'school_admin' && school_name) {
-            console.log(`🏫 Creating school: ${school_name}`);
+
             
             const { data: schoolData, error: schoolError } = await supabaseAdmin
                 .from('schools')
@@ -542,7 +534,7 @@ async function createUserProfileAndSchool(user) {
             }
             
             schoolId = schoolData.id;
-            console.log(`✅ School created with ID: ${schoolId}`);
+
         }
         
         // Create user profile
@@ -563,10 +555,7 @@ async function createUserProfileAndSchool(user) {
             throw profileError;
         }
         
-        console.log(`✅ User profile created for: ${user.email}`);
-        if (schoolId) {
-            console.log(`🔗 User linked to school ID: ${schoolId}`);
-        }
+
         
         return { profile: profileData, schoolId };
         
@@ -692,10 +681,7 @@ app.post('/admin/update-teacher', verifyAdminAccess, async (req, res) => {
             });
         }
 
-        console.log(`✅ Admin ${req.adminUser.email} updated teacher ${teacherId}:`, {
-            before: { firstName: teacher.first_name, lastName: teacher.last_name },
-            after: { firstName, lastName, note }
-        });
+
 
         res.json({
             success: true,
@@ -757,14 +743,14 @@ app.post('/admin/update-teacher-email', verifyAdminAccess, async (req, res) => {
         }
 
         // Update email in user_profiles table for all users (mock and real)
-        console.log(`🔄 Updating email in database for teacherId: ${teacherId} to: ${newEmail}`);
+
         const { data: profileUpdate, error: profileUpdateError } = await supabaseAdmin
             .from('user_profiles')
             .update({ email: newEmail })
             .eq('id', teacherId)
             .select();
 
-        console.log(`🔍 Database update result:`, { profileUpdate, profileUpdateError });
+
 
         if (profileUpdateError) {
             console.error('Profile email update error:', profileUpdateError);
@@ -776,7 +762,7 @@ app.post('/admin/update-teacher-email', verifyAdminAccess, async (req, res) => {
 
         // Handle mock users differently (simulate auth email update)
         if (teacher.is_mock) {
-            console.log(`✅ Admin ${req.adminUser.email} updated MOCK teacher email ${teacherId} to ${newEmail} (simulated)`);
+
             
             // For mock users, just return success without calling Auth API
             return res.json({
@@ -805,7 +791,7 @@ app.post('/admin/update-teacher-email', verifyAdminAccess, async (req, res) => {
             });
         }
 
-        console.log(`✅ Admin ${req.adminUser.email} updated teacher email ${teacherId} to ${newEmail}`);
+
 
         res.json({
             success: true,
@@ -863,7 +849,7 @@ app.post('/admin/update-teacher-password', verifyAdminAccess, async (req, res) =
 
         // Handle mock users differently (store password in database)
         if (teacher.is_mock) {
-            console.log(`✅ Admin ${req.adminUser.email} updated MOCK teacher password for ${teacherId} (simulated)`);
+
             
             // For mock users, store password in database instead of Auth
             const { data: passwordUpdate, error: passwordError } = await supabaseAdmin
@@ -906,7 +892,7 @@ app.post('/admin/update-teacher-password', verifyAdminAccess, async (req, res) =
             });
         }
 
-        console.log(`✅ Admin ${req.adminUser.email} updated teacher password for ${teacherId}`);
+
 
         res.json({
             success: true,
