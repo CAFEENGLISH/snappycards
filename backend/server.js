@@ -861,18 +861,33 @@ app.post('/admin/update-teacher-password', verifyAdminAccess, async (req, res) =
             });
         }
 
-        // Handle mock users differently (simulate password update)
+        // Handle mock users differently (store password in database)
         if (teacher.is_mock) {
             console.log(`✅ Admin ${req.adminUser.email} updated MOCK teacher password for ${teacherId} (simulated)`);
             
-            // For mock users, just return success without calling Auth API
+            // For mock users, store password in database instead of Auth
+            const { data: passwordUpdate, error: passwordError } = await supabaseAdmin
+                .from('user_profiles')
+                .update({ stored_password: newPassword })
+                .eq('id', teacherId)
+                .select();
+            
+            if (passwordError) {
+                console.error('Error storing mock user password:', passwordError);
+                return res.status(500).json({
+                    error: 'Failed to store password',
+                    details: passwordError.message
+                });
+            }
+            
             return res.json({
                 success: true,
                 message: 'Teacher password updated successfully (demo mode)',
                 data: {
                     teacherId,
                     isMock: true,
-                    updatedAt: new Date().toISOString()
+                    updatedAt: new Date().toISOString(),
+                    passwordStored: true
                 }
             });
         }

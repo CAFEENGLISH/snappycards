@@ -1285,8 +1285,7 @@
                         const passwordResult = await passwordResponse.json();
                         if (passwordResponse.ok) {
                             console.log('✅ Password updated successfully');
-                            // Store password locally so we can show it later
-                            localStorage.setItem(`teacher_password_${window.editingTeacherId}`, password);
+                            // Password is now stored in database via backend API
                             // Show visual feedback for password change
                             const passwordField = document.getElementById('teacherPassword');
                             passwordField.style.borderColor = '#10b981';
@@ -1396,7 +1395,7 @@
                 // Load teachers from Supabase for current school
                 const { data: teachersData, error } = await supabase
                     .from('user_profiles')
-                    .select('id, first_name, last_name, user_role, created_at, is_mock, note, email')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock, note, email, stored_password')
                     .eq('school_id', currentSchool?.id)
                     .eq('user_role', 'teacher')
                     .eq('is_mock', currentSchool?.is_mock || false);
@@ -1415,9 +1414,9 @@
                 
                 // Transform Supabase data to match expected format
                 const teachers = (teachersData || []).map(teacher => {
-                    console.log(`🔍 Processing teacher: ${teacher.first_name} ${teacher.last_name}, note: "${teacher.note}", email: "${teacher.email}"`);
-                    // Get stored password or default
-                    const storedPassword = localStorage.getItem(`teacher_password_${teacher.id}`) || 'Teaching123';
+                    console.log(`🔍 Processing teacher: ${teacher.first_name} ${teacher.last_name}, note: "${teacher.note}", email: "${teacher.email}", password: "${teacher.stored_password}"`);
+                    // Get stored password from database or default
+                    const realPassword = teacher.stored_password || 'Teaching123';
                     return {
                         id: teacher.id,
                         name: `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim(),
@@ -1425,7 +1424,7 @@
                         status: 'active', // Default status for now
                         note: teacher.note || '',
                         createdAt: teacher.created_at,
-                        password: storedPassword // Real password from localStorage
+                        password: realPassword // Real password from database
                     };
                 });
                 
@@ -1501,7 +1500,7 @@
             try {
                 const { data: teacherData, error } = await supabase
                     .from('user_profiles')
-                    .select('id, first_name, last_name, user_role, created_at, is_mock, note, email')
+                    .select('id, first_name, last_name, user_role, created_at, is_mock, note, email, stored_password')
                     .eq('id', id)
                     .single();
                 
@@ -1511,8 +1510,8 @@
                     return;
                 }
                 
-                // Get stored password or default
-                const storedPassword = localStorage.getItem(`teacher_password_${teacherData.id}`) || 'Teaching123';
+                // Get stored password from database or default
+                const realPassword = teacherData.stored_password || 'Teaching123';
                 
                 // Transform to expected format
                 const teacher = {
@@ -1521,7 +1520,7 @@
                                             email: teacherData.email || `${teacherData.first_name?.toLowerCase() || 'teacher'}.${teacherData.last_name?.toLowerCase() || 'user'}@${currentSchool?.is_mock ? 'cafeenglish.eu' : 'school.edu'}`,
                     status: teacherData.first_name === 'Sarah' ? 'archived' : 'active',
                     note: teacherData.note || '',
-                    password: storedPassword // Real password stored locally
+                    password: realPassword // Real password from database
                 };
                 
             if (teacher) {
