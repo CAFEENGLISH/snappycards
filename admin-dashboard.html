@@ -1268,7 +1268,8 @@
                 console.log('✅ Backend API Success:', result);
 
                 // Handle email and password updates via separate backend endpoints
-                if (password && password !== '***' && password !== 'Teaching123') {
+                // Always update password if it's changed (including back to default Teaching123)
+                if (password && password !== '***') {
                     try {
                         const passwordResponse = await fetch(`${backendUrl}/admin/update-teacher-password`, {
                             method: 'POST',
