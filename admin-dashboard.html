@@ -1234,9 +1234,11 @@
                 });
 
                 // Call backend admin API instead of direct Supabase
-                const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-                    ? 'http://localhost:8080' 
-                    : 'https://snappycards-api.onrender.com';
+                // FORCE PRODUCTION: Always use Render.com backend for testing
+                const backendUrl = 'https://snappycards-api.onrender.com';
+                // const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                //     ? 'http://localhost:8080' 
+                //     : 'https://snappycards-api.onrender.com';
 
                 const response = await fetch(`${backendUrl}/admin/update-teacher`, {
                     method: 'POST',
