@@ -20,12 +20,18 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 // Frontend and Backend URLs (global scope for use in multiple endpoints)
-const frontendUrl = process.env.NODE_ENV === 'production' 
-    ? 'https://snappycards.netlify.app' 
-    : 'http://localhost:3000';
-const backendUrl = process.env.NODE_ENV === 'production' 
-    ? 'https://snappycards-api.onrender.com' 
-    : 'http://localhost:8080';
+const frontendUrl = process.env.FRONTEND_URL || 
+    (process.env.NODE_ENV === 'production' 
+        ? 'https://snappycards.netlify.app' 
+        : 'http://localhost:3000');
+const backendUrl = process.env.BACKEND_URL || 
+    (process.env.NODE_ENV === 'production' 
+        ? 'https://snappycards-api.onrender.com' 
+        : 'http://localhost:8080');
+
+// Debug URLs
+console.log(`🌐 Frontend URL: ${frontendUrl}`);
+console.log(`🔗 Backend URL: ${backendUrl}`);
 
 // Verify Resend API key
 if (!process.env.RESEND_API_KEY) {
@@ -918,7 +924,7 @@ app.listen(PORT, () => {
     console.log(`🚀 SnappyCards API Server running on port ${PORT}`);
     console.log(`📧 Email Provider: Resend API`);
     console.log(`📬 From: noreply@snappycards.io`);
-    console.log(`🎯 Endpoints: /register, /send-confirmation, /verify`);
+    console.log(`🎯 Endpoints: /register, /send-confirmation, /verify, /verify`);
     console.log(`🏫 Admin Endpoints: /admin/update-teacher, /admin/update-teacher-email, /admin/update-teacher-password`);
 });
 
