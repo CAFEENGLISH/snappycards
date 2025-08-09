@@ -1,24 +1,33 @@
+/**
+ * Central Supabase admin client.
+ * Loads env from .env.local (dev) or process.env (prod).
+ * No insecure fallbacks!
+ */
 const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config();
 
-// Supabase Admin Configuration
-const supabaseUrl = process.env.SUPABASE_URL || 'https://aeijlzokobuqcyznljvn.supabase.co';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDU2NjA1NiwiZXhwIjoyMDcwMTQyMDU2fQ.wwrrCv8xd3uECT24fBKasPk5MJPz3hlS_32jzJebbhs';
+// Töltsük be lokálisan a backend/.env.local-t (ha létezik)
+try {
+  const fs = require('fs');
+  const path = require('path');
+  const dotenv = require('dotenv');
+  const envPath = path.resolve(__dirname, '../../.env.local');
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath, override: true });
+  } else {
+    // utolsó esély: .env
+    const envPath2 = path.resolve(__dirname, '../../.env');
+    if (fs.existsSync(envPath2)) dotenv.config({ path: envPath2 });
+  }
+} catch (_) { /* no-op */ }
 
-// Verify Supabase Service Key
-if (!process.env.SUPABASE_SERVICE_KEY) {
-    console.error('❌ SUPABASE_SERVICE_KEY environment variable is required');
-    console.error('   Please set your Supabase Service Role key in .env file');
-    process.exit(1);
-} else {
-    console.log('✅ Supabase Admin API initialized');
-}
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+// Kötelező env-ek – nincs több hardcode fallback!
+if (!supabaseUrl) throw new Error('Missing SUPABASE_URL in env');
+if (!supabaseServiceKey) throw new Error('Missing SUPABASE_SERVICE_KEY / SUPABASE_SERVICE_ROLE_KEY in env');
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 console.log(`🔗 Using Supabase project: ${supabaseUrl}`);
-
-module.exports = {
-    supabaseAdmin,
-    supabaseUrl
-};
+module.exports = { supabaseAdmin, supabaseUrl };
