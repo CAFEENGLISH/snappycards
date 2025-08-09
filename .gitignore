@@ -1,3 +1,15 @@
 # Local Netlify folder
 .netlify
 .DS_Store
+
+# --- local env files ---
+.env*
+\!.env.example
+
+# OS & editor junk
+.DS_Store
+*.log
+
+# node & backups
+node_modules/
+backups/
