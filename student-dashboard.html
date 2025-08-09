@@ -3717,10 +3717,13 @@
             window.location.href = 'slot-machine.html?setId=' + setId;
         }
 
-        function openStudyMode(setId) {
+        // Study mode configuration - easy to change between different study systems
+        const STUDY_PAGE = '/slot-machine.html';  // 3-card study system
+        
+        window.openStudyMode = function(setId) {
             console.log('DEBUG: openStudyMode called with:', { setId });
-            window.location.href = 'study.html?setId=' + setId;
-        }
+            window.location.assign(`${STUDY_PAGE}?setId=${encodeURIComponent(setId)}`);
+        };
 
         function flipCard(cardElement) {
             if (cardElement.classList.contains('flipped')) {
