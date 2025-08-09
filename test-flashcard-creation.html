@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Flashcard Set Creation</title>
+</head>
+<body>
+    <h1>Test Flashcard Set Creation</h1>
+    <div id="results"></div>
+    <button onclick="loginAndTestCreation()">Login and Test Set Creation</button>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
+    <script>
+        function log(message) {
+            console.log(message);
+            const results = document.getElementById('results');
+            results.innerHTML += '<div style="margin: 10px 0; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">' + 
+                '<pre>' + JSON.stringify(message, null, 2) + '</pre></div>';
+        }
+
+        async function loginAndTestCreation() {
+            log('🚀 Starting flashcard set creation test...');
+            
+            try {
+                // Step 1: Login
+                log('📝 Logging in...');
+                const { data: authData, error: authError } = await window.supabaseClient.auth.signInWithPassword({
+                    email: 'vidamkos@gmail.com',
+                    password: 'Palacs1nta'
+                });
+                
+                if (authError) {
+                    log('❌ Login failed: ' + JSON.stringify(authError, null, 2));
+                    return;
+                }
+                
+                log('✅ Login successful: ' + JSON.stringify({
+                    id: authData.user.id,
+                    email: authData.user.email
+                }, null, 2));
+                
+                // Step 2: Test flashcard set creation
+                log('📚 Creating flashcard set...');
+                const { data: setData, error: setError } = await window.supabaseClient
+                    .from('flashcard_sets')
+                    .insert({
+                        title: 'Test Set ' + Date.now(),
+                        description: 'Test description',
+                        user_id: authData.user.id,
+                        is_public: false,
+                        language_a: 'english',
+                        language_b: 'hungarian'
+                    })
+                    .select()
+                    .single();
+                    
+                if (setError) {
+                    log('❌ Flashcard set creation failed: ' + JSON.stringify(setError, null, 2));
+                } else {
+                    log('✅ Flashcard set created successfully: ' + JSON.stringify(setData, null, 2));
+                    
+                    // Clean up - delete the test set
+                    await window.supabaseClient
+                        .from('flashcard_sets')
+                        .delete()
+                        .eq('id', setData.id);
+                    log('🧹 Test set deleted');
+                }
+                
+            } catch (error) {
+                log('❌ Exception: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

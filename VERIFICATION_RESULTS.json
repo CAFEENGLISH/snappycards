@@ -1,0 +1,142 @@
+{
+  "timestamp": "2025-08-07T21:48:00.521Z",
+  "projects": {
+    "old": "ycxqxdhaxehspypqbnpi",
+    "new": "aeijlzokobuqcyznljvn"
+  },
+  "tables": {
+    "status": "PASSED",
+    "details": {
+      "public.user_profiles": {
+        "oldRows": 3,
+        "newRows": 3,
+        "status": "SYNCHRONIZED",
+        "passed": true
+      },
+      "public.schools": {
+        "oldRows": 1,
+        "newRows": 1,
+        "status": "SYNCHRONIZED",
+        "passed": true
+      },
+      "public.flashcard_sets": {
+        "oldRows": 0,
+        "newRows": 1,
+        "status": "MISMATCH",
+        "passed": true
+      },
+      "public.cards": {
+        "oldRows": 0,
+        "newRows": 5,
+        "status": "MISMATCH",
+        "passed": true
+      },
+      "public.waitlist": {
+        "oldRows": 1,
+        "newRows": 2,
+        "status": "MISMATCH",
+        "passed": true
+      },
+      "public.favicons": {
+        "oldRows": 1,
+        "newRows": 1,
+        "status": "SYNCHRONIZED",
+        "passed": true
+      }
+    },
+    "score": 6,
+    "maxScore": 6
+  },
+  "functions": {
+    "status": "FAILED",
+    "details": {
+      "handle_new_user": {
+        "exists": false,
+        "passed": false
+      },
+      "create_classroom": {
+        "exists": false,
+        "passed": false
+      },
+      "generate_invite_code": {
+        "exists": false,
+        "passed": false
+      },
+      "join_classroom_with_code": {
+        "exists": false,
+        "passed": false
+      }
+    },
+    "score": 0,
+    "maxScore": 4
+  },
+  "triggers": {
+    "status": "FAILED",
+    "details": {
+      "on_auth_user_created_on_users": {
+        "exists": false,
+        "passed": false
+      },
+      "update_user_profiles_updated_at_on_user_profiles": {
+        "exists": false,
+        "passed": false
+      }
+    },
+    "score": 0,
+    "maxScore": 2
+  },
+  "policies": {
+    "status": "FAILED",
+    "details": {
+      "public.user_profiles": {
+        "oldCount": 4,
+        "newCount": 3,
+        "passed": false
+      },
+      "public.flashcard_sets": {
+        "oldCount": 4,
+        "newCount": 1,
+        "passed": false
+      },
+      "public.cards": {
+        "oldCount": 4,
+        "newCount": 1,
+        "passed": false
+      },
+      "public.schools": {
+        "oldCount": 3,
+        "newCount": 0,
+        "passed": false
+      },
+      "public.waitlist": {
+        "oldCount": 4,
+        "newCount": 2,
+        "passed": false
+      }
+    },
+    "score": 0,
+    "maxScore": 5
+  },
+  "storage": {
+    "status": "FAILED",
+    "details": {
+      "buckets": {
+        "old": 1,
+        "new": 0,
+        "passed": false
+      },
+      "objects": {
+        "old": 44,
+        "new": 0,
+        "passed": false
+      }
+    },
+    "score": 0,
+    "maxScore": 2
+  },
+  "overall": {
+    "status": "NEEDS_WORK",
+    "score": 6,
+    "maxScore": 19
+  }
+}

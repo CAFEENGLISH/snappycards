@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Language Test - SnappyCards</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
+</head>
+<body>
+    <h1>UI Language Selection Test</h1>
+    
+    <div id="testResults" style="font-family: monospace; padding: 20px; background: #f5f5f5; margin: 20px 0;">
+        <h3>Test Results:</h3>
+        <div id="results"></div>
+    </div>
+
+    <div style="margin: 20px 0;">
+        <button onclick="testSaveUILanguage('en')">Save English</button>
+        <button onclick="testSaveUILanguage('hu')">Save Hungarian</button>
+        <button onclick="testSaveUILanguage('th')">Save Thai</button>
+        <button onclick="testLoadUILanguage()">Load UI Language</button>
+        <button onclick="testDetectBrowser()">Detect Browser Language</button>
+        <button onclick="clearStorage()">Clear Storage</button>
+    </div>
+
+    <script>
+        let logResults = [];
+
+        function log(message) {
+            logResults.push(new Date().toISOString() + ': ' + message);
+            document.getElementById('results').innerHTML = logResults.join('<br>');
+            console.log(message);
+        }
+
+        // Test save UI language
+        async function testSaveUILanguage(langCode) {
+            log(`Testing save UI language: ${langCode}`);
+            
+            // Clear previous
+            localStorage.removeItem('snappy_ui_language');
+            
+            try {
+                // Save language to localStorage
+                localStorage.setItem('snappy_ui_language', langCode);
+                
+                const saved = localStorage.getItem('snappy_ui_language');
+                if (saved === langCode) {
+                    log(`✅ Successfully saved UI language: ${langCode}`);
+                } else {
+                    log(`❌ Failed to save UI language. Expected: ${langCode}, Got: ${saved}`);
+                }
+            } catch (error) {
+                log(`❌ Error saving UI language: ${error.message}`);
+            }
+        }
+
+        // Test load UI language
+        function testLoadUILanguage() {
+            log('Testing load UI language');
+            
+            try {
+                const saved = localStorage.getItem('snappy_ui_language');
+                const browser = navigator.language.slice(0, 2);
+                const detected = saved || browser || 'hu';
+                
+                log(`💾 Saved language: ${saved}`);
+                log(`🌐 Browser language: ${browser}`);
+                log(`🎯 Detected language: ${detected}`);
+                
+                // Test if it's supported
+                const supportedLanguages = {
+                    'hu': '🇭🇺 Magyar',
+                    'en': '🇺🇸 English', 
+                    'th': '🇹🇭 ไทย'
+                };
+                
+                if (supportedLanguages[detected]) {
+                    log(`✅ Language ${detected} is supported: ${supportedLanguages[detected]}`);
+                } else {
+                    log(`⚠️ Language ${detected} not supported, falling back to Hungarian`);
+                }
+            } catch (error) {
+                log(`❌ Error loading UI language: ${error.message}`);
+            }
+        }
+
+        // Test browser detection
+        function testDetectBrowser() {
+            log('Testing browser detection');
+            
+            const browserLang = navigator.language;
+            const langCode = browserLang.slice(0, 2);
+            
+            log(`🌐 Full browser language: ${browserLang}`);
+            log(`🎯 Language code: ${langCode}`);
+            
+            // Check if supported
+            const supportedLanguages = ['hu', 'en', 'th'];
+            if (supportedLanguages.includes(langCode)) {
+                log(`✅ Browser language ${langCode} is supported`);
+                // Save it
+                localStorage.setItem('snappy_ui_language', langCode);
+                log(`💾 Saved browser language to localStorage`);
+            } else {
+                log(`⚠️ Browser language ${langCode} not supported`);
+            }
+        }
+
+        // Clear storage
+        function clearStorage() {
+            localStorage.removeItem('snappy_ui_language');
+            log('🗑️ Cleared localStorage');
+            logResults = ['🗑️ Cleared localStorage'];
+            document.getElementById('results').innerHTML = logResults.join('<br>');
+        }
+
+        // Test multilingual matrix simulation
+        async function testLanguageMatrix() {
+            log('Testing language translation matrix');
+            
+            if (!window.supabaseClient) {
+                log('❌ Supabase client not available');
+                return;
+            }
+
+            try {
+                // Simulated test for language matrix
+                const testLangCode = 'en';
+                const testDisplayLang = 'hu';
+                
+                log(`🔍 Testing matrix lookup: ${testLangCode} displayed in ${testDisplayLang}`);
+                
+                // This would normally query the database
+                const mockTranslation = {
+                    'en': { 'hu': 'Angol', 'en': 'English', 'th': 'อังกฤษ' },
+                    'hu': { 'hu': 'Magyar', 'en': 'Hungarian', 'th': 'ฮังการี' },
+                    'th': { 'hu': 'Thai', 'en': 'Thai', 'th': 'ไทย' }
+                };
+                
+                if (mockTranslation[testLangCode] && mockTranslation[testLangCode][testDisplayLang]) {
+                    const translation = mockTranslation[testLangCode][testDisplayLang];
+                    log(`✅ Translation found: ${testLangCode} in ${testDisplayLang} = ${translation}`);
+                } else {
+                    log(`❌ No translation found for ${testLangCode} in ${testDisplayLang}`);
+                }
+            } catch (error) {
+                log(`❌ Error testing language matrix: ${error.message}`);
+            }
+        }
+
+        // Run initial tests
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 UI Language Test Started');
+            testLoadUILanguage();
+            testLanguageMatrix();
+        });
+    </script>
+</body>
+</html>

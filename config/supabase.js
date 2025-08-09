@@ -9,10 +9,10 @@ const isProduction = window.location.hostname !== 'localhost' && window.location
 
 // Central API Configuration
 window.SNAPPY_CONFIG = {
-    // Supabase
+    // Supabase - NEW PROJECT
     supabase: {
-        url: 'https://ycxqxdhaxehspypqbnpi.supabase.co',
-        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g'
+        url: 'https://aeijlzokobuqcyznljvn.supabase.co',
+        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM'
     },
     
     // Backend API
@@ -59,17 +59,19 @@ window.SNAPPY_CONFIG = {
 // Backwards compatibility
 window.SUPABASE_CONFIG = window.SNAPPY_CONFIG.supabase;
 
-// Initialize Supabase client when this script loads
-if (typeof window.supabase !== 'undefined') {
+// Initialize Supabase client when this script loads (singleton pattern)
+if (typeof window.supabase !== 'undefined' && !window.supabaseClient) {
     window.supabaseClient = window.supabase.createClient(
         window.SUPABASE_CONFIG.url, 
         window.SUPABASE_CONFIG.anonKey
     );
     console.log('✅ Supabase client initialized from central config');
+} else if (window.supabaseClient) {
+    console.log('ℹ️ Supabase client already initialized, skipping');
 } else {
     console.warn('⚠️ Supabase library not loaded. Make sure to include @supabase/supabase-js before this script.');
 }
 
 // Backwards compatibility - create the old global constants
 window.SUPABASE_URL = window.SUPABASE_CONFIG.url;
-window.SUPABASE_ANON_KEY = window.SUPABASE_CONFIG.anonKey;
+window.SUPABASE_ANON_KEY = window.SUPABASE_CONFIG.anonKey;// Force cache break - Thu Aug  7 13:54:52 CEST 2025

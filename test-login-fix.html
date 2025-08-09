@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Custom Login Fix</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
+    <script src="lib/custom-auth-client.js"></script>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        }
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #dcfce7;
+            border: 1px solid #22c55e;
+            color: #16a34a;
+        }
+        .error {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1>🔧 SnappyCards Login Fix Test</h1>
+        <p>Test both original Supabase Auth and Custom Auth fallback</p>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="vidamkos@gmail.com">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" value="Palacs1nta">
+        </div>
+        
+        <button onclick="testSupabaseAuth()">Test Supabase Auth</button>
+        <button onclick="testCustomAuth()">Test Custom Auth</button>
+        <button onclick="testHybridAuth()">Test Hybrid Auth</button>
+        <button onclick="clearResults()">Clear</button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Initialize clients
+        const supabaseUrl = window.SNAPPY_CONFIG.supabase.url;
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeHF4ZGhheGVoc3B5cHFibnBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMDMwMzEsImV4cCI6MjA2ODc3OTAzMX0.7RGVld6WOhNgeTA6xQc_U_eDXfMGzIshUlKV6j2Ru6g';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        const apiBaseUrl = window.SNAPPY_CONFIG.api.baseUrl;
+        const customSupabase = window.createCustomSupabaseClient(apiBaseUrl, supabaseKey);
+
+        function showResult(message, isSuccess = true) {
+            const resultEl = document.getElementById('result');
+            resultEl.textContent = message;
+            resultEl.className = `result ${isSuccess ? 'success' : 'error'}`;
+            resultEl.style.display = 'block';
+        }
+
+        function clearResults() {
+            document.getElementById('result').style.display = 'none';
+        }
+
+        async function testSupabaseAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                console.log('🔧 Testing original Supabase Auth...');
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                showResult(`✅ Supabase Auth SUCCESS!
+User ID: ${data.user.id}
+Email: ${data.user.email}
+Session: ${data.session ? 'Yes' : 'No'}`);
+
+            } catch (error) {
+                console.error('❌ Supabase Auth failed:', error);
+                showResult(`❌ Supabase Auth FAILED:
+${error.message}
+
+This confirms the database error issue.`, false);
+            }
+        }
+
+        async function testCustomAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                console.log('🔧 Testing Custom Auth...');
+                const { data, error } = await customSupabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                showResult(`✅ Custom Auth SUCCESS!
+User ID: ${data.user.id}
+Email: ${data.user.email}  
+User Role: ${data.user.user_metadata?.user_role}
+Session Token: ${data.session.access_token.substring(0, 20)}...`);
+
+            } catch (error) {
+                console.error('❌ Custom Auth failed:', error);
+                showResult(`❌ Custom Auth FAILED:
+${error.message}`, false);
+            }
+        }
+
+        async function testHybridAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            let authResult = null;
+            let authMethod = '';
+            
+            try {
+                // First try Supabase Auth
+                try {
+                    console.log('🔧 Attempting Supabase Auth...');
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+
+                    if (error) {
+                        console.log('⚠️ Supabase Auth failed:', error.message);
+                        if (error.message.includes('Database error') || error.message.includes('schema')) {
+                            console.log('🔄 Database error detected - falling back to custom auth');
+                            throw new Error('FALLBACK_TO_CUSTOM');
+                        } else {
+                            throw error;
+                        }
+                    }
+
+                    authResult = data;
+                    authMethod = 'Supabase Auth';
+                    console.log('✅ Supabase Auth successful');
+
+                } catch (supabaseError) {
+                    if (supabaseError.message === 'FALLBACK_TO_CUSTOM') {
+                        // Try custom auth
+                        console.log('🔧 Using custom authentication...');
+                        const customResult = await customSupabase.auth.signInWithPassword({
+                            email: email,
+                            password: password
+                        });
+
+                        if (customResult.error) {
+                            throw customResult.error;
+                        }
+
+                        authResult = customResult.data;
+                        authMethod = 'Custom Auth (Fallback)';
+                        console.log('✅ Custom auth successful');
+                    } else {
+                        throw supabaseError;
+                    }
+                }
+
+                showResult(`✅ HYBRID AUTH SUCCESS!
+Method Used: ${authMethod}
+User ID: ${authResult.user.id}
+Email: ${authResult.user.email}
+User Role: ${authResult.user.user_metadata?.user_role || 'N/A'}
+
+This is exactly how the login.html will work!`);
+
+            } catch (error) {
+                console.error('❌ Hybrid Auth failed:', error);
+                showResult(`❌ HYBRID AUTH FAILED:
+${error.message}`, false);
+            }
+        }
+    </script>
+</body>
+</html>

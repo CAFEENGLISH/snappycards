@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check User ID</title>
+</head>
+<body>
+    <h1>Check Current User ID</h1>
+    <div id="results"></div>
+    <button onclick="checkCurrentUser()">Check Current User</button>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
+    <script>
+        function log(message) {
+            console.log(message);
+            document.getElementById('results').innerHTML += '<div>' + JSON.stringify(message, null, 2) + '</div>';
+        }
+
+        async function checkCurrentUser() {
+            try {
+                const { data: { user }, error } = await window.supabaseClient.auth.getUser();
+                
+                if (error) {
+                    log('❌ Auth Error: ' + JSON.stringify(error, null, 2));
+                    return;
+                }
+                
+                if (!user) {
+                    log('❌ No user logged in');
+                    return;
+                }
+                
+                log('✅ Current User: ' + JSON.stringify({
+                    id: user.id,
+                    email: user.email
+                }, null, 2));
+                
+                // Check sets for this user
+                const { data: sets, error: setsError } = await window.supabaseClient
+                    .from('flashcard_sets')
+                    .select('id, title, user_id, created_at')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false });
+                    
+                if (setsError) {
+                    log('❌ Sets Error: ' + JSON.stringify(setsError, null, 2));
+                } else {
+                    log('📚 User Sets: ' + JSON.stringify(sets, null, 2));
+                }
+                
+            } catch (error) {
+                log('❌ Exception: ' + error.message);
+            }
+        }
+
+        // Auto-run on load
+        window.addEventListener('load', () => {
+            setTimeout(checkCurrentUser, 1000);
+        });
+    </script>
+</body>
+</html>

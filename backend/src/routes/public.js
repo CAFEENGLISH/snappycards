@@ -17,6 +17,93 @@ router.get('/', (req, res) => {
     });
 });
 
+// Custom login endpoint - bypasses broken Supabase Auth
+router.post('/custom-login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                error: 'Email and password are required'
+            });
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid email format'
+            });
+        }
+
+        // Check user in user_profiles table
+        const { data: user, error: userError } = await supabaseAdmin
+            .from('user_profiles')
+            .select('id, email, first_name, user_role, stored_password')
+            .eq('email', email.toLowerCase())
+            .single();
+
+        if (userError || !user) {
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid email or password'
+            });
+        }
+
+        // Check password (stored_password field)
+        if (user.stored_password !== password) {
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid email or password'
+            });
+        }
+
+        // Generate a simple session token (you can implement JWT if needed)
+        const sessionToken = Buffer.from(`${user.id}:${user.email}:${Date.now()}`).toString('base64');
+        
+        // Return successful login response
+        res.json({
+            success: true,
+            message: 'Login successful',
+            user: {
+                id: user.id,
+                email: user.email,
+                firstName: user.first_name,
+                userRole: user.user_role
+            },
+            sessionToken: sessionToken,
+            // Include auth data for compatibility
+            auth: {
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    user_metadata: {
+                        first_name: user.first_name,
+                        user_role: user.user_role
+                    }
+                },
+                session: {
+                    access_token: sessionToken,
+                    user: {
+                        id: user.id,
+                        email: user.email
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('Custom login error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error during login',
+            details: error.message
+        });
+    }
+});
+
 // User registration endpoint
 router.post('/register', async (req, res) => {
     try {

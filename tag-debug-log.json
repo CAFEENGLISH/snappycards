@@ -1,0 +1,1553 @@
+{
+  "timestamp": "2025-08-08T21:13:39.071Z",
+  "allLogs": [
+    {
+      "time": "2025-08-08T21:12:50.131Z",
+      "type": "log",
+      "text": "✅ Supabase client initialized from central config",
+      "location": {
+        "url": "http://localhost:3000/config/supabase.js",
+        "lineNumber": 67,
+        "columnNumber": 12
+      },
+      "args": [
+        "✅ Supabase client initialized from central config"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.147Z",
+      "type": "log",
+      "text": "DEBUG: Script loaded, waiting for DOM...",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 10047,
+        "columnNumber": 16
+      },
+      "args": [
+        "DEBUG: Script loaded, waiting for DOM..."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.184Z",
+      "type": "log",
+      "text": "🇭🇺 Lokalizáció ideiglenesen kikapcsolva - Magyar nyelv rögzítve",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 406,
+        "columnNumber": 16
+      },
+      "args": [
+        "🇭🇺 Lokalizáció ideiglenesen kikapcsolva - Magyar nyelv rögzítve"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.185Z",
+      "type": "log",
+      "text": "🌍 Snappy I18n initialized with language: hu",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 419,
+        "columnNumber": 16
+      },
+      "args": [
+        "🌍 Snappy I18n initialized with language: hu"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.186Z",
+      "type": "log",
+      "text": "🌍 Snappy Cards I18n Engine Ready!",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 618,
+        "columnNumber": 12
+      },
+      "args": [
+        "🌍 Snappy Cards I18n Engine Ready!"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.186Z",
+      "type": "log",
+      "text": "DEBUG: DOM loaded, calling initDashboard...",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 10049,
+        "columnNumber": 20
+      },
+      "args": [
+        "DEBUG: DOM loaded, calling initDashboard..."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.186Z",
+      "type": "log",
+      "text": "DEBUG: Dashboard init started - checking auth status",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2024,
+        "columnNumber": 20
+      },
+      "args": [
+        "DEBUG: Dashboard init started - checking auth status"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.186Z",
+      "type": "log",
+      "text": "✅ Lucide icons initialized",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 10055,
+        "columnNumber": 24
+      },
+      "args": [
+        "✅ Lucide icons initialized"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.190Z",
+      "type": "log",
+      "text": "DEBUG: Auth error: Auth session missing!",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2031,
+        "columnNumber": 28
+      },
+      "args": [
+        "DEBUG: Auth error:",
+        "Auth session missing!"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.191Z",
+      "type": "log",
+      "text": "DEBUG: No user found - redirecting to login",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2035,
+        "columnNumber": 28
+      },
+      "args": [
+        "DEBUG: No user found - redirecting to login"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.285Z",
+      "type": "log",
+      "text": "✅ Supabase client initialized from central config",
+      "location": {
+        "url": "http://localhost:3000/config/supabase.js",
+        "lineNumber": 67,
+        "columnNumber": 12
+      },
+      "args": [
+        "✅ Supabase client initialized from central config"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.286Z",
+      "type": "log",
+      "text": "✅ SnappyCards helper utilities loaded",
+      "location": {
+        "url": "http://localhost:3000/lib/helpers.js",
+        "lineNumber": 208,
+        "columnNumber": 12
+      },
+      "args": [
+        "✅ SnappyCards helper utilities loaded"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.286Z",
+      "type": "log",
+      "text": "✅ SnappyAuth utilities loaded",
+      "location": {
+        "url": "http://localhost:3000/lib/auth.js",
+        "lineNumber": 153,
+        "columnNumber": 12
+      },
+      "args": [
+        "✅ SnappyAuth utilities loaded"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.286Z",
+      "type": "log",
+      "text": "✅ Custom Auth Client loaded - ready to bypass broken Supabase Auth",
+      "location": {
+        "url": "http://localhost:3000/lib/custom-auth-client.js",
+        "lineNumber": 224,
+        "columnNumber": 8
+      },
+      "args": [
+        "✅ Custom Auth Client loaded - ready to bypass broken Supabase Auth"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.286Z",
+      "type": "log",
+      "text": "✅ SnappyCards API services loaded",
+      "location": {
+        "url": "http://localhost:3000/lib/api.js",
+        "lineNumber": 245,
+        "columnNumber": 12
+      },
+      "args": [
+        "✅ SnappyCards API services loaded"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.287Z",
+      "type": "warning",
+      "text": "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.",
+      "location": {
+        "url": "https://unpkg.com/@supabase/supabase-js@2",
+        "lineNumber": 0,
+        "columnNumber": 19073
+      },
+      "args": [
+        "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.288Z",
+      "type": "log",
+      "text": "🇭🇺 Lokalizáció ideiglenesen kikapcsolva - Magyar nyelv rögzítve",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 406,
+        "columnNumber": 16
+      },
+      "args": [
+        "🇭🇺 Lokalizáció ideiglenesen kikapcsolva - Magyar nyelv rögzítve"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.288Z",
+      "type": "log",
+      "text": "🌍 Snappy I18n initialized with language: hu",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 419,
+        "columnNumber": 16
+      },
+      "args": [
+        "🌍 Snappy I18n initialized with language: hu"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.288Z",
+      "type": "log",
+      "text": "🌍 Snappy Cards I18n Engine Ready!",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 618,
+        "columnNumber": 12
+      },
+      "args": [
+        "🌍 Snappy Cards I18n Engine Ready!"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:50.290Z",
+      "type": "verbose",
+      "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o",
+      "location": {
+        "url": "http://localhost:3000/login.html",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:12:51.289Z",
+      "type": "warning",
+      "text": "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.",
+      "location": {
+        "url": "https://unpkg.com/@supabase/supabase-js@2",
+        "lineNumber": 0,
+        "columnNumber": 19073
+      },
+      "args": [
+        "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:51.478Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 400 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:12:51.479Z",
+      "type": "warning",
+      "text": "⚠️ Could not load favicon from database: column favicons.data_url does not exist",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 31,
+        "columnNumber": 24
+      },
+      "args": [
+        "⚠️ Could not load favicon from database:",
+        "column favicons.data_url does not exist"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:51.480Z",
+      "type": "log",
+      "text": "🔧 Setting favicon: {mimeType: image/svg+xml, dataUrlLength: 706, dataUrlPreview: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl}",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 58,
+        "columnNumber": 16
+      },
+      "args": [
+        "🔧 Setting favicon:",
+        {
+          "mimeType": "image/svg+xml",
+          "dataUrlLength": 706,
+          "dataUrlPreview": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl"
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:51.481Z",
+      "type": "log",
+      "text": "📌 Favicon element added to DOM: {rel: icon, type: image/svg+xml, href: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl...}",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 102,
+        "columnNumber": 16
+      },
+      "args": [
+        "📌 Favicon element added to DOM:",
+        {
+          "rel": "icon",
+          "type": "image/svg+xml",
+          "href": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl..."
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:51.481Z",
+      "type": "log",
+      "text": "✅ Default favicon set",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 131,
+        "columnNumber": 16
+      },
+      "args": [
+        "✅ Default favicon set"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:51.983Z",
+      "type": "log",
+      "text": "🔴 TEST: Simple red square favicon added for visibility test",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 99,
+        "columnNumber": 20
+      },
+      "args": [
+        "🔴 TEST: Simple red square favicon added for visibility test"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:55.893Z",
+      "type": "log",
+      "text": "🔧 Attempting Supabase Auth...",
+      "location": {
+        "url": "http://localhost:3000/login.html",
+        "lineNumber": 444,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔧 Attempting Supabase Auth..."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:56.178Z",
+      "type": "log",
+      "text": "✅ Supabase Auth successful",
+      "location": {
+        "url": "http://localhost:3000/login.html",
+        "lineNumber": 461,
+        "columnNumber": 28
+      },
+      "args": [
+        "✅ Supabase Auth successful"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.093Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 406 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_profiles?select=user_role&id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:12:58.094Z",
+      "type": "error",
+      "text": "Profile fetch error: {code: PGRST116, details: The result contains 0 rows, hint: null, message: Cannot coerce the result to a single JSON object}",
+      "location": {
+        "url": "http://localhost:3000/login.html",
+        "lineNumber": 515,
+        "columnNumber": 40
+      },
+      "args": [
+        "Profile fetch error:",
+        "Could not serialize"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.117Z",
+      "type": "log",
+      "text": "✅ Supabase client initialized from central config",
+      "location": {
+        "url": "http://localhost:3000/config/supabase.js",
+        "lineNumber": 67,
+        "columnNumber": 12
+      },
+      "args": [
+        "✅ Supabase client initialized from central config"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.133Z",
+      "type": "log",
+      "text": "DEBUG: Script loaded, waiting for DOM...",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 10047,
+        "columnNumber": 16
+      },
+      "args": [
+        "DEBUG: Script loaded, waiting for DOM..."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.134Z",
+      "type": "log",
+      "text": "🇭🇺 Lokalizáció ideiglenesen kikapcsolva - Magyar nyelv rögzítve",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 406,
+        "columnNumber": 16
+      },
+      "args": [
+        "🇭🇺 Lokalizáció ideiglenesen kikapcsolva - Magyar nyelv rögzítve"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.135Z",
+      "type": "log",
+      "text": "🌍 Snappy I18n initialized with language: hu",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 419,
+        "columnNumber": 16
+      },
+      "args": [
+        "🌍 Snappy I18n initialized with language: hu"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.136Z",
+      "type": "log",
+      "text": "🌍 Snappy Cards I18n Engine Ready!",
+      "location": {
+        "url": "http://localhost:3000/lib/i18n.js",
+        "lineNumber": 618,
+        "columnNumber": 12
+      },
+      "args": [
+        "🌍 Snappy Cards I18n Engine Ready!"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.136Z",
+      "type": "log",
+      "text": "DEBUG: DOM loaded, calling initDashboard...",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 10049,
+        "columnNumber": 20
+      },
+      "args": [
+        "DEBUG: DOM loaded, calling initDashboard..."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.136Z",
+      "type": "log",
+      "text": "DEBUG: Dashboard init started - checking auth status",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2024,
+        "columnNumber": 20
+      },
+      "args": [
+        "DEBUG: Dashboard init started - checking auth status"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.138Z",
+      "type": "log",
+      "text": "✅ Lucide icons initialized",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 10055,
+        "columnNumber": 24
+      },
+      "args": [
+        "✅ Lucide icons initialized"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.226Z",
+      "type": "log",
+      "text": "DEBUG: Auth successful, user: vidamkos@gmail.com",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2039,
+        "columnNumber": 28
+      },
+      "args": [
+        "DEBUG: Auth successful, user:",
+        "vidamkos@gmail.com"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.227Z",
+      "type": "log",
+      "text": "DEBUG: Setting welcome title for user: Vidam",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2092,
+        "columnNumber": 20
+      },
+      "args": [
+        "DEBUG: Setting welcome title for user:",
+        "Vidam"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.227Z",
+      "type": "log",
+      "text": "DEBUG: Loading dashboard data...",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2046,
+        "columnNumber": 24
+      },
+      "args": [
+        "DEBUG: Loading dashboard data..."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.421Z",
+      "type": "log",
+      "text": "🔍 DEBUG - Own sets response: [Object]",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2162,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 DEBUG - Own sets response:",
+        [
+          {
+            "id": "438fcd77-e21a-45b3-9c0c-d370d54c3420",
+            "title": "konyha",
+            "description": "most már van elírás",
+            "created_at": "2025-08-07T23:56:44.303341+00:00",
+            "language_a": "Hungarian",
+            "language_b": "English",
+            "language_a_code": null,
+            "language_b_code": null,
+            "flashcard_set_categories": [
+              {
+                "categories": {
+                  "id": "477a6888-6ea5-4b03-85b2-78d81b6080e7",
+                  "name": "butor"
+                },
+                "category_id": "477a6888-6ea5-4b03-85b2-78d81b6080e7"
+              },
+              {
+                "categories": {
+                  "id": "68f95220-6041-412c-b227-7d77da22340a",
+                  "name": "épület"
+                },
+                "category_id": "68f95220-6041-412c-b227-7d77da22340a"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.421Z",
+      "type": "log",
+      "text": "🔍 DEBUG - First set categories: [Object, Object]",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2164,
+        "columnNumber": 32
+      },
+      "args": [
+        "🔍 DEBUG - First set categories:",
+        [
+          {
+            "categories": {
+              "id": "477a6888-6ea5-4b03-85b2-78d81b6080e7",
+              "name": "butor"
+            },
+            "category_id": "477a6888-6ea5-4b03-85b2-78d81b6080e7"
+          },
+          {
+            "categories": {
+              "id": "68f95220-6041-412c-b227-7d77da22340a",
+              "name": "épület"
+            },
+            "category_id": "68f95220-6041-412c-b227-7d77da22340a"
+          }
+        ]
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.421Z",
+      "type": "log",
+      "text": "🔍 DEBUG - Full first set object: {id: 438fcd77-e21a-45b3-9c0c-d370d54c3420, title: konyha, description: most már van elírás, created_at: 2025-08-07T23:56:44.303341+00:00, language_a: Hungarian}",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2165,
+        "columnNumber": 32
+      },
+      "args": [
+        "🔍 DEBUG - Full first set object:",
+        {
+          "id": "438fcd77-e21a-45b3-9c0c-d370d54c3420",
+          "title": "konyha",
+          "description": "most már van elírás",
+          "created_at": "2025-08-07T23:56:44.303341+00:00",
+          "language_a": "Hungarian",
+          "language_b": "English",
+          "language_a_code": null,
+          "language_b_code": null,
+          "flashcard_set_categories": [
+            {
+              "categories": {
+                "id": "477a6888-6ea5-4b03-85b2-78d81b6080e7",
+                "name": "butor"
+              },
+              "category_id": "477a6888-6ea5-4b03-85b2-78d81b6080e7"
+            },
+            {
+              "categories": {
+                "id": "68f95220-6041-412c-b227-7d77da22340a",
+                "name": "épület"
+              },
+              "category_id": "68f95220-6041-412c-b227-7d77da22340a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.421Z",
+      "type": "log",
+      "text": "🔍 DEBUG SZETT: konyha",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2175,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 DEBUG SZETT: konyha"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.421Z",
+      "type": "log",
+      "text": "🔍 Set data: {id: 438fcd77-e21a-45b3-9c0c-d370d54c3420, title: konyha, description: most már van elírás, created_at: 2025-08-07T23:56:44.303341+00:00, language_a: Hungarian}",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2176,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 Set data:",
+        {
+          "id": "438fcd77-e21a-45b3-9c0c-d370d54c3420",
+          "title": "konyha",
+          "description": "most már van elírás",
+          "created_at": "2025-08-07T23:56:44.303341+00:00",
+          "language_a": "Hungarian",
+          "language_b": "English",
+          "language_a_code": null,
+          "language_b_code": null,
+          "flashcard_set_categories": [
+            {
+              "categories": {
+                "id": "477a6888-6ea5-4b03-85b2-78d81b6080e7",
+                "name": "butor"
+              },
+              "category_id": "477a6888-6ea5-4b03-85b2-78d81b6080e7"
+            },
+            {
+              "categories": {
+                "id": "68f95220-6041-412c-b227-7d77da22340a",
+                "name": "épület"
+              },
+              "category_id": "68f95220-6041-412c-b227-7d77da22340a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.516Z",
+      "type": "log",
+      "text": "🔍 Cards count for \"konyha\": 2",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2185,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 Cards count for \"konyha\":",
+        2
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.516Z",
+      "type": "log",
+      "text": "🔍 LEKÉRDEZÉS OWN: user_id=1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3, set_id=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2188,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 LEKÉRDEZÉS OWN: user_id=1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3, set_id=438fcd77-e21a-45b3-9c0c-d370d54c3420"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.604Z",
+      "type": "log",
+      "text": "🔍 OWN Progress data for set: konyha []",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2198,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 OWN Progress data for set:",
+        "konyha",
+        []
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.698Z",
+      "type": "log",
+      "text": "⏱️ OWN Total time spent for set: konyha 0 seconds",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2209,
+        "columnNumber": 28
+      },
+      "args": [
+        "⏱️ OWN Total time spent for set:",
+        "konyha",
+        0,
+        "seconds"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.699Z",
+      "type": "log",
+      "text": "🔍 RÉSZLETES STATS: {tudom: 0, bizonytalan: 0, nemTudom: 0, osszesen: 0}",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2217,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 RÉSZLETES STATS:",
+        {
+          "tudom": 0,
+          "bizonytalan": 0,
+          "nemTudom": 0,
+          "osszesen": 0
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.709Z",
+      "type": "log",
+      "text": "🔍 DEBUG - Final ownSets stored: [Object]",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2320,
+        "columnNumber": 24
+      },
+      "args": [
+        "🔍 DEBUG - Final ownSets stored:",
+        [
+          {
+            "id": "438fcd77-e21a-45b3-9c0c-d370d54c3420",
+            "title": "konyha",
+            "description": "most már van elírás",
+            "cardCount": 2,
+            "masteredCount": 0,
+            "tudokCount": 0,
+            "bizonytalanCount": 0,
+            "nemTudomCount": 0,
+            "totalStudied": 0,
+            "totalTimeSpent": 0,
+            "createdAt": "2025. 08. 08.",
+            "lastStudied": "2025. 08. 08.",
+            "language_a": "Hungarian",
+            "language_b": "English",
+            "language_a_code": "en",
+            "language_b_code": "hu",
+            "flashcard_set_categories": [
+              {
+                "categories": {
+                  "id": "477a6888-6ea5-4b03-85b2-78d81b6080e7",
+                  "name": "butor"
+                },
+                "category_id": "477a6888-6ea5-4b03-85b2-78d81b6080e7"
+              },
+              {
+                "categories": {
+                  "id": "68f95220-6041-412c-b227-7d77da22340a",
+                  "name": "épület"
+                },
+                "category_id": "68f95220-6041-412c-b227-7d77da22340a"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.709Z",
+      "type": "log",
+      "text": "🔍 DEBUG - First stored set categories: [Object, Object]",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2322,
+        "columnNumber": 28
+      },
+      "args": [
+        "🔍 DEBUG - First stored set categories:",
+        [
+          {
+            "categories": {
+              "id": "477a6888-6ea5-4b03-85b2-78d81b6080e7",
+              "name": "butor"
+            },
+            "category_id": "477a6888-6ea5-4b03-85b2-78d81b6080e7"
+          },
+          {
+            "categories": {
+              "id": "68f95220-6041-412c-b227-7d77da22340a",
+              "name": "épület"
+            },
+            "category_id": "68f95220-6041-412c-b227-7d77da22340a"
+          }
+        ]
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.711Z",
+      "type": "log",
+      "text": "DEBUG: Dashboard data loaded successfully",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2048,
+        "columnNumber": 24
+      },
+      "args": [
+        "DEBUG: Dashboard data loaded successfully"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.711Z",
+      "type": "log",
+      "text": "DEBUG: Magyar nyelv rögzítése...",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2051,
+        "columnNumber": 24
+      },
+      "args": [
+        "DEBUG: Magyar nyelv rögzítése..."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:58.711Z",
+      "type": "log",
+      "text": "DEBUG: Magyar nyelv rögzítve és szövegek frissítve",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 2056,
+        "columnNumber": 28
+      },
+      "args": [
+        "DEBUG: Magyar nyelv rögzítve és szövegek frissítve"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:59.135Z",
+      "type": "warning",
+      "text": "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.",
+      "location": {
+        "url": "https://unpkg.com/@supabase/supabase-js@2",
+        "lineNumber": 0,
+        "columnNumber": 19073
+      },
+      "args": [
+        "Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key."
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:59.228Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 400 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:12:59.229Z",
+      "type": "warning",
+      "text": "⚠️ Could not load favicon from database: column favicons.data_url does not exist",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 31,
+        "columnNumber": 24
+      },
+      "args": [
+        "⚠️ Could not load favicon from database:",
+        "column favicons.data_url does not exist"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:59.230Z",
+      "type": "log",
+      "text": "🔧 Setting favicon: {mimeType: image/svg+xml, dataUrlLength: 706, dataUrlPreview: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl}",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 58,
+        "columnNumber": 16
+      },
+      "args": [
+        "🔧 Setting favicon:",
+        {
+          "mimeType": "image/svg+xml",
+          "dataUrlLength": 706,
+          "dataUrlPreview": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl"
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:59.231Z",
+      "type": "log",
+      "text": "📌 Favicon element added to DOM: {rel: icon, type: image/svg+xml, href: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl...}",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 102,
+        "columnNumber": 16
+      },
+      "args": [
+        "📌 Favicon element added to DOM:",
+        {
+          "rel": "icon",
+          "type": "image/svg+xml",
+          "href": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhl..."
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:59.231Z",
+      "type": "log",
+      "text": "✅ Default favicon set",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 131,
+        "columnNumber": 16
+      },
+      "args": [
+        "✅ Default favicon set"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:59.730Z",
+      "type": "log",
+      "text": "🔴 TEST: Simple red square favicon added for visibility test",
+      "location": {
+        "url": "http://localhost:3000/lib/favicon.js",
+        "lineNumber": 99,
+        "columnNumber": 20
+      },
+      "args": [
+        "🔴 TEST: Simple red square favicon added for visibility test"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:02.937Z",
+      "type": "log",
+      "text": "DEBUG: openSet called with: {setId: 438fcd77-e21a-45b3-9c0c-d370d54c3420, type: own}",
+      "location": {
+        "url": "http://localhost:3000/student-dashboard.html",
+        "lineNumber": 3274,
+        "columnNumber": 20
+      },
+      "args": [
+        "DEBUG: openSet called with:",
+        "Could not serialize"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:03.118Z",
+      "type": "log",
+      "text": "✅ Supabase client initialized from central config",
+      "location": {
+        "url": "http://localhost:3000/config/supabase.js",
+        "lineNumber": 67,
+        "columnNumber": 12
+      },
+      "args": [
+        "✅ Supabase client initialized from central config"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:03.119Z",
+      "type": "log",
+      "text": "🔍 DEBUG: totalStudyTime inicializálva: 0",
+      "location": {
+        "url": "http://localhost:3000/slot-machine.html?setId=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+        "lineNumber": 830,
+        "columnNumber": 16
+      },
+      "args": [
+        "🔍 DEBUG: totalStudyTime inicializálva:",
+        0
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:03.119Z",
+      "type": "log",
+      "text": "🔍 DEBUG: window.debugTime objektum létrehozva - használd: debugTime.totalStudyTime",
+      "location": {
+        "url": "http://localhost:3000/slot-machine.html?setId=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+        "lineNumber": 843,
+        "columnNumber": 16
+      },
+      "args": [
+        "🔍 DEBUG: window.debugTime objektum létrehozva - használd: debugTime.totalStudyTime"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:03.224Z",
+      "type": "log",
+      "text": "✅ User betöltve: 1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+      "location": {
+        "url": "http://localhost:3000/slot-machine.html?setId=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+        "lineNumber": 799,
+        "columnNumber": 24
+      },
+      "args": [
+        "✅ User betöltve: 1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:03.318Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 400 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_set_cards?select=cards%28id%2Ctitle%2Cenglish_title%2Ctitle_formatted%2Cenglish_title_formatted%2Cmedia_url%2Cmedia_type%29&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420&order=position.asc",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:13:03.318Z",
+      "type": "error",
+      "text": "Error loading cards: {code: PGRST200, details: Searched for a foreign key relationship between 'f…n the schema 'public', but no matches were found., hint: Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'., message: Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache}",
+      "location": {
+        "url": "http://localhost:3000/slot-machine.html?setId=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+        "lineNumber": 994,
+        "columnNumber": 24
+      },
+      "args": [
+        "Error loading cards:",
+        {
+          "code": "PGRST200",
+          "details": "Searched for a foreign key relationship between 'flashcard_set_cards' and 'cards' in the schema 'public', but no matches were found.",
+          "hint": "Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'.",
+          "message": "Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache"
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:03.319Z",
+      "type": "error",
+      "text": "Error initializing SlotMachine: {code: PGRST200, details: Searched for a foreign key relationship between 'f…n the schema 'public', but no matches were found., hint: Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'., message: Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache}",
+      "location": {
+        "url": "http://localhost:3000/slot-machine.html?setId=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+        "lineNumber": 823,
+        "columnNumber": 24
+      },
+      "args": [
+        "Error initializing SlotMachine:",
+        {
+          "code": "PGRST200",
+          "details": "Searched for a foreign key relationship between 'flashcard_set_cards' and 'cards' in the schema 'public', but no matches were found.",
+          "hint": "Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'.",
+          "message": "Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache"
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "time": "2025-08-08T21:12:51.478Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 400 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:12:58.093Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 406 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_profiles?select=user_role&id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:12:58.094Z",
+      "type": "error",
+      "text": "Profile fetch error: {code: PGRST116, details: The result contains 0 rows, hint: null, message: Cannot coerce the result to a single JSON object}",
+      "location": {
+        "url": "http://localhost:3000/login.html",
+        "lineNumber": 515,
+        "columnNumber": 40
+      },
+      "args": [
+        "Profile fetch error:",
+        "Could not serialize"
+      ]
+    },
+    {
+      "time": "2025-08-08T21:12:59.228Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 400 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:13:03.318Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 400 ()",
+      "location": {
+        "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_set_cards?select=cards%28id%2Ctitle%2Cenglish_title%2Ctitle_formatted%2Cenglish_title_formatted%2Cmedia_url%2Cmedia_type%29&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420&order=position.asc",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "time": "2025-08-08T21:13:03.318Z",
+      "type": "error",
+      "text": "Error loading cards: {code: PGRST200, details: Searched for a foreign key relationship between 'f…n the schema 'public', but no matches were found., hint: Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'., message: Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache}",
+      "location": {
+        "url": "http://localhost:3000/slot-machine.html?setId=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+        "lineNumber": 994,
+        "columnNumber": 24
+      },
+      "args": [
+        "Error loading cards:",
+        {
+          "code": "PGRST200",
+          "details": "Searched for a foreign key relationship between 'flashcard_set_cards' and 'cards' in the schema 'public', but no matches were found.",
+          "hint": "Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'.",
+          "message": "Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache"
+        }
+      ]
+    },
+    {
+      "time": "2025-08-08T21:13:03.319Z",
+      "type": "error",
+      "text": "Error initializing SlotMachine: {code: PGRST200, details: Searched for a foreign key relationship between 'f…n the schema 'public', but no matches were found., hint: Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'., message: Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache}",
+      "location": {
+        "url": "http://localhost:3000/slot-machine.html?setId=438fcd77-e21a-45b3-9c0c-d370d54c3420",
+        "lineNumber": 823,
+        "columnNumber": 24
+      },
+      "args": [
+        "Error initializing SlotMachine:",
+        {
+          "code": "PGRST200",
+          "details": "Searched for a foreign key relationship between 'flashcard_set_cards' and 'cards' in the schema 'public', but no matches were found.",
+          "hint": "Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'.",
+          "message": "Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache"
+        }
+      ]
+    }
+  ],
+  "apiCalls": [
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:51.291Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept": "application/vnd.pgrst.object+json",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:51.481Z",
+      "status": 400,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+      "body": "{\"code\":\"42703\",\"details\":null,\"hint\":null,\"message\":\"column favicons.data_url does not exist\"}"
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:55.894Z",
+      "method": "POST",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/token?grant_type=password",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM",
+        "x-supabase-api-version": "2024-01-01",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "content-type": "application/json;charset=UTF-8",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": "{\"email\":\"vidamkos@gmail.com\",\"password\":\"Palacs1nta\",\"gotrue_meta_security\":{}}"
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:56.179Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/token?grant_type=password",
+      "body": "{\"access_token\":\"eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec\",\"token_type\":\"bearer\",\"expires_in\":3600,\"expires_at\":1754691176,\"refresh_token\":\"3o3phtsvs62y\",\"user\":{\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"vidamkos@gmail.com\",\"email_confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"phone\":\"\",\"confirmation_sent_at\":\"2025-08-07T11:35:31.187491Z\",\"confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"last_sign_in_at\":\"2025-08-08T21:12:56.153632247Z\",\"app_metadata\":{\"provider\":\"email\",\"providers\":[\"email\"]},\"user_metadata\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"identities\":[{\"identity_id\":\"e7ed89a4-986c-4a60-a92e-f06ec2601d5f\",\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"identity_data\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"provider\":\"email\",\"last_sign_in_at\":\"2025-08-07T11:35:31.184818Z\",\"created_at\":\"2025-08-07T11:35:31.184876Z\",\"updated_at\":\"2025-08-07T11:35:31.184876Z\",\"email\":\"vidamkos@gmail.com\"}],\"created_at\":\"2025-08-07T11:35:31.182506Z\",\"updated_at\":\"2025-08-08T21:12:56.156186Z\",\"is_anonymous\":false}}"
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:57.680Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/user",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "x-supabase-api-version": "2024-01-01",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:57.988Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_profiles?select=user_role&id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept": "application/vnd.pgrst.object+json",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:57.988Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/user",
+      "body": "{\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"vidamkos@gmail.com\",\"email_confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"phone\":\"\",\"confirmation_sent_at\":\"2025-08-07T11:35:31.187491Z\",\"confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"last_sign_in_at\":\"2025-08-08T21:12:56.153632Z\",\"app_metadata\":{\"provider\":\"email\",\"providers\":[\"email\"]},\"user_metadata\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"identities\":[{\"identity_id\":\"e7ed89a4-986c-4a60-a92e-f06ec2601d5f\",\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"identity_data\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"provider\":\"email\",\"last_sign_in_at\":\"2025-08-07T11:35:31.184818Z\",\"created_at\":\"2025-08-07T11:35:31.184876Z\",\"updated_at\":\"2025-08-07T11:35:31.184876Z\",\"email\":\"vidamkos@gmail.com\"}],\"created_at\":\"2025-08-07T11:35:31.182506Z\",\"updated_at\":\"2025-08-08T21:12:56.156186Z\",\"is_anonymous\":false}"
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:58.117Z",
+      "status": 406,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_profiles?select=user_role&id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+      "body": null
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:58.139Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/user",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "x-supabase-api-version": "2024-01-01",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:58.227Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_sets?select=id%2Ctitle%2Cdescription%2Ccreated_at%2Clanguage_a%2Clanguage_b%2Clanguage_a_code%2Clanguage_b_code%2Cflashcard_set_categories%28category_id%2Ccategories%21flashcard_set_categories_category_id_fkey%28id%2Cname%29%29&user_id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:58.227Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_sets?select=id%2Ctitle%2Cdescription%2Ccreated_at%2Clanguage_a%2Clanguage_b%2Clanguage_a_code%2Clanguage_b_code%2Cflashcard_set_categories%28category_id%2Ccategories%21flashcard_set_categories_category_id_fkey%28id%2Cname%29%29&is_public=eq.true&user_id=neq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:58.227Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/user",
+      "body": "{\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"vidamkos@gmail.com\",\"email_confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"phone\":\"\",\"confirmation_sent_at\":\"2025-08-07T11:35:31.187491Z\",\"confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"last_sign_in_at\":\"2025-08-08T21:12:56.153632Z\",\"app_metadata\":{\"provider\":\"email\",\"providers\":[\"email\"]},\"user_metadata\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"identities\":[{\"identity_id\":\"e7ed89a4-986c-4a60-a92e-f06ec2601d5f\",\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"identity_data\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"provider\":\"email\",\"last_sign_in_at\":\"2025-08-07T11:35:31.184818Z\",\"created_at\":\"2025-08-07T11:35:31.184876Z\",\"updated_at\":\"2025-08-07T11:35:31.184876Z\",\"email\":\"vidamkos@gmail.com\"}],\"created_at\":\"2025-08-07T11:35:31.182506Z\",\"updated_at\":\"2025-08-08T21:12:56.156186Z\",\"is_anonymous\":false}"
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:58.318Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_sets?select=id%2Ctitle%2Cdescription%2Ccreated_at%2Clanguage_a%2Clanguage_b%2Clanguage_a_code%2Clanguage_b_code%2Cflashcard_set_categories%28category_id%2Ccategories%21flashcard_set_categories_category_id_fkey%28id%2Cname%29%29&user_id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+      "body": "[{\"id\":\"438fcd77-e21a-45b3-9c0c-d370d54c3420\",\"title\":\"konyha\",\"description\":\"most már van elírás\",\"created_at\":\"2025-08-07T23:56:44.303341+00:00\",\"language_a\":\"Hungarian\",\"language_b\":\"English\",\"language_a_code\":null,\"language_b_code\":null,\"flashcard_set_categories\":[{\"categories\": {\"id\": \"477a6888-6ea5-4b03-85b2-78d81b6080e7\", \"name\": \"butor\"}, \"category_id\": \"477a6888-6ea5-4b03-85b2-78d81b6080e7\"}, {\"categories\": {\"id\": \"68f95220-6041-412c-b227-7d77da22340a\", \"name\": \"épület\"}, \"category_id\": \"68f95220-6041-412c-b227-7d77da22340a\"}]}]"
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:58.422Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_set_cards?select=card_id&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:58.422Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_sets?select=id%2Ctitle%2Cdescription%2Ccreated_at%2Clanguage_a%2Clanguage_b%2Clanguage_a_code%2Clanguage_b_code%2Cflashcard_set_categories%28category_id%2Ccategories%21flashcard_set_categories_category_id_fkey%28id%2Cname%29%29&is_public=eq.true&user_id=neq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3",
+      "body": "[]"
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:58.516Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_set_cards?select=card_id&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420",
+      "body": "[{\"card_id\":\"a870f5b6-02da-4ee4-a3f4-baace59cea3d\"}, \n {\"card_id\":\"54b0ec84-163d-4cc7-96b3-1cf031a69e79\"}]"
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:58.516Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_card_progress?select=mastery_level%2Ccard_id%2Clast_reviewed&user_id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:58.605Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_set_progress?select=total_time_spent&user_id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:58.605Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_card_progress?select=mastery_level%2Ccard_id%2Clast_reviewed&user_id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420",
+      "body": "[]"
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:58.723Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/user_set_progress?select=total_time_spent&user_id=eq.1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420",
+      "body": "[]"
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:12:59.137Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept": "application/vnd.pgrst.object+json",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:12:59.232Z",
+      "status": 400,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/favicons?select=data_url%2Cmime_type&is_active=eq.true",
+      "body": "{\"code\":\"42703\",\"details\":null,\"hint\":null,\"message\":\"column favicons.data_url does not exist\"}"
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:13:03.129Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/user",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "x-supabase-api-version": "2024-01-01",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "time": "2025-08-08T21:13:03.226Z",
+      "method": "GET",
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_set_cards?select=cards%28id%2Ctitle%2Cenglish_title%2Ctitle_formatted%2Cenglish_title_formatted%2Cmedia_url%2Cmedia_type%29&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420&order=position.asc",
+      "headers": {
+        "sec-ch-ua-platform": "\"macOS\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkE1NHpPTTQzV2NSOGpVZ0QiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FlaWpsem9rb2J1cWN5em5sanZuLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxZTNlZDY3My05ZWQ5LTRjMDAtOTFjOC00YmNmNTZhZmEzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU0NjkxMTc2LCJpYXQiOjE3NTQ2ODc1NzYsImVtYWlsIjoidmlkYW1rb3NAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6InZpZGFta29zQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyc3RfbmFtZSI6IlZpZGFtIiwibGFzdF9uYW1lIjoiS8OzcyIsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWUzZWQ2NzMtOWVkOS00YzAwLTkxYzgtNGJjZjU2YWZhM2MzIiwidXNlcl9yb2xlIjoic3R1ZGVudCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzU0Njg3NTc2fV0sInNlc3Npb25faWQiOiI4ZjhjZThkZi0zNjJkLTQyNDAtOGNhYS1kZDlmNDgzMWNlOTIiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.uNPw3x-9krx7WU03qNdKiZzhzaRkvdE4ckcqw2vH1Ec",
+        "referer": "http://localhost:3000/",
+        "sec-ch-ua": "\"Chromium\";v=\"139\", \"Not;A=Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.54.0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ1NjYwNTYsImV4cCI6MjA3MDE0MjA1Nn0.Kva8czOdONqJp2512w_94dcRq8ZPkYOnLT9oRsldmJM"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:13:03.226Z",
+      "status": 200,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/auth/v1/user",
+      "body": "{\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"vidamkos@gmail.com\",\"email_confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"phone\":\"\",\"confirmation_sent_at\":\"2025-08-07T11:35:31.187491Z\",\"confirmed_at\":\"2025-08-07T11:38:02.153609Z\",\"last_sign_in_at\":\"2025-08-08T21:12:56.153632Z\",\"app_metadata\":{\"provider\":\"email\",\"providers\":[\"email\"]},\"user_metadata\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"identities\":[{\"identity_id\":\"e7ed89a4-986c-4a60-a92e-f06ec2601d5f\",\"id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_id\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"identity_data\":{\"email\":\"vidamkos@gmail.com\",\"email_verified\":false,\"first_name\":\"Vidam\",\"last_name\":\"Kós\",\"phone_verified\":false,\"sub\":\"1e3ed673-9ed9-4c00-91c8-4bcf56afa3c3\",\"user_role\":\"student\"},\"provider\":\"email\",\"last_sign_in_at\":\"2025-08-07T11:35:31.184818Z\",\"created_at\":\"2025-08-07T11:35:31.184876Z\",\"updated_at\":\"2025-08-07T11:35:31.184876Z\",\"email\":\"vidamkos@gmail.com\"}],\"created_at\":\"2025-08-07T11:35:31.182506Z\",\"updated_at\":\"2025-08-08T21:12:56.156186Z\",\"is_anonymous\":false}"
+    },
+    {
+      "type": "response",
+      "time": "2025-08-08T21:13:03.319Z",
+      "status": 400,
+      "url": "https://aeijlzokobuqcyznljvn.supabase.co/rest/v1/flashcard_set_cards?select=cards%28id%2Ctitle%2Cenglish_title%2Ctitle_formatted%2Cenglish_title_formatted%2Cmedia_url%2Cmedia_type%29&set_id=eq.438fcd77-e21a-45b3-9c0c-d370d54c3420&order=position.asc",
+      "body": "{\"code\":\"PGRST200\",\"details\":\"Searched for a foreign key relationship between 'flashcard_set_cards' and 'cards' in the schema 'public', but no matches were found.\",\"hint\":\"Perhaps you meant 'flashcard_set_categories' instead of 'flashcard_set_cards'.\",\"message\":\"Could not find a relationship between 'flashcard_set_cards' and 'cards' in the schema cache\"}"
+    }
+  ]
+}

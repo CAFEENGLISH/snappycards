@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SnappyCards</title>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <meta name="theme-color" content="#7c3aed">
+    <!-- Favicon - Multiple formats for better browser support -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPCEtLSBCYWNrZ3JvdW5kIC0tPgo8cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI0IiBmaWxsPSIjNjM2NmYxIi8+CjwhLS0gQ2FyZCBTaGFwZSAtLT4KPHJlY3QgeD0iNCIgeT0iNiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjE2IiByeD0iMyIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjZGRkZGRkIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8IS0tIFRleHQgUyAtLT4KPHRleHQgeD0iMTYiIHk9IjE4IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjNjM2NmYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+UzwvdGV4dD4KPCEtLSBTbWFsbCBkb3RzIGZvciBmbGFzaGNhcmQgZWZmZWN0IC0tPgo8Y2lyY2xlIGN4PSI4IiBjeT0iMTAiIHI9IjEiIGZpbGw9IiM2MzY2ZjEiLz4KPGNpcmNsZSBjeD0iMjQiIGN5PSIxOCIgcj0iMSIgZmlsbD0iIzYzNjZmMSIvPgo8L3N2Zz4K">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPCEtLSBCYWNrZ3JvdW5kIC0tPgo8cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI0IiBmaWxsPSIjNjM2NmYxIi8+CjwhLS0gQ2FyZCBTaGFwZSAtLT4KPHJlY3QgeD0iNCIgeT0iNiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjE2IiByeD0iMyIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjZGRkZGRkIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8IS0tIFRleHQgUyAtLT4KPHRleHQgeD0iMTYiIHk9IjE4IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjNjM2NmYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+UzwvdGV4dD4KPCEtLSBTbWFsbCBkb3RzIGZvciBmbGFzaGNhcmQgZWZmZWN0IC0tPgo8Y2lyY2xlIGN4PSI4IiBjeT0iMTAiIHI9IjEiIGZpbGw9IiM2MzY2ZjEiLz4KPGNpcmNsZSBjeD0iMjQiIGN5PSIxOCIgcj0iMSIgZmlsbD0iIzYzNjZmMSIvPgo8L3N2Zz4K">
+    <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPCEtLSBCYWNrZ3JvdW5kIC0tPgo8cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI0IiBmaWxsPSIjNjM2NmYxIi8+CjwhLS0gQ2FyZCBTaGFwZSAtLT4KPHJlY3QgeD0iNCIgeT0iNiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjE2IiByeD0iMyIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjZGRkZGRkIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8IS0tIFRleHQgUyAtLT4KPHRleHQgeD0iMTYiIHk9IjE4IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjNjM2NmYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+UzwvdGV4dD4KPCEtLSBTbWFsbCBkb3RzIGZvciBmbGFzaGNhcmQgZWZmZWN0IC0tPgo8Y2lyY2xlIGN4PSI4IiBjeT0iMTAiIHI9IjEiIGZpbGw9IiM2MzY2ZjEiLz4KPGNpcmNsZSBjeD0iMjQiIGN5PSIxOCIgcj0iMSIgZmlsbD0iIzYzNjZmMSIvPgo8L3N2Zz4K">
+    <meta name="theme-color" content="#6366f1">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -16,12 +18,12 @@
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="config/supabase.js"></script>
-    <script src="lib/favicon.js"></script>
     <script src="lib/i18n.js"></script>
     
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
+    <!-- STYLES_CLEANED_OK (lines 26-1754) -->
     <style>
         * {
             margin: 0;
@@ -41,9 +43,24 @@
 
 
         .container {
-            max-width: 1200px;
+            max-width: 1440px;
+            width: 90%;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
+        }
+        
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1600px;
+                width: 85%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 0 16px;
+            }
         }
 
         /* Header */
@@ -126,7 +143,7 @@
 
         .welcome-section {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
         }
 
         .welcome-title {
@@ -148,9 +165,9 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
         }
 
         .stat-card {
@@ -287,20 +304,41 @@
         }
 
         /* Cards Grid */
+        /* base */
         .cards-grid {
-            display: grid !important;
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 20px !important;
-            margin-bottom: 40px;
-            width: 100% !important;
+            display: grid;
+            gap: 24px;
+            width: 100%;
+            margin-bottom: 24px;
+            grid-template-columns: 1fr;           /* mobile default */
+        }
+
+        /* ≥ 1024px: 2 columns */
+        @media (min-width: 1024px) {
+            .cards-grid { 
+                grid-template-columns: repeat(2, minmax(0, 1fr)); 
+            }
+        }
+
+        /* ≥ 1360px (desktop): 3 columns */
+        @media (min-width: 1360px) {
+            .cards-grid { 
+                grid-template-columns: repeat(3, minmax(0, 1fr)); 
+            }
+        }
+
+        /* remove any width constraints that block 3-up */
+        .flashcard-set, .card, .card-inner, .card-front {
+            max-width: none !important;
+            min-width: 0 !important;
+            width: auto;
         }
 
         .flashcard-set {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
             border-radius: 20px;
-            padding: 24px;
-            padding-bottom: 10px; /* Minimal space for bottom stats */
+            padding: 0;
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
@@ -309,11 +347,87 @@
             display: block !important;
             width: auto !important;
             max-width: none !important;
+            min-height: 300px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .flashcard-set:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .flashcard-set:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            transition: transform 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard-set.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-front {
+            background: transparent;
+            padding-top: var(--pad-top);
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: var(--pad-bottom);
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
+        }
+
+        .card-back {
+            background: rgba(255, 255, 255, 0.9);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-back-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .card-back-title {
+            position: relative;
+            z-index: 2;
+            height: 20%;
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 0 0 20px 20px;
         }
 
         .set-header {
@@ -333,8 +447,20 @@
         .set-description {
             font-size: 14px;
             color: #64748b;
-            margin-bottom: 16px;
-            line-height: 1.5;
+            line-height: var(--desc-lh);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: var(--desc-lines);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-clamp: var(--desc-lines);
+
+            /* reserve constant vertical space */
+            min-height: var(--desc-h);
+            max-height: var(--desc-h);
+
+            margin-bottom: var(--desc-gap);
+            word-break: break-word;
         }
 
         .set-meta {
@@ -356,16 +482,16 @@
 
         /* 🎯 PONTOSAN 2 SOR statisztika - Figma design alapján */
         .set-stats-2row {
-            margin-top: 8px;
-            margin-bottom: 5px;
+            margin-top: 6px;
+            margin-bottom: 0;
             line-height: 1.3;
         }
 
         .row1 {
             display: flex;
-            justify-content: space-evenly;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             gap: 8px;
         }
 
@@ -375,7 +501,22 @@
             align-items: center;
             font-size: 13.6px;
             color: #64748b;
+            padding-top: 2px;
+            padding-bottom: 0;  /* csak ha volt beállítva bármi */
         }
+
+        .row2 .left {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .row2 .right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
 
         /* Status indicators - színes háttérrel */
         .status-indicator {
@@ -413,13 +554,18 @@
             transition: all 0.2s ease;
             border-radius: 4px;
             padding: 2px 6px;
-            margin: -2px -6px;
+            margin: 0;
         }
         
         .language-pair.clickable:hover {
             background: rgba(59, 130, 246, 0.1);
             color: #3b82f6;
             transform: scale(1.05);
+        }
+
+        .dbg-stats{
+            font-size:10px; background:#7c3aed; color:#fff;
+            padding:2px 6px; border-radius:9999px; margin-left:auto;
         }
 
         .time-indicator {
@@ -571,7 +717,7 @@
             border-radius: 10px;
             height: 8px;
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
 
         .progress-fill {
@@ -587,9 +733,6 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
             
             .section-header {
                 flex-direction: column;
@@ -636,8 +779,8 @@
             backdrop-filter: blur(20px);
             border-radius: 24px;
             padding: 40px;
-            max-width: 1200px;
-            width: 95%;
+            max-width: 1440px;
+            width: 90%;
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             transform: scale(0.9);
@@ -647,6 +790,70 @@
         /* Create set modal smaller */
         #createSetModal .modal {
             max-width: 600px;
+        }
+
+        /* Tag styles */
+        .tag-suggestion {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .tag-suggestion:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .tag-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .selected-tag {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 4px 8px 4px 0;
+            animation: tagFadeIn 0.3s ease;
+        }
+
+        .selected-tag .tag-remove {
+            margin-left: 8px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .selected-tag .tag-remove:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes tagFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         /* Add cards modal larger - FLEX layout with fixed buttons */
@@ -841,15 +1048,7 @@
             pointer-events: none !important;
         }
 
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(226, 232, 240, 0.8);
-            justify-content: center;
-        }
+        /* Removed - using .set-actions instead */
 
         .action-btn {
             display: flex;
@@ -895,16 +1094,28 @@
             background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
         }
 
-        .action-btn svg {
+        .action-btn.study {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        }
+
+        .set-actions .action-btn.study {
+            margin-right: 16px !important;
+        }
+
+        .action-btn svg,
+        .action-btn i {
             display: block;
             margin: auto;
+            color: white;
+            width: 20px;
+            height: 20px;
         }
 
         /* Enhanced Cards List Modal */
         .cards-list-modal {
-            max-width: 1200px !important;
+            max-width: 1440px !important;
             max-height: 90vh !important;
-            width: 95% !important;
+            width: 90% !important;
             padding: 0 !important;
             display: flex !important;
             flex-direction: column !important;
@@ -1120,6 +1331,55 @@
         .card-actions {
             display: flex;
             gap: 4px;
+            align-items: center;
+        }
+
+        .set-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+            width: 100%;
+            margin-top: 16px;
+            margin-bottom: 10px;
+        }
+
+
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #6b7280;
+            line-height: normal;
+        }
+
+        .icon-btn:hover {
+            background: rgba(156, 163, 175, 0.1);
+            color: #111827;
+        }
+
+        .icon-btn:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 1px;
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 1.75;
+        }
+
+        @keyframes highlight-flash {
+            0% { background-color: #EEF2FF; }
+            100% { background-color: rgba(255, 255, 255, 0.8); }
         }
 
         .list-action-btn {
@@ -1219,7 +1479,7 @@
         /* Empty state for cards list */
         .empty-state {
             text-align: center;
-            padding: 64px 32px;
+            padding: 32px 32px;
             color: #6b7280;
         }
 
@@ -1277,8 +1537,8 @@
             border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 32px;
-            max-width: 1200px;
-            width: 95%;
+            max-width: 1440px;
+            width: 90%;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -1547,6 +1807,230 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Clamp bottom spacing for the dashboard cards section */
+        main.main-content,
+        main.main-content > .container,
+        main.main-content > .container > section.fade-in-up.delay-2,
+        #ownSetsGrid.cards-grid {
+          margin-bottom: 0 !important;
+          padding-bottom: 24px !important;
+        }
+
+        /* Culprit: prevent the section from forcing extra height */
+        main.main-content > .container > section.fade-in-up.delay-2 {
+          min-height: auto !important;
+          height: auto !important;
+          overflow: visible;
+        }
+
+        /* Grid itself should not enforce extra height */
+        #ownSetsGrid.cards-grid { min-height: auto; }
+
+        /* CSS tokens for description height consistency */
+        :root {
+            --desc-lh: 1.6;         /* line-height used on description */
+            --desc-lines: 2;         /* we want exactly 2 visible lines */
+            --desc-h: calc(var(--desc-lines) * var(--desc-lh) * 1em);
+            --desc-gap: 12px;        /* space below description */
+        }
+
+        /* One-line title with ellipsis */
+        .set-title,
+        .card-front h3,                /* fallback, if no .set-title */
+        .flashcard-set .title {
+            line-height: 1.25;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: var(--title-gap, 10px);
+        }
+
+        /* do NOT set fixed height; just keep it to one line */
+
+        :root {
+            /* vertical paddings and gaps */
+            --pad-top: 20px;
+            --pad-bottom: 6px;      /* was effectively 20; now much tighter */
+            --gap1: 12px;               /* title → description */
+            --gap2: 12px;               /* description → progress */
+            --gap3: 16px;               /* progress → icon row */
+            --gap4: 12px;               /* icon row → chips */
+            --gap5: 6px;            /* chips → bottom row (was 10px) */
+
+            /* row heights */
+            --title-h: 36px;            /* 1-line title at current font */
+            --desc-h: calc(2 * 1.6em);  /* already 2 lines; keep in sync with .set-description */
+            --progress-h: 8px;
+            --icons-h: 56px;            /* colored square buttons */
+            --chips-h: 36px;            /* ✓ / ⚠ / ✗ row */
+            --bottomrow-h: 28px;        /* language + 0/2 + clock + date */
+
+            /* computed card height */
+            --card-h: calc(
+                var(--pad-top) + var(--pad-bottom) +
+                var(--title-h) + var(--gap1) +
+                var(--desc-h) + var(--gap2) +
+                var(--progress-h) + var(--gap3) +
+                var(--icons-h) + var(--gap4) +
+                var(--chips-h) + var(--gap5) +
+                var(--bottomrow-h)
+            );
+        }
+
+        .flashcard-set,
+        .card-inner,
+        .card-front {
+            min-height: var(--card-h);
+        }
+
+        :root {
+            --icon-gap: 8px;
+            --icon-leader-gap: 16px;   /* Study után */
+            --glyph-size: 22px;
+
+            /* responsive, könnyen állítható méret */
+            --icon-size-d: 48px;       /* desktop */
+            --icon-size-t: 44px;       /* tablet */
+            --icon-size-m: 40px;       /* mobile */
+            --icon-size: var(--icon-size-d);
+        }
+        @media (max-width:1360px){ :root{ --icon-size: var(--icon-size-t); } }
+        @media (max-width:1024px){ :root{ --icon-size: var(--icon-size-m); } }
+
+        .set-actions {
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: var(--icon-gap);
+            flex-wrap: nowrap;          /* mindig egy sor */
+        }
+        .set-actions .action-btn {
+            width: var(--icon-size); 
+            height: var(--icon-size);
+            border-radius: 12px;
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+        .set-actions .action-btn.study { 
+            margin-right: var(--icon-leader-gap); 
+        }
+        .set-actions .action-btn i { 
+            width: var(--glyph-size); 
+            height: var(--glyph-size); 
+        }
+
+        :root {
+            --chip-h: var(--chips-h);   /* currently 36px – keep in sync with card calc */
+            --chip-gap: 8px;
+            --chip-pad-x: 10px;
+            --chip-radius: 12px;
+            --chip-font: 15px;
+            --chip-icon: 18px;          /* Lucide glyph inside the chip */
+        }
+
+        .set-stats-2row .row1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;   /* or center if that's our current look */
+            gap: var(--chip-gap);
+            flex-wrap: nowrap;            /* never wrap to a second line */
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: var(--chip-h);
+            padding: 0 var(--chip-pad-x);
+            border-radius: var(--chip-radius);
+            white-space: nowrap;
+            line-height: 1;
+            font-size: var(--chip-font);
+            font-weight: 600;
+        }
+        .status-indicator i {
+            width: var(--chip-icon);
+            height: var(--chip-icon);
+        }
+
+        :root {
+            --bottomrow-h: 28px;         /* already used in --card-h */
+            --bottomrow-gap: 12px;       /* gaps between right-side items */
+            --bottomrow-font: 15px;
+            --bottomrow-icon: 18px;      /* Lucide glyph size for clock */
+        }
+
+        .set-stats-2row .row2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--bottomrow-h);
+            font-size: var(--bottomrow-font);
+            line-height: 1;              /* keep it compact */
+            gap: 8px;                    /* small safety gap between left/right */
+            white-space: nowrap;         /* never wrap to second line */
+        }
+
+        .set-stats-2row .row2 .left {
+            flex: 1 1 auto;              /* takes remaining space */
+            min-width: 0;                /* enables ellipsis */
+        }
+        .set-stats-2row .row2 .left .language-pair {
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin: 0;                   /* no extra vertical space */
+        }
+
+        .set-stats-2row .row2 .right {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: var(--bottomrow-gap);
+            white-space: nowrap;
+        }
+        .set-stats-2row .row2 .right .time-indicator i {
+            width: var(--bottomrow-icon);
+            height: var(--bottomrow-icon);
+        }
+
+        /* Ensure card width is controlled only by the grid */
+        .flashcard-set,
+        .card,
+        .card-inner,
+        .card-front {
+            width: 100%;
+            max-width: none;
+            min-width: 0;
+            box-sizing: border-box;
+            overflow: visible;           /* avoid accidental clipping */
+        }
+
+        /* Prevent inner blocks from forcing width */
+        .set-description,
+        .set-actions,
+        .set-stats-2row,
+        .progress-bar {
+            min-width: 0;                /* enable ellipsis shrink */
+        }
+
+        /* Ensure icons/chips/bottom row don't overflow horizontally */
+        .set-actions, 
+        .set-stats-2row .row1, 
+        .set-stats-2row .row2 {
+            flex-wrap: nowrap;
+            overflow: hidden;            /* safety: no subtle scrollbars */
+        }
+
+        /* Grid container remains the boss */
+        .cards-grid { 
+            width: 100%; 
+        }
+
     </style>
 </head>
 <body>
@@ -1572,21 +2056,30 @@
                         <h3 id="userName">Loading...</h3>
                         <p id="userRole">student</p>
                     </div>
-                    <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()" style="cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" data-i18n-title="dashboard.userMenu" title="Felhasználói menü">Z</div>
+                    <div class="user-avatar" id="userAvatar" style="cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" data-i18n-title="dashboard.userMenu" title="Felhasználói menü">Z</div>
                     
                     <!-- User Dropdown Menu -->
-                    <div id="userDropdownMenu" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); z-index: 1000; min-width: 200px; overflow: hidden; backdrop-filter: blur(8px);">
-                        <div onclick="openSettingsModal(); closeUserMenu()" style="padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background 0.2s ease; border-bottom: 1px solid rgba(0,0,0,0.05);" onmouseover="this.style.background='rgba(102, 126, 234, 0.05)'" onmouseout="this.style.background='none'">
-                            <span style="font-size: 18px;">⚙️</span>
-                            <span style="color: #374151; font-weight: 500;" data-i18n="dashboard.settings">Beállítások</span>
+                    <div id="userDropdownMenu" style="display: none; position: absolute; top: 100%; right: 0; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); z-index: 1000; min-width: 200px; overflow: hidden; border: 1px solid #e5e7eb;">
+                        <div onclick="openSettingsModal(); closeUserMenu()" 
+                             style="padding: 0 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background-color 0.2s ease; height: 40px;"
+                             onmouseover="this.style.backgroundColor='#f3f4f6'; this.querySelector('.menu-icon').style.stroke='#111827'"
+                             onmouseout="this.style.backgroundColor='transparent'; this.querySelector('.menu-icon').style.stroke='#6b7280'">
+                            <i class="menu-icon" data-lucide="settings" style="width: 20px; height: 20px; stroke: #6b7280; stroke-width: 1.75;"></i>
+                            <span style="color: #374151; font-weight: 500; font-size: 14px;" data-i18n="dashboard.settings">Beállítások</span>
                         </div>
-                        <div onclick="openTagManagerModal(); closeUserMenu()" style="padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background 0.2s ease; border-bottom: 1px solid rgba(0,0,0,0.05);" onmouseover="this.style.background='rgba(34, 197, 94, 0.05)'" onmouseout="this.style.background='none'">
-                            <span style="font-size: 18px;">🏷️</span>
-                            <span style="color: #374151; font-weight: 500;" data-i18n="dashboard.tagManager">TAG Kezelő</span>
+                        <div onclick="openTagManagerModal(); closeUserMenu()" 
+                             style="padding: 0 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background-color 0.2s ease; height: 40px;"
+                             onmouseover="this.style.backgroundColor='#f3f4f6'; this.querySelector('.menu-icon').style.stroke='#111827'"
+                             onmouseout="this.style.backgroundColor='transparent'; this.querySelector('.menu-icon').style.stroke='#6b7280'">
+                            <i class="menu-icon" data-lucide="tags" style="width: 20px; height: 20px; stroke: #6b7280; stroke-width: 1.75;"></i>
+                            <span style="color: #374151; font-weight: 500; font-size: 14px;" data-i18n="dashboard.tagManager">TAG kezelő</span>
                         </div>
-                        <div onclick="logout(); closeUserMenu()" style="padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background 0.2s ease;" onmouseover="this.style.background='rgba(239, 68, 68, 0.05)'" onmouseout="this.style.background='none'">
-                            <span style="font-size: 18px;">🚪</span>
-                            <span style="color: #ef4444; font-weight: 500;" data-i18n="dashboard.logout">Kilépés</span>
+                        <div onclick="logout(); closeUserMenu()" 
+                             style="padding: 0 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background-color 0.2s ease; height: 40px;"
+                             onmouseover="this.style.backgroundColor='#f3f4f6'; this.querySelector('.menu-icon').style.stroke='#111827'"
+                             onmouseout="this.style.backgroundColor='transparent'; this.querySelector('.menu-icon').style.stroke='#6b7280'">
+                            <i class="menu-icon" data-lucide="log-out" style="width: 20px; height: 20px; stroke: #6b7280; stroke-width: 1.75;"></i>
+                            <span style="color: #374151; font-weight: 500; font-size: 14px;" data-i18n="dashboard.logout">Kilépés</span>
                         </div>
                     </div>
                 </div>
@@ -1943,6 +2436,7 @@
         </div>
     </div>
 
+    <!-- SCRIPTS_CLEANED_OK (lines 2160-11003) -->
     <script>
         // Supabase client from central configuration
         const supabase = window.supabaseClient;
@@ -2077,20 +2571,20 @@
         // Load flashcard sets from Supabase
         async function loadFlashcardSets() {
             try {
-                // Get user's own sets and public sets
+                // Get user's own sets and public sets (without broken relationship)
                 const [ownSetsResponse, publicSetsResponse] = await Promise.all([
-                    // User's own sets
+                    // User's own sets - simplified query without broken relationship
                     supabase
                         .from('flashcard_sets')
-                        .select('id, title, description, created_at, language_a, language_b, language_a_code, language_b_code, flashcard_set_cards (card_id), flashcard_set_categories (category_id, categories!flashcard_set_categories_category_id_fkey (id, name))')
-                        .eq('creator_id', currentUser.id),
+                        .select('id, title, description, created_at, language_a, language_b, language_a_code, language_b_code, flashcard_set_categories (category_id, categories!flashcard_set_categories_category_id_fkey (id, name))')
+                        .eq('user_id', currentUser.id),
                     
-                    // Public sets (that user didn't create)
+                    // Public sets (that user didn't create) - simplified query
                     supabase
                         .from('flashcard_sets')
-                        .select('id, title, description, created_at, language_a, language_b, language_a_code, language_b_code, flashcard_set_cards (card_id), flashcard_set_categories (category_id, categories!flashcard_set_categories_category_id_fkey (id, name))')
+                        .select('id, title, description, created_at, language_a, language_b, language_a_code, language_b_code, flashcard_set_categories (category_id, categories!flashcard_set_categories_category_id_fkey (id, name))')
                         .eq('is_public', true)
-                        .neq('creator_id', currentUser.id)
+                        .neq('user_id', currentUser.id)
                 ]);
 
                 if (ownSetsResponse.error) {
@@ -2111,8 +2605,15 @@
                 const ownSets = await Promise.all((ownSetsResponse.data || []).map(async set => {
                     console.log(`🔍 DEBUG SZETT: ${set.title}`);
                     console.log('🔍 Set data:', set);
-                    console.log('🔍 flashcard_set_cards:', set.flashcard_set_cards);
-                    console.log('🔍 Cards count:', set.flashcard_set_cards?.length);
+                    
+                    // Get card count manually since relationship is broken
+                    const { data: setCards, error: cardsError } = await supabase
+                        .from('flashcard_set_cards')
+                        .select('card_id', { count: 'exact' })
+                        .eq('set_id', set.id);
+                    
+                    const cardCount = cardsError ? 0 : (setCards?.length || 0);
+                    console.log(`🔍 Cards count for "${set.title}":`, cardCount);
                     
                     // Get user progress for this set
                     console.log(`🔍 LEKÉRDEZÉS OWN: user_id=${currentUser.id}, set_id=${set.id}`);
@@ -2155,7 +2656,7 @@
                     id: set.id,
                     title: set.title,
                     description: set.description || 'Nincs leírás',
-                    cardCount: set.flashcard_set_cards?.length || 0,
+                    cardCount: cardCount,
                         masteredCount: masteredCount,
                         // 📊 RÉSZLETES STATISZTIKÁK a szett kártyához
                         tudokCount: tudokCount,
@@ -2177,8 +2678,15 @@
                 const joinedSets = await Promise.all((publicSetsResponse.data || []).map(async set => {
                     console.log(`🔍 DEBUG JOINED SZETT: ${set.title}`);
                     console.log('🔍 Joined Set data:', set);
-                    console.log('🔍 Joined flashcard_set_cards:', set.flashcard_set_cards);
-                    console.log('🔍 Joined Cards count:', set.flashcard_set_cards?.length);
+                    
+                    // Get card count manually for joined sets too
+                    const { data: setCards, error: cardsError } = await supabase
+                        .from('flashcard_set_cards')
+                        .select('card_id', { count: 'exact' })
+                        .eq('set_id', set.id);
+                    
+                    const cardCount = cardsError ? 0 : (setCards?.length || 0);
+                    console.log(`🔍 Joined Cards count for "${set.title}":`, cardCount);
                     
                     // Get user progress for this set
                     console.log(`🔍 LEKÉRDEZÉS JOINED: user_id=${currentUser.id}, set_id=${set.id}`);
@@ -2221,7 +2729,7 @@
                     id: set.id,
                     title: set.title,
                     description: set.description || 'Nincs leírás',
-                    cardCount: set.flashcard_set_cards?.length || 0,
+                    cardCount: cardCount,
                         masteredCount: masteredCount,
                         // 📊 RÉSZLETES STATISZTIKÁK a szett kártyához (JOINED)
                         tudokCount: tudokCount,
@@ -2288,9 +2796,9 @@
             }
 
             grid.innerHTML = setsToShow.map(set => createSetCard(set, 'own')).join('');
-            
-            // Initialize Lucide icons for dynamically added content
-            lucide.createIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
         }
 
         // Debounce timer for search
@@ -2504,6 +3012,9 @@
             // Simple display: just show the sets directly like normal
             if (filteredSets.length > 0) {
                 container.innerHTML = setsHTML;
+                if (window.lucide && typeof lucide.createIcons === 'function') {
+                    lucide.createIcons();
+                }
             } else {
                 const message = searchQuery 
                     ? `Nincs találat a "${searchQuery}" keresésre a választott TAG-ekkel`
@@ -2734,9 +3245,9 @@
             }
 
             grid.innerHTML = dashboardData.joinedSets.map(set => createSetCard(set, 'joined')).join('');
-            
-            // Initialize Lucide icons for dynamically added content
-            lucide.createIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
         }
 
         // Load invitations
@@ -2751,9 +3262,6 @@
 
             section.style.display = 'block';
             list.innerHTML = dashboardData.invitations.map(createInvitationCard).join('');
-            
-            // Initialize Lucide icons for dynamically added content
-            lucide.createIcons();
         }
 
         // Helper function to format time from seconds to MM:SS
@@ -2774,57 +3282,70 @@
             let actionButtons = '';
             if (type === 'own') {
                 actionButtons = 
-                    '<div class="action-buttons">' +
                         '<button class="action-btn add" onclick="event.stopPropagation(); addCardsToSet(\'' + set.id + '\')" title="Új kártya">' +
-                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5v14"/></svg>' +
+                            '<i data-lucide="plus"></i>' +
                         '</button>' +
                         '<button class="action-btn edit" onclick="event.stopPropagation(); editSet(\'' + set.id + '\')" title="Szerkesztés">' +
-                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>' +
+                            '<i data-lucide="pencil"></i>' +
                         '</button>' +
                         '<button class="action-btn list" onclick="event.stopPropagation(); showCardsList(\'' + set.id + '\')" title="Lista nézet">' +
-                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>' +
+                            '<i data-lucide="list"></i>' +
                         '</button>' +
                         '<button class="action-btn import" onclick="event.stopPropagation(); importCards(\'' + set.id + '\')" title="Import">' +
-                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="16,10 12,6 8,10"/><line x1="12" x2="12" y1="6" y2="14"/></svg>' +
+                            '<i data-lucide="upload"></i>' +
                         '</button>' +
                         '<button class="action-btn delete" onclick="event.stopPropagation(); deleteSet(\'' + set.id + '\')" title="Törlés">' +
-                            '<i data-lucide="trash" width="20" height="20"></i>' +
-                        '</button>' +
-                    '</div>';
+                            '<i data-lucide="trash"></i>' +
+                        '</button>';
             } else {
                 actionButtons = 
-                    '<div class="action-buttons">' +
                         '<button class="action-btn list" onclick="event.stopPropagation(); showCardsList(\'' + set.id + '\')" title="Lista nézet">' +
-                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>' +
+                            '<i data-lucide="list"></i>' +
                         '</button>' +
                         '<button class="action-btn leave" onclick="event.stopPropagation(); leaveSet(\'' + set.id + '\')" title="Szett elhagyása">' +
-                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>' +
-                        '</button>' +
-                    '</div>';
+                            '<i data-lucide="log-out"></i>' +
+                        '</button>';
             }
 
-            return '<div class="flashcard-set" data-set-id="' + set.id + '" data-direction="AtoB" onclick="openSet(\'' + set.id + '\', \'' + type + '\')">' +
-                    '<div class="set-header">' +
-                        '<div>' +
-                            '<h3 class="set-title">' + set.title + '</h3>' +
+            return '<div class="flashcard-set" data-set-id="' + set.id + '" data-direction="AtoB" tabindex="0" onkeydown="handleCardKeydown(event, \'' + set.id + '\')" onclick="flipCard(this)" style="animation: highlight-flash 0.5s ease-out;">' +
+                    '<div class="card-inner">' +
+                        '<div class="card-face card-front">' +
+                            '<div class="set-header">' +
+                                '<div>' +
+                                    '<h3 class="set-title">' + set.title + '</h3>' +
+                                '</div>' +
+                            '</div>' +
+                            '<p class="set-description">' + set.description + '</p>' +
+                            '<div class="progress-bar">' +
+                                '<div class="progress-fill" style="width: ' + progress + '%"></div>' +
+                            '</div>' +
+                            '<div class="set-actions">' +
+                                '<button class="action-btn study" onclick="event.stopPropagation(); openStudyMode(\'' + set.id + '\')" title="Tanulás indítása" aria-label="Tanulás indítása">' +
+                                    '<i data-lucide="play-circle"></i>' +
+                                '</button>' +
+                                actionButtons +
+                            '</div>' +
+                            '<div class="set-stats-2row">' +
+                                '<div class="row1">' +
+                                    '<div class="status-indicator green"><i data-lucide="check" width="16" height="16"></i>' + (set.tudokCount || 0) + '</div>' +
+                                    '<div class="status-indicator yellow"><i data-lucide="alert-triangle" width="16" height="16"></i>' + (set.bizonytalanCount || 0) + '</div>' +
+                                    '<div class="status-indicator red"><i data-lucide="x" width="16" height="16"></i>' + (set.nemTudomCount || 0) + '</div>' +
+                                '</div>' +
+                                '<div class="row2">' +
+                                    '<div class="left">' +
+                                        '<button class="language-pair clickable" onclick="event.stopPropagation(); toggleSetDirection(\'' + set.id + '\')" title="Irány váltása" style="background: none; border: none; color: inherit; font: inherit; cursor: pointer; text-decoration: underline;">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</button>' +
+                                    '</div>' +
+                                    '<div class="right">' +
+                                        '<span class="progress-text">' + (set.totalStudied || 0) + '/' + set.cardCount + '</span>' +
+                                        '<div class="time-indicator"><i data-lucide="clock" width="18" height="18"></i>' + formatTime(set.totalTimeSpent || 0) + '</div>' +
+                                        '<span class="study-date">' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</span>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
                         '</div>' +
-                    '</div>' +
-                    '<p class="set-description">' + set.description + '</p>' +
-                    '<div class="progress-bar">' +
-                        '<div class="progress-fill" style="width: ' + progress + '%"></div>' +
-                    '</div>' +
-                    actionButtons +
-                    '<div class="set-stats-2row">' +
-                        '<div class="row1">' +
-                            '<div class="status-indicator green"><i data-lucide="check" width="16" height="16"></i>' + (set.tudokCount || 0) + '</div>' +
-                            '<div class="status-indicator yellow"><i data-lucide="alert-triangle" width="16" height="16"></i>' + (set.bizonytalanCount || 0) + '</div>' +
-                            '<div class="status-indicator red"><i data-lucide="x" width="16" height="16"></i>' + (set.nemTudomCount || 0) + '</div>' +
-                            '<span class="progress-text">' + (set.totalStudied || 0) + '/' + set.cardCount + '</span>' +
-                            '<div class="time-indicator"><i data-lucide="clock" width="18" height="18"></i>' + formatTime(set.totalTimeSpent || 0) + '</div>' +
-                        '</div>' +
-                        '<div class="row2">' +
-                            '<span class="language-pair clickable" onclick="event.stopPropagation(); toggleSetDirection(\'' + set.id + '\')" title="Irány váltása">' + translateLanguageName(set.language_a) + ' → ' + translateLanguageName(set.language_b) + '</span>' +
-                            '<span class="study-date">' + (type === 'own' ? set.lastStudied : (set.joinedAt || set.createdAt)) + '</span>' +
+                        '<div class="card-face card-back">' +
+                            '<img class="card-back-image" src="' + (set.image_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=face') + '" alt="' + set.title + '">' +
+                            '<div class="card-back-title">' + set.title + '</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -2914,9 +3435,6 @@
                 // Update progress bar
                 const progress = totalCards > 0 ? Math.round((tudokCount / totalCards) * 100) : 0;
                 if (progressBar) progressBar.style.width = progress + '%';
-                
-                // Re-initialize Lucide icons
-                lucide.createIcons();
                 
                 console.log(`📊 Direction ${direction} stats: ${tudokCount}/${bizonytalanCount}/${nemTudomCount} (${totalStudied}/${totalCards}) ⏱️${totalTimeSpent}s`);
                 
@@ -3019,7 +3537,7 @@
                     .insert({
                         title: title,
                         description: description || null,
-                        creator_id: currentUser.id,
+                        user_id: currentUser.id,
                         is_public: false,
                         language_a: translateToEnglish(languageAName),
                         language_b: translateToEnglish(languageBName)
@@ -3197,6 +3715,26 @@
             console.log('DEBUG: openSet called with:', { setId, type });
             // Navigate to slot machine page
             window.location.href = 'slot-machine.html?setId=' + setId;
+        }
+
+        function openStudyMode(setId) {
+            console.log('DEBUG: openStudyMode called with:', { setId });
+            window.location.href = 'study.html?setId=' + setId;
+        }
+
+        function flipCard(cardElement) {
+            if (cardElement.classList.contains('flipped')) {
+                cardElement.classList.remove('flipped');
+            } else {
+                cardElement.classList.add('flipped');
+            }
+        }
+
+        function handleCardKeydown(event, setId) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                flipCard(event.currentTarget);
+            }
         }
 
         // Helper function to close all dropdowns
@@ -3430,7 +3968,7 @@
                                            oninput="updatePreview(); handleTagInput(this.value)"
                                            onkeydown="handleTagKeydown(event)"
                                            onfocus="updateCategoryPlaceholder()">
-                                    <div id="tagSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; max-height: 150px; overflow-y: auto; z-index: 1000; display: none;"></div>
+                                    <div id="tagSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); max-height: 150px; overflow-y: auto; z-index: 10000; display: none;"></div>
                                 </div>
                                 <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;" id="selectedTags"></div>
                             </div>
@@ -3486,234 +4024,6 @@
                     </div>
                 </form>
                 
-                <style>
-                .modern-input {
-                    width: 100%;
-                    padding: 20px 24px;
-                    border: 2px solid #e2e8f0;
-                    background: #ffffff;
-                    font-size: 16px;
-                    font-weight: 500;
-                    color: #374151;
-                    transition: all 0.2s ease;
-                    outline: none;
-                }
-                
-                .modern-input:focus {
-                    border-color: #667eea;
-                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-                }
-                
-                .modern-input::placeholder {
-                    color: #9ca3af;
-                    font-weight: 400;
-                }
-
-                /* Rich Text Editor Styles */
-                .rich-text-toolbar {
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                    padding: 8px 12px;
-                    background: #f8fafc;
-                    border: 2px solid #e2e8f0;
-                    border-bottom: none;
-                    margin-bottom: 0;
-                }
-
-                .toolbar-btn {
-                    background: transparent;
-                    border: 1px solid transparent;
-                    padding: 8px 12px;
-                    font-size: 13px;
-                    font-weight: 600;
-                    color: #374151;
-                    cursor: pointer;
-                    border-radius: 6px;
-                    transition: all 0.2s ease;
-                    min-width: 34px;
-                    height: 34px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .toolbar-btn:hover {
-                    background: #e2e8f0;
-                    border-color: #cbd5e1;
-                    transform: translateY(-1px);
-                }
-
-                .toolbar-btn:active {
-                    transform: translateY(0);
-                    background: #cbd5e1;
-                }
-
-                .toolbar-btn.active {
-                    background: #667eea;
-                    color: white;
-                    border-color: #667eea;
-                    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
-                }
-
-                .highlight-btn.active {
-                    background: #fbbf24 !important;
-                    color: #92400e !important;
-                    border-color: #f59e0b !important;
-                    box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3) !important;
-                }
-
-                .highlight-btn {
-                    background: #fef3c7;
-                    color: #92400e;
-                    border-color: #fcd34d;
-                }
-
-                .highlight-btn:hover {
-                    background: #fbbf24;
-                }
-
-                .clear-btn {
-                    color: #ef4444;
-                    font-size: 16px;
-                    font-weight: 700;
-                }
-
-                .clear-btn:hover {
-                    background: #fee2e2;
-                    border-color: #fca5a5;
-                }
-
-                .toolbar-separator {
-                    width: 1px;
-                    height: 24px;
-                    background: #d1d5db;
-                    margin: 0 8px;
-                }
-
-                .color-picker {
-                    width: 36px;
-                    height: 34px;
-                    padding: 0;
-                    border: 1px solid #d1d5db;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    background: none;
-                }
-
-                .rich-text-input {
-                    width: 100%;
-                    min-height: 60px;
-                    padding: 20px 24px;
-                    border: 2px solid #e2e8f0;
-                    border-top: none;
-                    background: #ffffff;
-                    font-size: 24px;
-                    font-weight: 500;
-                    color: #000000;
-                    transition: all 0.2s ease;
-                    outline: none;
-                    overflow-wrap: break-word;
-                    line-height: 1.5;
-                }
-
-                .rich-text-input:focus {
-                    border-color: #667eea;
-                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-                }
-
-                .rich-text-input:empty:before {
-                    content: attr(data-placeholder);
-                    color: #9ca3af;
-                    font-weight: 400;
-                    pointer-events: none;
-                }
-
-                .rich-text-input.required-error {
-                    border-color: #ef4444;
-                    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-                }
-                
-                .tag-chip {
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 6px 12px;
-                    background: #f3f4f6;
-                    border: 1px solid #d1d5db;
-                    font-size: 12px;
-                    font-weight: 500;
-                    color: #374151;
-                    gap: 6px;
-                }
-                
-                .tag-chip .remove {
-                    cursor: pointer;
-                    color: #ef4444;
-                    font-weight: 600;
-                }
-                
-                .tag-suggestion {
-                    padding: 12px 16px;
-                    cursor: pointer;
-                    border-bottom: 1px solid #f3f4f6;
-                    font-size: 14px;
-                }
-                
-                .tag-suggestion:hover {
-                    background: #f8fafc;
-                }
-                
-                .tag-suggestion.selected {
-                    background: #667eea;
-                    color: white;
-                }
-                
-                @media (max-width: 1024px) {
-                    .modal {
-                        width: 98%;
-                        max-width: none;
-                        margin: 20px;
-                    }
-                    
-                    /* Make all input grids single column on mobile */
-                    #addCardsFormContainer > form > div:first-child > div:nth-child(2),
-                    #addCardsFormContainer > form > div:first-child > div:nth-child(3) {
-                        grid-template-columns: 1fr !important;
-                        gap: 24px !important;
-                    }
-                    
-                    /* Preview cards responsive */
-                    #cardPreview > div {
-                        grid-template-columns: 1fr !important;
-                        gap: 16px !important;
-                    }
-                    
-                    /* Adjust card heights for mobile */
-                    #previewMediaContainer,
-                    #previewMediaContainerB {
-                        min-height: 150px !important;
-                    }
-                    
-                    /* Media input responsive */
-                    .modern-input-group > div > div:first-child > button {
-                        width: 50px !important;
-                        height: 50px !important;
-                        font-size: 20px !important;
-                    }
-                    
-                    /* Video URL input responsive */
-                    .modern-input-group > div > div:nth-child(2) > input {
-                        max-width: 200px !important;
-                    }
-                    
-                    /* Action buttons responsive */
-                    .modern-input-group > div > div:nth-child(2) > button {
-                        width: 35px !important;
-                        height: 35px !important;
-                        font-size: 14px !important;
-                    }
-                }
-                </style>
             `;
             
             // Initialize
@@ -4074,12 +4384,7 @@
                 // Load card data from database
                 const { data: cardData, error } = await supabase
                     .from('cards')
-                    .select(`
-                        *,
-                        flashcard_set_cards!inner(
-                            flashcard_sets!inner(*)
-                        )
-                    `)
+                    .select('*')
                     .eq('id', cardId)
                     .single();
                 
@@ -4089,7 +4394,49 @@
                     return;
                 }
                 
-                const setData = cardData.flashcard_set_cards[0].flashcard_sets;
+                // Get the card's categories
+                const { data: cardCategories, error: catError } = await supabase
+                    .from('card_categories')
+                    .select('category_id')
+                    .eq('card_id', cardId);
+                
+                if (!catError && cardCategories && cardCategories.length > 0) {
+                    // Get category names
+                    const categoryIds = cardCategories.map(cc => cc.category_id);
+                    const { data: categories } = await supabase
+                        .from('categories')
+                        .select('id, name')
+                        .in('id', categoryIds);
+                    
+                    cardData.categories = categories || [];
+                } else {
+                    cardData.categories = [];
+                }
+                
+                // Get the set data separately
+                const { data: linkData, error: linkError } = await supabase
+                    .from('flashcard_set_cards')
+                    .select('set_id')
+                    .eq('card_id', cardId)
+                    .single();
+                
+                if (linkError) {
+                    console.error('Error loading card link:', linkError);
+                    showErrorMessage('❌ Hiba a kártya szett kapcsolat betöltése során!');
+                    return;
+                }
+                
+                const { data: setData, error: setError } = await supabase
+                    .from('flashcard_sets')
+                    .select('*')
+                    .eq('id', linkData.set_id)
+                    .single();
+                
+                if (setError) {
+                    console.error('Error loading set:', setError);
+                    showErrorMessage('❌ Hiba a szett betöltése során!');
+                    return;
+                }
                 const languageA = translateLanguageName(setData.language_a) || 'Magyar';
                 const languageB = translateLanguageName(setData.language_b) || 'Angol';
                 
@@ -4133,6 +4480,35 @@
                 
                 // Generate the EXACT SAME form as for new cards, but with edit mode
                 generateEditCardForm(languageA, languageB, cardData);
+                
+                // Load existing tags into the form
+                if (cardData.categories && cardData.categories.length > 0) {
+                    // Clear selected tags list first
+                    selectedTagsList = [];
+                    const selectedTagsContainer = document.getElementById('selectedTags');
+                    if (selectedTagsContainer) {
+                        selectedTagsContainer.innerHTML = '';
+                    }
+                    
+                    // Add each category as a tag
+                    cardData.categories.forEach(category => {
+                        if (category && category.name) {
+                            // Add to selectedTagsList for saving
+                            if (!selectedTagsList.includes(category.name)) {
+                                selectedTagsList.push(category.name);
+                            }
+                            
+                            // Create visual tag element
+                            const tagElement = document.createElement('div');
+                            tagElement.style.cssText = 'display: inline-flex; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;';
+                            tagElement.innerHTML = `
+                                ${category.name}
+                                <button type="button" onclick="removeTag('${category.name}')" style="margin-left: 8px; background: none; border: none; color: white; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;">×</button>
+                            `;
+                            selectedTagsContainer.appendChild(tagElement);
+                        }
+                    });
+                }
                 
                 // Show the edit modal
                 editModalContainer.style.display = 'block';
@@ -4296,7 +4672,7 @@
                                            oninput="updatePreview(); handleTagInput(this.value)"
                                            onkeydown="handleTagKeydown(event)"
                                            onfocus="updateCategoryPlaceholder()">
-                                    <div id="tagSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; max-height: 150px; overflow-y: auto; z-index: 1000; display: none;"></div>
+                                    <div id="tagSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); max-height: 150px; overflow-y: auto; z-index: 10000; display: none;"></div>
                                 </div>
                                 <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;" id="selectedTags"></div>
                             </div>
@@ -4353,188 +4729,6 @@
                     </div>
                 </form>
                 
-                <style>
-                .modern-input {
-                    width: 100%;
-                    padding: 20px 24px;
-                    border: 2px solid #e2e8f0;
-                    background: #ffffff;
-                    font-size: 16px;
-                    font-weight: 500;
-                    color: #374151;
-                    transition: all 0.2s ease;
-                    outline: none;
-                }
-                
-                .modern-input:focus {
-                    border-color: #667eea;
-                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-                }
-                
-                .modern-input::placeholder {
-                    color: #9ca3af;
-                    font-weight: 400;
-                }
-
-                /* Rich Text Editor Styles */
-                .rich-text-toolbar {
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                    padding: 8px 12px;
-                    background: #f8fafc;
-                    border: 2px solid #e2e8f0;
-                    border-bottom: none;
-                    margin-bottom: 0;
-                }
-
-                .toolbar-btn {
-                    background: transparent;
-                    border: 1px solid transparent;
-                    padding: 8px 12px;
-                    font-size: 13px;
-                    font-weight: 600;
-                    color: #374151;
-                    cursor: pointer;
-                    border-radius: 6px;
-                    transition: all 0.2s ease;
-                    min-width: 34px;
-                    height: 34px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .toolbar-btn:hover {
-                    background: #e2e8f0;
-                    border-color: #cbd5e1;
-                    transform: translateY(-1px);
-                }
-
-                .toolbar-btn:active {
-                    transform: translateY(0);
-                    background: #cbd5e1;
-                }
-
-                .toolbar-btn.active {
-                    background: #667eea;
-                    color: white;
-                    border-color: #667eea;
-                    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
-                }
-
-                .highlight-btn.active {
-                    background: #fbbf24 !important;
-                    color: #92400e !important;
-                    border-color: #f59e0b !important;
-                    box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3) !important;
-                }
-
-                .highlight-btn {
-                    background: #fef3c7;
-                    color: #92400e;
-                    border-color: #fcd34d;
-                }
-
-                .highlight-btn:hover {
-                    background: #fbbf24;
-                }
-
-                .clear-btn {
-                    color: #ef4444;
-                    font-size: 16px;
-                    font-weight: 700;
-                }
-
-                .clear-btn:hover {
-                    background: #fee2e2;
-                    border-color: #fca5a5;
-                }
-
-                .toolbar-separator {
-                    width: 1px;
-                    height: 24px;
-                    background: #d1d5db;
-                    margin: 0 8px;
-                }
-
-                .color-picker {
-                    width: 36px;
-                    height: 34px;
-                    padding: 0;
-                    border: 1px solid #d1d5db;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    background: none;
-                }
-
-                .rich-text-input {
-                    width: 100%;
-                    min-height: 60px;
-                    padding: 20px 24px;
-                    border: 2px solid #e2e8f0;
-                    border-top: none;
-                    background: #ffffff;
-                    font-size: 24px;
-                    font-weight: 500;
-                    color: #000000;
-                    transition: all 0.2s ease;
-                    outline: none;
-                    overflow-wrap: break-word;
-                    line-height: 1.5;
-                }
-
-                .rich-text-input:focus {
-                    border-color: #667eea;
-                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-                }
-
-                .rich-text-input:empty:before {
-                    content: attr(data-placeholder);
-                    color: #9ca3af;
-                    font-weight: 400;
-                    pointer-events: none;
-                }
-
-                .rich-text-input.required-error {
-                    border-color: #ef4444;
-                    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-                }
-                
-                .tag-chip {
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 6px 12px;
-                    background: #f3f4f6;
-                    border: 1px solid #d1d5db;
-                    font-size: 12px;
-                    font-weight: 500;
-                    color: #374151;
-                    gap: 6px;
-                }
-                
-                .tag-chip .remove {
-                    cursor: pointer;
-                    color: #ef4444;
-                    font-weight: 600;
-                }
-                
-                .tag-suggestion {
-                    padding: 12px 16px;
-                    cursor: pointer;
-                    border-bottom: 1px solid #f3f4f6;
-                    font-size: 14px;
-                }
-                
-                .tag-suggestion:hover {
-                    background: #f8fafc;
-                }
-                
-                .tag-suggestion.selected {
-                    background: #667eea;
-                    color: white;
-                }
-                </style>
             `;
             
             // Initialize - same as new card
@@ -4605,10 +4799,10 @@
                     // Add to selectedTagsList for processing
                     selectedTagsList = [...categoryNames];
                     
-                    // Set input field with comma-separated values
+                    // Keep input field empty for adding new tags
                     const tagsInput = document.getElementById('singleTags');
                     if (tagsInput) {
-                        tagsInput.value = categoryNames.join(', ');
+                        tagsInput.value = '';  // Always keep input empty
                     }
                     
                     // Display the tag chips
@@ -4629,6 +4823,16 @@
             const titleB = document.getElementById('singleWordB').innerHTML.trim();
             const videoUrl = document.getElementById('singleVideoUrl').value.trim();
             const tagsInput = document.getElementById('singleTags').value.trim();
+            
+            // Add any text input tags to selectedTagsList
+            if (tagsInput) {
+                const inputTags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+                for (const tagName of inputTags) {
+                    if (!selectedTagsList.includes(tagName)) {
+                        selectedTagsList.push(tagName);
+                    }
+                }
+            }
             
             if (!titleA || !titleB) {
                 showErrorMessage('❌ Kérlek töltsd ki mindkét nyelvi mezőt!');
@@ -4652,8 +4856,8 @@
                     return;
                 }
                 
-                // Handle categories/tags update
-                await updateCardCategories(currentEditCardId, tagsInput);
+                // Handle categories/tags update - use selectedTagsList
+                await updateCardCategoriesFromList(currentEditCardId, selectedTagsList);
                 
                 showSuccessMessage('✅ Kártya sikeresen frissítve!');
                 
@@ -4676,23 +4880,50 @@
             if (!window.currentListSet) return [];
             
             try {
-                const { data: cards, error } = await supabase
+                // First get card IDs from junction table
+                const { data: setCards, error: junctionError } = await supabase
                     .from('flashcard_set_cards')
-                    .select(`
-                        cards (
-                            id,
-                            title,
-                            english_title,
-                            image_url
-                        )
-                    `)
-                    .eq('flashcard_set_id', window.currentListSet.id);
+                    .select('card_id')
+                    .eq('set_id', window.currentListSet.id);
+                
+                if (junctionError) throw junctionError;
+                
+                if (!setCards || setCards.length === 0) {
+                    window.currentListCards = [];
+                    return [];
+                }
+                
+                // Get the actual cards
+                const cardIds = setCards.map(sc => sc.card_id);
+                const { data: cards, error } = await supabase
+                    .from('cards')
+                    .select('*')
+                    .in('id', cardIds);
                 
                 if (error) throw error;
                 
-                const cardsList = cards.map(item => item.cards);
-                window.currentListCards = cardsList;
-                return cardsList;
+                // Load categories for each card
+                for (const card of cards) {
+                    const { data: cardCategories } = await supabase
+                        .from('card_categories')
+                        .select('category_id')
+                        .eq('card_id', card.id);
+                    
+                    if (cardCategories && cardCategories.length > 0) {
+                        const categoryIds = cardCategories.map(cc => cc.category_id);
+                        const { data: categories } = await supabase
+                            .from('categories')
+                            .select('id, name')
+                            .in('id', categoryIds);
+                        
+                        card.categories = categories || [];
+                    } else {
+                        card.categories = [];
+                    }
+                }
+                
+                window.currentListCards = cards;
+                return cards;
                 
             } catch (error) {
                 console.error('Error reloading cards:', error);
@@ -5190,7 +5421,9 @@
 
         // Handle tag input with autocomplete from categories table
         async function handleTagInput(value) {
+            console.log('🏷️ handleTagInput called with:', value);
             const suggestions = document.getElementById('tagSuggestions');
+            console.log('🏷️ suggestions element found:', !!suggestions);
             
             if (!value.trim()) {
                 suggestions.style.display = 'none';
@@ -5231,11 +5464,14 @@
             
             try {
                 // Search categories from database
+                console.log('🔍 Searching for tags containing:', currentTag);
                 const { data: categories, error } = await supabase
                     .from('categories')
                     .select('name')
                     .ilike('name', '%' + currentTag + '%')
                     .limit(10);
+                
+                console.log('🔍 Database results:', categories, error);
                 
                 if (error) {
                     console.error('Error loading categories:', error);
@@ -5247,6 +5483,8 @@
                 const matches = categories
                     .map(cat => cat.name)
                     .filter(name => !selectedTagsList.includes(name));
+                    
+                console.log('🔍 Filtered matches:', matches);
                 
                 const exactMatch = matches.find(name => name.toLowerCase() === currentTag);
                 
@@ -5457,8 +5695,8 @@
                     title_formatted: wordAFormatted, // Rich text for display
                     english_title_formatted: wordBFormatted, // Rich text for display
                     media_type: mediaType,
-                    media_url: mediaUrl || getDefaultMediaUrl(mediaType),
-                    image_url: mediaUrl || getDefaultMediaUrl(mediaType), // backwards compatibility
+                    media_url: mediaUrl || null, // Don't add default URL
+                    image_url: mediaUrl || null, // Don't add default URL
                     image_alt: wordA + ' - ' + wordB,
                     category_id: null, // Will be set if tags are selected
                     difficulty_level: 1
@@ -5472,7 +5710,7 @@
                 if (approveBtn2) approveBtn2.innerHTML = '';
                 showSuccessMessage(` Kártya sikeresen mentve az adatbázisba!`);
                 
-                // Clear form after short delay
+                // Clear form and close modal after short delay
                 setTimeout(() => {
                     clearForm();
                     if (approveBtn) {
@@ -5483,6 +5721,10 @@
                         approveBtn2.disabled = false;
                         approveBtn2.innerHTML = originalContent2;
                     }
+                    // Close the add cards modal
+                    closeAddCardsModal();
+                    // Reload dashboard data to update card counts
+                    loadDashboardData();
                 }, 1500);
                 
             } catch (error) {
@@ -5512,6 +5754,19 @@
             
             if (cardError) {
                 throw new Error('Kártya mentési hiba: ' + cardError.message + '');
+            }
+            
+            // Link card to flashcard set
+            const { error: linkError } = await supabase
+                .from('flashcard_set_cards')
+                .insert({
+                    set_id: setId,
+                    card_id: card.id
+                });
+            
+            if (linkError) {
+                console.error('Error linking card to set:', linkError);
+                throw new Error('Kártya összekapcsolási hiba: ' + linkError.message + '');
             }
             
             // Handle categories if any are selected - create many-to-many relationships
@@ -5627,6 +5882,60 @@
             } catch (error) {
                 console.error('Error updating card categories:', error);
                 // Don't throw - the card update was successful
+            }
+        }
+        
+        // Update card categories from selectedTagsList
+        async function updateCardCategoriesFromList(cardId, tagsList) {
+            console.log('🏷️ updateCardCategoriesFromList called with:', cardId, tagsList);
+            try {
+                // Create service role client for admin operations
+                const { createClient } = window.supabase;
+                const serviceSupabase = createClient(
+                    'https://aeijlzokobuqcyznljvn.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlaWpsem9rb2J1cWN5em5sanZuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDU2NjA1NiwiZXhwIjoyMDcwMTQyMDU2fQ.wwrrCv8xd3uECT24fBKasPk5MJPz3hlS_32jzJebbhs'
+                );
+                
+                // Delete existing card-category relationships using service role
+                const { error: deleteError } = await serviceSupabase
+                    .from('card_categories')
+                    .delete()
+                    .eq('card_id', cardId);
+                
+                if (deleteError) {
+                    console.error('Error deleting old categories:', deleteError);
+                    // Don't throw - continue with adding new ones
+                }
+                
+                // Add new categories if any
+                if (tagsList && tagsList.length > 0) {
+                    console.log('🏷️ Adding tags to card:', tagsList);
+                    const cardCategories = [];
+                    for (const tagName of tagsList) {
+                        // Get or create category
+                        const categoryId = await getOrCreateCategory(tagName);
+                        console.log('🏷️ Category ID for', tagName, ':', categoryId);
+                        cardCategories.push({
+                            card_id: cardId,
+                            category_id: categoryId
+                        });
+                    }
+                    
+                    // Insert all card-category relationships using service role
+                    console.log('🏷️ Inserting card-category relationships:', cardCategories);
+                    const { error: insertError } = await serviceSupabase
+                        .from('card_categories')
+                        .insert(cardCategories);
+                    
+                    if (insertError) {
+                        console.error('❌ Error adding new categories:', insertError);
+                        // Don't throw - the card was updated successfully
+                    } else {
+                        console.log('✅ Categories successfully linked to card!');
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating card categories:', error);
             }
         }
 
@@ -6094,7 +6403,7 @@
             
             container.innerHTML = `
                 <div class="modal-overlay active" onclick="closeModal()">
-                    <div class="modal" onclick="event.stopPropagation()" style="max-width: 500px;">
+                    <div class="modal" onclick="event.stopPropagation()" style="max-width: 700px; max-height: 80vh; overflow-y: auto;">
                         <div class="modal-header">
                             <h2 style="margin: 0; color: #667eea; font-size: 24px; font-weight: 700;">
                                 Beállítások
@@ -6102,44 +6411,99 @@
                             <button onclick="closeModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #64748b; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(100, 116, 139, 0.1)'" onmouseout="this.style.background='none'">×</button>
                         </div>
                         
-                        <div style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; margin-bottom: 16px;">
+                        <!-- Személyes Profil -->
+                        <div style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; margin-bottom: 16px; border-radius: 12px;">
+                            <h3 style="margin: 0 0 16px 0; color: #374151; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                                Személyes profil
+                            </h3>
                             
-                            <!-- Language Setting -->
-                            <div style="margin-bottom: 20px;">
-                                <label style="display: block; margin-bottom: 12px; font-weight: 600; color: #374151; font-size: 16px;">
-                                    Snappy Cards felületi nyelve
-                                </label>
-                                <p style="font-size: 14px; color: #64748b; margin-bottom: 16px; line-height: 1.5;">
-                                    Ez a beállítás határozza meg, hogy milyen nyelven jelenjen meg a Snappy Cards felülete.
-                                </p>
-                                
-                                <!-- IDEIGLENESEN LETILTVA FIGYELMEZTETÉS -->
-                                <div style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 13px; color: #e67e22;">
-                                    <strong> Figyelem:</strong> A nyelvváltás funkció jelenleg fejlesztés alatt áll és ideiglenesen letiltva. Az alkalmazás magyar nyelven működik.
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151; font-size: 14px;">Keresztnév</label>
+                                    <input type="text" id="profileFirstName" style="width: 100%; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 14px;" placeholder="Adja meg keresztnevét">
                                 </div>
-                                
-                                <div style="background: rgba(102, 126, 234, 0.05); border: 1px solid rgba(102, 126, 234, 0.2); border-radius: 12px; padding: 12px; margin-bottom: 16px; font-size: 13px; color: #64748b;">
-                                    <strong>Böngésző nyelve:</strong> ' + navigator.language + ' (' + navigator.language.slice(0, 2) + ')<br>
-                                    <strong>Jelenlegi beállítás:</strong> Magyar (rögzített)
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151; font-size: 14px;">Vezetéknév</label>
+                                    <input type="text" id="profileLastName" style="width: 100%; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 14px;" placeholder="Adja meg vezetéknevét">
                                 </div>
-                                
-                                <select id="interfaceLanguageSelect" 
-                                        disabled 
-                                        style="width: 100%; padding: 16px 20px; border: 2px solid rgba(102, 126, 234, 0.1); border-radius: 16px; font-size: 16px; background: rgba(200, 200, 200, 0.3); backdrop-filter: blur(8px); transition: all 0.3s ease; outline: none; color: #666666; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 4 5%22><path fill=%22%23999%22 d=%22M2 0L0 2h4zm0 5L0 3h4z%22/></svg>'); background-repeat: no-repeat; background-position: right 20px center; background-size: 12px; cursor: not-allowed;"
-                                        title="Nyelvváltás ideiglenesen letiltva">
-                                    <option value="hu" ' + (currentLang === 'hu' ? 'selected' : '') + '> Magyar</option>
-                                    <option value="en" ' + (currentLang === 'en' ? 'selected' : '') + '> English</option>
-                                    <option value="th" ' + (currentLang === 'th' ? 'selected' : '') + '> ไทย</option>
-                                </select>
                             </div>
                             
-                            <!-- Detect Browser Language -->
-                            <div style="margin-bottom: 24px;">
-                                <button disabled 
-                                        style="padding: 12px 20px; background: rgba(200, 200, 200, 0.2); border: 2px solid rgba(200, 200, 200, 0.3); border-radius: 12px; cursor: not-allowed; transition: all 0.3s ease; font-size: 14px; color: #999999; font-weight: 600;"
-                                        title="Automatikus nyelvfelismerés ideiglenesen letiltva">
-                                    Böngésző nyelvének automatikus felismerése (letiltva)
-                                </button>
+                            <div style="margin-bottom: 16px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151; font-size: 14px;">Email cím</label>
+                                <input type="email" id="profileEmail" style="width: 100%; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 14px;" placeholder="email@example.com" readonly>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151; font-size: 14px;">Telefonszám</label>
+                                    <input type="tel" id="profilePhone" style="width: 100%; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 14px;" placeholder="+36-XX-XXX-XXXX">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151; font-size: 14px;">Anyanyelv</label>
+                                    <select id="profileNativeLanguage" style="width: 100%; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 14px;">
+                                        <option value="hu">Magyar</option>
+                                        <option value="en">English</option>
+                                        <option value="de">Deutsch</option>
+                                        <option value="es">Español</option>
+                                        <option value="fr">Français</option>
+                                        <option value="it">Italiano</option>
+                                        <option value="th">ไทย</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 16px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151; font-size: 14px;">Mit tanulsz vagy szeretnél tanulni?</label>
+                                
+                                <!-- Language input with autocomplete -->
+                                <div style="position: relative; margin-bottom: 8px;">
+                                    <input type="text" id="learningLanguageInput" 
+                                           placeholder="Keress nyelvet..."
+                                           style="width: 100%; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 14px;"
+                                           oninput="filterLearningLanguages(this.value)"
+                                           onfocus="showLearningLanguageOptions()"
+                                           onblur="setTimeout(() => hideLearningLanguageOptions(), 150)">
+                                    
+                                    <!-- Language options dropdown -->
+                                    <div id="learningLanguageOptions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid rgba(102, 126, 234, 0.2); border-top: none; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; z-index: 1000; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
+                                        <!-- Options will be populated dynamically -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Selected languages (like tags) - now below input -->
+                                <div id="selectedLearningLanguages" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 20px;">
+                                    <!-- Selected language badges will appear here -->
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <!-- Nyelvi beállítások -->
+                        <div style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px; margin-bottom: 16px; border-radius: 12px;">
+                            <h3 style="margin: 0 0 16px 0; color: #374151; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                                🌍 Snappy Cards felületi nyelve
+                            </h3>
+                            <p style="font-size: 14px; color: #64748b; margin-bottom: 16px; line-height: 1.5;">
+                                Ez a beállítás határozza meg, hogy milyen nyelven jelenjen meg a Snappy Cards felülete.
+                            </p>
+                            
+                            <div style="background: rgba(102, 126, 234, 0.05); border: 1px solid rgba(102, 126, 234, 0.2); border-radius: 12px; padding: 12px; margin-bottom: 16px; font-size: 13px; color: #64748b;">
+                                <strong>Böngésző nyelve:</strong> ${navigator.language} (${navigator.language.slice(0, 2)})<br>
+                                <strong>Jelenlegi UI nyelv:</strong> <span id="currentUILanguageDisplay">Magyar</span>
+                            </div>
+                            
+                            <!-- UI Language dropdown selection -->
+                            <div style="position: relative; margin-bottom: 16px;">
+                                <input type="text" id="uiLanguageInput" 
+                                       placeholder="Válassz felületi nyelvet..."
+                                       readonly
+                                       style="width: 100%; padding: 12px; border: 2px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 14px; cursor: pointer; background: white;"
+                                       onclick="toggleUILanguageDropdown()">
+                                
+                                <!-- UI Language options dropdown -->
+                                <div id="uiLanguageOptions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid rgba(102, 126, 234, 0.2); border-top: none; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; z-index: 1000; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
+                                    <!-- Options will be populated dynamically -->
+                                </div>
                             </div>
                             
                         </div>
@@ -6149,7 +6513,13 @@
                                     style="padding: 12px 24px; background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; font-size: 16px; color: #64748b; font-weight: 600;"
                                     onmouseover="this.style.background='#e2e8f0'"
                                     onmouseout="this.style.background='#f1f5f9'">
-                                Bezárás
+                                Mégse
+                            </button>
+                            <button onclick="saveAllSettings()" 
+                                    style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                    onmouseover="this.style.transform='scale(1.02)'"
+                                    onmouseout="this.style.transform='scale(1)'">
+                                Mentés
                             </button>
                         </div>
                     </div>
@@ -6157,6 +6527,623 @@
             `;
             
             container.style.display = 'block';
+            
+            // Load languages and profile data
+            loadAvailableLanguages();
+            loadProfileSettings();
+            loadUserLearningLanguages();
+            loadCurrentUILanguage();
+        }
+
+        // Get supported languages from i18n.js or use fallback
+        function getSupportedLanguages() {
+            return window.snappyI18n?.getSupportedLanguages() || {
+                'hu': '🇭🇺 Magyar',
+                'en': '🇺🇸 English',
+                'th': '🇹🇭 ไทย'
+            };
+        }
+
+        // Global variables for language management
+        let availableLanguages = [];
+        let selectedLearningLanguages = [];
+
+        // Load all available languages from database with translations
+        async function loadAvailableLanguages() {
+            try {
+                // Get user's native language (fallback to Hungarian)
+                const userLang = currentUser?.user_metadata?.language || 'hu';
+                
+                const { data: languages, error } = await supabase
+                    .from('languages')
+                    .select(`
+                        id,
+                        code,
+                        name,
+                        flag_emoji,
+                        is_active,
+                        language_translations!inner(
+                            translated_name
+                        )
+                    `)
+                    .eq('is_active', true)
+                    .eq('language_translations.display_language_code', userLang);
+                
+                if (error) {
+                    console.error('Error loading languages with translations:', error);
+                    // Fallback to original names if translations fail
+                    const { data: fallbackLanguages, error: fallbackError } = await supabase
+                        .from('languages')
+                        .select('*')
+                        .eq('is_active', true)
+                        .order('name');
+                    
+                    availableLanguages = fallbackLanguages || [];
+                } else {
+                    // Process languages with translations
+                    availableLanguages = languages.map(lang => ({
+                        id: lang.id,
+                        code: lang.code,
+                        name: lang.name, // Original name as fallback
+                        display_name: lang.language_translations?.[0]?.translated_name || lang.name,
+                        flag_emoji: lang.flag_emoji,
+                        is_active: lang.is_active
+                    }));
+                    
+                    // Sort by translated name
+                    availableLanguages.sort((a, b) => a.display_name.localeCompare(b.display_name));
+                }
+                
+                console.log('✅ Available languages loaded:', availableLanguages.length, 'for user lang:', userLang);
+            } catch (error) {
+                console.error('Error loading available languages:', error);
+            }
+        }
+
+        // Load user's selected learning languages with translations
+        async function loadUserLearningLanguages() {
+            try {
+                if (!currentUser) return;
+                
+                // Get user's native language for translations
+                const userLang = currentUser?.user_metadata?.language || 'hu';
+                
+                const { data: userLanguages, error } = await supabase
+                    .from('user_learning_languages')
+                    .select(`
+                        id,
+                        languages (
+                            id,
+                            name,
+                            code,
+                            flag_emoji,
+                            language_translations!left (
+                                translated_name
+                            )
+                        )
+                    `)
+                    .eq('user_id', currentUser.id)
+                    .eq('languages.language_translations.display_language_code', userLang);
+                
+                if (error) {
+                    console.error('Error loading user learning languages:', error);
+                    return;
+                }
+                
+                selectedLearningLanguages = userLanguages?.map(ul => {
+                    const lang = ul.languages;
+                    return {
+                        id: lang.id,
+                        name: lang.name,
+                        code: lang.code,
+                        flag_emoji: lang.flag_emoji,
+                        display_name: lang.language_translations?.[0]?.translated_name || lang.name
+                    };
+                }) || [];
+                
+                renderSelectedLearningLanguages();
+                console.log('✅ User learning languages loaded:', selectedLearningLanguages.length, 'for user lang:', userLang);
+            } catch (error) {
+                console.error('Error loading user learning languages:', error);
+            }
+        }
+
+        // Render selected learning languages as badges
+        function renderSelectedLearningLanguages() {
+            const container = document.getElementById('selectedLearningLanguages');
+            if (!container) return;
+            
+            container.innerHTML = selectedLearningLanguages.map(lang => {
+                const displayName = lang.display_name || lang.name;
+                return `
+                    <div style="display: inline-flex; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; gap: 6px;">
+                        <span>${lang.flag_emoji}</span>
+                        <span>${displayName}</span>
+                        <button onclick="removeLearningLanguage('${lang.id}')" 
+                                style="background: none; border: none; color: white; cursor: pointer; padding: 0; margin: 0; font-size: 14px; line-height: 1; opacity: 0.8; transition: opacity 0.2s ease;"
+                                onmouseover="this.style.opacity='1'"
+                                onmouseout="this.style.opacity='0.8'">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filter and show learning language options
+        function filterLearningLanguages(searchTerm) {
+            const optionsContainer = document.getElementById('learningLanguageOptions');
+            if (!optionsContainer) return;
+            
+            const filtered = availableLanguages.filter(lang => {
+                const searchText = searchTerm.toLowerCase();
+                const displayName = lang.display_name || lang.name;
+                return (
+                    displayName.toLowerCase().includes(searchText) ||
+                    lang.name.toLowerCase().includes(searchText)
+                ) && !selectedLearningLanguages.find(selected => selected.id === lang.id);
+            });
+            
+            optionsContainer.innerHTML = filtered.slice(0, 10).map(lang => {
+                const displayName = lang.display_name || lang.name;
+                return `
+                    <div onclick="addLearningLanguage('${lang.id}', '${displayName}', '${lang.code}', '${lang.flag_emoji}')"
+                         style="padding: 12px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 14px; color: #374151; transition: background 0.2s ease;"
+                         onmouseover="this.style.background='rgba(102, 126, 234, 0.1)'"
+                         onmouseout="this.style.background='none'">
+                        <span>${lang.flag_emoji}</span>
+                        <span>${displayName}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            optionsContainer.style.display = filtered.length > 0 ? 'block' : 'none';
+        }
+
+        // Show learning language options
+        function showLearningLanguageOptions() {
+            const input = document.getElementById('learningLanguageInput');
+            filterLearningLanguages(input.value);
+        }
+
+        // Hide learning language options
+        function hideLearningLanguageOptions() {
+            const optionsContainer = document.getElementById('learningLanguageOptions');
+            if (optionsContainer) {
+                optionsContainer.style.display = 'none';
+            }
+        }
+
+        // Add learning language
+        async function addLearningLanguage(langId, displayName, langCode, flagEmoji) {
+            try {
+                if (!currentUser) return;
+                
+                // Check if already selected
+                if (selectedLearningLanguages.find(lang => lang.id === langId)) {
+                    return;
+                }
+                
+                // Add to database
+                const { error } = await supabase
+                    .from('user_learning_languages')
+                    .insert({
+                        user_id: currentUser.id,
+                        language_id: langId
+                    });
+                
+                if (error) {
+                    console.error('Error adding learning language:', error);
+                    return;
+                }
+                
+                // Find the original language name from availableLanguages
+                const originalLang = availableLanguages.find(lang => lang.id === langId);
+                
+                // Add to local array
+                selectedLearningLanguages.push({
+                    id: langId,
+                    name: originalLang?.name || displayName, // Keep original name for database compatibility
+                    code: langCode,
+                    flag_emoji: flagEmoji,
+                    display_name: displayName // Use localized name for display
+                });
+                
+                renderSelectedLearningLanguages();
+                
+                // Clear input and hide options
+                const input = document.getElementById('learningLanguageInput');
+                if (input) {
+                    input.value = '';
+                }
+                hideLearningLanguageOptions();
+                
+                console.log('✅ Learning language added:', displayName);
+            } catch (error) {
+                console.error('Error adding learning language:', error);
+            }
+        }
+
+        // Remove learning language
+        async function removeLearningLanguage(langId) {
+            try {
+                if (!currentUser) return;
+                
+                // Remove from database
+                const { error } = await supabase
+                    .from('user_learning_languages')
+                    .delete()
+                    .match({
+                        user_id: currentUser.id,
+                        language_id: langId
+                    });
+                
+                if (error) {
+                    console.error('Error removing learning language:', error);
+                    return;
+                }
+                
+                // Remove from local array
+                selectedLearningLanguages = selectedLearningLanguages.filter(lang => lang.id !== langId);
+                renderSelectedLearningLanguages();
+                
+                console.log('✅ Learning language removed');
+            } catch (error) {
+                console.error('Error removing learning language:', error);
+            }
+        }
+
+        // UI Language Management Functions
+        let currentUILanguage = null;
+
+        // Load and display current UI language
+        async function loadCurrentUILanguage() {
+            try {
+                // Get browser language (default) or saved preference
+                const browserLang = navigator.language.slice(0, 2);
+                const savedLang = localStorage.getItem('snappy_ui_language');
+                const currentLang = savedLang || browserLang || 'hu';
+                
+                console.log('🌐 Browser language:', browserLang);
+                console.log('💾 Saved UI language:', savedLang);
+                console.log('🎯 Using language:', currentLang);
+                
+                // Get language name in browser language (or Hungarian if not English)
+                const displayLang = browserLang === 'en' ? 'en' : 'hu';
+                
+                const { data: languages, error } = await supabase
+                    .from('languages')
+                    .select(`
+                        id, code, name, flag_emoji, is_active,
+                        language_translations!inner(translated_name)
+                    `)
+                    .eq('is_active', true)
+                    .eq('code', currentLang)
+                    .eq('language_translations.display_language_code', displayLang);
+                
+                if (error) {
+                    console.error('Error loading current UI language:', error);
+                    return;
+                }
+                
+                let langInfo = null;
+                let translatedName = 'Magyar'; // fallback
+                
+                if (languages && languages.length > 0) {
+                    langInfo = languages[0];
+                    translatedName = langInfo.language_translations[0]?.translated_name || langInfo.name;
+                }
+                
+                currentUILanguage = {
+                    code: currentLang,
+                    name: langInfo?.name || 'Hungarian',
+                    display_name: translatedName,
+                    flag_emoji: langInfo?.flag_emoji || '🇭🇺'
+                };
+                
+                // Set input field value to show selected language (browser language names)
+                const input = document.getElementById('uiLanguageInput');
+                if (input && currentUILanguage) {
+                    input.value = `${currentUILanguage.flag_emoji} ${currentUILanguage.display_name}`;
+                }
+                
+                updateUILanguageDisplay();
+                
+                console.log(`✅ Current UI language loaded: ${currentUILanguage.display_name} (displayed in ${displayLang})`);
+                
+            } catch (error) {
+                console.error('Error loading current UI language:', error);
+                // Fallback
+                const input = document.getElementById('uiLanguageInput');
+                if (input) {
+                    input.value = '🇭🇺 Magyar';
+                }
+            }
+        }
+
+        // Update UI language display in info box
+        function updateUILanguageDisplay() {
+            const displayElement = document.getElementById('currentUILanguageDisplay');
+            if (displayElement && currentUILanguage) {
+                displayElement.textContent = `${currentUILanguage.flag_emoji} ${currentUILanguage.display_name}`;
+            }
+        }
+
+        // Render selected UI language as badge
+        function renderSelectedUILanguage() {
+            const container = document.getElementById('selectedUILanguage');
+            if (!container || !currentUILanguage) return;
+            
+            container.innerHTML = `
+                <div style="display: inline-flex; align-items: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; gap: 8px;">
+                    <span>${currentUILanguage.flag_emoji}</span>
+                    <span>${currentUILanguage.display_name}</span>
+                    <span style="opacity: 0.7; font-size: 12px;">(UI nyelv)</span>
+                </div>
+            `;
+        }
+
+        // Toggle UI language dropdown
+        function toggleUILanguageDropdown() {
+            const optionsContainer = document.getElementById('uiLanguageOptions');
+            if (!optionsContainer) return;
+            
+            // If dropdown is visible, hide it
+            if (optionsContainer.style.display === 'block') {
+                hideUILanguageOptions();
+                return;
+            }
+            
+            // Get user's browser language to determine display language for matrix
+            const browserLang = navigator.language.slice(0, 2);
+            const displayLang = browserLang === 'en' ? 'en' : 'hu'; // Show in English if browser is English
+            
+            console.log(`🌐 Showing language matrix in: ${displayLang} (based on browser: ${browserLang})`);
+            
+            // Load all languages from matrix using display language
+            loadUILanguageOptions(displayLang);
+        }
+        
+        // Load UI language options from 20x20 matrix
+        async function loadUILanguageOptions(displayLang = 'hu') {
+            try {
+                const { data: languages, error } = await supabase
+                    .from('languages')
+                    .select(`
+                        id, code, name, flag_emoji, is_active,
+                        language_translations!inner(translated_name)
+                    `)
+                    .eq('is_active', true)
+                    .eq('language_translations.display_language_code', displayLang);
+                
+                if (error) {
+                    console.error('Error loading UI languages:', error);
+                    return;
+                }
+                
+                const optionsContainer = document.getElementById('uiLanguageOptions');
+                if (!optionsContainer) return;
+                
+                optionsContainer.innerHTML = languages.map(lang => {
+                    const translatedName = lang.language_translations[0]?.translated_name || lang.name;
+                    const isSelected = lang.code === currentUILanguage?.code;
+                    
+                    return `
+                        <div onclick="selectUILanguage('${lang.code}', '${translatedName}', '${lang.flag_emoji}')"
+                             style="padding: 12px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 14px; color: #374151; transition: background 0.2s ease; ${isSelected ? 'background: rgba(16, 185, 129, 0.1); font-weight: 600;' : ''}"
+                             onmouseover="this.style.background='rgba(16, 185, 129, 0.15)'"
+                             onmouseout="this.style.background='${isSelected ? 'rgba(16, 185, 129, 0.1)' : 'none'}'">
+                            <span>${lang.flag_emoji}</span>
+                            <span>${translatedName}</span>
+                            ${isSelected ? '<span style="color: #10b981; font-size: 12px; margin-left: auto;">✓ Kiválasztva</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+                optionsContainer.style.display = 'block';
+                console.log(`✅ Loaded ${languages.length} UI language options in ${displayLang}`);
+                
+            } catch (error) {
+                console.error('Error loading UI language options:', error);
+            }
+        }
+
+        // Show UI language options
+        function showUILanguageOptions() {
+            const input = document.getElementById('uiLanguageInput');
+            filterUILanguages(input.value);
+        }
+
+        // Hide UI language options
+        function hideUILanguageOptions() {
+            const optionsContainer = document.getElementById('uiLanguageOptions');
+            if (optionsContainer) {
+                optionsContainer.style.display = 'none';
+            }
+        }
+
+        // Select UI language (save to localStorage, but don't change UI yet)
+        function selectUILanguage(langCode, displayName, flagEmoji) {
+            try {
+                // Update current UI language (but don't save yet - only on modal save)
+                currentUILanguage = {
+                    code: langCode,
+                    name: displayName,
+                    display_name: displayName,
+                    flag_emoji: flagEmoji
+                };
+                
+                // Update input field to show selected language
+                const input = document.getElementById('uiLanguageInput');
+                if (input) {
+                    input.value = `${flagEmoji} ${displayName}`;
+                }
+                
+                updateUILanguageDisplay();
+                hideUILanguageOptions();
+                
+                // Show success message (but don't actually change UI yet)
+                showSuccessMessage(`✅ UI nyelv beállítva: ${displayName} (következő betöltéskor aktiválódik)`);
+                
+                console.log('✅ UI language saved:', displayName, '(not applied to current UI yet)');
+            } catch (error) {
+                console.error('Error selecting UI language:', error);
+                showErrorMessage('❌ Hiba történt a UI nyelv mentése során');
+            }
+        }
+
+        // Detect browser language for UI
+        async function detectBrowserLanguageForUI() {
+            const browserLang = navigator.language.slice(0, 2);
+            console.log(`🌐 Detecting browser language: ${browserLang}`);
+            
+            try {
+                // Get browser language name in the current display language
+                const displayLang = browserLang === 'en' ? 'en' : 'hu';
+                
+                const { data: languages, error } = await supabase
+                    .from('languages')
+                    .select(`
+                        id, code, name, flag_emoji, is_active,
+                        language_translations!inner(translated_name)
+                    `)
+                    .eq('is_active', true)
+                    .eq('code', browserLang)
+                    .eq('language_translations.display_language_code', displayLang);
+                
+                if (error) {
+                    console.error('Error detecting browser language:', error);
+                    return;
+                }
+                
+                if (languages && languages.length > 0) {
+                    const lang = languages[0];
+                    const translatedName = lang.language_translations[0]?.translated_name || lang.name;
+                    
+                    selectUILanguage(lang.code, translatedName, lang.flag_emoji);
+                    showSuccessMessage(`✅ Böngésző nyelve felismerve: ${translatedName}`);
+                } else {
+                    showErrorMessage(`❌ Böngésző nyelve (${browserLang}) nem támogatott. Válassz a listából!`);
+                }
+            } catch (error) {
+                console.error('Error detecting browser language:', error);
+                showErrorMessage('❌ Hiba történt a böngésző nyelvének felismerése során');
+            }
+        }
+        
+        // Save all settings (profile and UI language)
+        async function saveAllSettings() {
+            try {
+                // Save profile settings
+                await saveProfileSettings();
+                
+                // Save UI language to localStorage (only when explicitly saved)
+                if (currentUILanguage) {
+                    localStorage.setItem('snappy_ui_language', currentUILanguage.code);
+                    console.log(`💾 UI language saved to localStorage: ${currentUILanguage.code}`);
+                }
+                
+                showSuccessMessage('✅ Minden beállítás sikeresen mentve!');
+                setTimeout(() => {
+                    closeModal();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error saving all settings:', error);
+                showErrorMessage('❌ Hiba történt a beállítások mentése során');
+            }
+        }
+
+        // Load profile settings from database
+        async function loadProfileSettings() {
+            try {
+                if (!currentUser) return;
+                
+                const { data: profile, error } = await supabase
+                    .from('user_profiles')
+                    .select('first_name, last_name, email, phone, language')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error loading profile:', error);
+                    return;
+                }
+                
+                // Fill the form with current data
+                if (profile) {
+                    document.getElementById('profileFirstName').value = profile.first_name || '';
+                    document.getElementById('profileLastName').value = profile.last_name || '';
+                    document.getElementById('profileEmail').value = profile.email || currentUser.email || '';
+                    document.getElementById('profilePhone').value = profile.phone || '';
+                    
+                    const nativeSelect = document.getElementById('profileNativeLanguage');
+                    if (profile.language && nativeSelect) {
+                        nativeSelect.value = profile.language;
+                    }
+                } else {
+                    // New profile, fill with auth data
+                    document.getElementById('profileFirstName').value = currentUser.user_metadata?.first_name || '';
+                    document.getElementById('profileLastName').value = currentUser.user_metadata?.last_name || '';
+                    document.getElementById('profileEmail').value = currentUser.email || '';
+                }
+                
+            } catch (error) {
+                console.error('Error loading profile settings:', error);
+            }
+        }
+
+        // Save profile settings to database
+        async function saveProfileSettings() {
+            try {
+                if (!currentUser) return;
+                
+                const firstName = document.getElementById('profileFirstName').value.trim();
+                const lastName = document.getElementById('profileLastName').value.trim();
+                const phone = document.getElementById('profilePhone').value.trim();
+                const nativeLanguage = document.getElementById('profileNativeLanguage').value;
+                
+                // Validate required fields
+                if (!firstName) {
+                    showErrorMessage('❌ A keresztnév megadása kötelező!');
+                    return;
+                }
+                
+                const profileData = {
+                    id: currentUser.id,
+                    first_name: firstName,
+                    last_name: lastName,
+                    email: currentUser.email,
+                    phone: phone,
+                    language: nativeLanguage,
+                    user_role: 'student',
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Upsert (insert or update) profile
+                const { error } = await supabase
+                    .from('user_profiles')
+                    .upsert(profileData, { onConflict: 'id' });
+                
+                if (error) {
+                    console.error('Error saving profile:', error);
+                    showErrorMessage('❌ Hiba a profil mentése során!');
+                    return;
+                }
+                
+                // Update the UI with the new first name
+                const userName = document.getElementById('userName');
+                const userAvatar = document.getElementById('userAvatar');
+                if (userName) userName.textContent = firstName;
+                if (userAvatar) userAvatar.textContent = firstName.charAt(0).toUpperCase();
+                
+                // Update welcome title
+                updateWelcomeTitle(firstName);
+                
+                showSuccessMessage('✅ Profil sikeresen mentve!');
+                
+            } catch (error) {
+                console.error('Error saving profile settings:', error);
+                showErrorMessage('❌ Hiba a profil mentése során!');
+            }
         }
 
         // Update language setting
@@ -6176,18 +7163,12 @@
             
             // Update welcome title with new language
             if (currentUser) {
-                const firstName = currentUser.user_metadata?.first_name || 'User';
+                const firstName = currentUser.user_metadata?.first_name || document.getElementById('userName')?.textContent || 'User';
                 updateWelcomeTitle(firstName);
             }
             
             // Show confirmation
-            showSuccessMessage(' Nyelv frissítve: ' + newLang + '!');
-            
-            // Close modal and refresh dynamic content
-            setTimeout(() => {
-                closeModal();
-                // No need to reload dashboard data anymore
-            }, 1500);
+            showSuccessMessage('✅ Nyelv frissítve: ' + (getSupportedLanguages()[newLang] || newLang) + '!');
         }
 
         // Detect and set browser language
@@ -6374,9 +7355,6 @@
                 `).join('');
                 
                 tagsList.innerHTML = tagsHTML;
-                
-                // Initialize Lucide icons for dynamically added content
-                lucide.createIcons();
                 
             } catch (error) {
                 console.error('Error loading tags:', error);
@@ -6701,7 +7679,9 @@
                 return;
             }
             
-            const currentTag = value.trim().toLowerCase();
+            // Extract the current tag being typed (after the last comma)
+            const tags = value.split(',');
+            const currentTag = tags[tags.length - 1].trim().toLowerCase();
             
             if (currentTag.length < 1) {
                 suggestions.style.display = 'none';
@@ -6777,15 +7757,15 @@
                 document.getElementById('createTagSuggestions').style.display = 'none';
             }
             
-            // Prevent form submission on Enter key
-            if (event.key === 'Enter') {
+            // Handle comma separation - when comma is pressed, add current input as tag
+            if (event.key === ',' || event.key === 'Enter') {
                 event.preventDefault();
                 
-                const suggestions = document.getElementById('createTagSuggestions');
                 const input = document.getElementById('setTag');
+                const suggestions = document.getElementById('createTagSuggestions');
                 
-                // If there are suggestions visible, select the first one
-                if (suggestions.style.display !== 'none') {
+                // If there are suggestions visible and Enter was pressed, select the first one
+                if (event.key === 'Enter' && suggestions.style.display !== 'none') {
                     const firstSuggestion = suggestions.querySelector('.tag-suggestion');
                     if (firstSuggestion) {
                         firstSuggestion.click();
@@ -6793,9 +7773,11 @@
                     }
                 }
                 
-                // If input has value, add it as tag
-                if (input.value.trim()) {
-                    addCreateTag(input.value.trim());
+                // Get current input value and clean it up
+                const currentValue = input.value.replace(/,$/, '').trim(); // Remove trailing comma if any
+                
+                if (currentValue) {
+                    addCreateTag(currentValue);
                 }
                 
                 return false;
@@ -7176,12 +8158,12 @@
             // Add to array
             createSelectedTagsList.push(tagName);
             
-            // Create tag element
+            // Create tag element with new CSS classes
             const tagElement = document.createElement('div');
-            tagElement.style.cssText = 'display: inline-flex; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; margin-bottom: 4px;';
+            tagElement.className = 'selected-tag';
             tagElement.innerHTML = `
                 <span>${tagName}</span>
-                <button type="button" onclick="removeCreateTag('${tagName}')" style="margin-left: 8px; background: none; border: none; color: white; cursor: pointer; font-size: 16px; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='none'" title="Tag eltávolítása">×</button>
+                <button type="button" class="tag-remove" onclick="removeCreateTag('${tagName}')" title="Tag eltávolítása">×</button>
             `;
             
             // Add to container
@@ -7633,7 +8615,7 @@
                     .from('flashcard_sets')
                     .delete()
                     .eq('id', setId)
-                    .eq('creator_id', currentUser.id); // Extra safety check
+                    .eq('user_id', currentUser.id); // Extra safety check
 
                 if (setError) {
                     throw setError;
@@ -7654,6 +8636,23 @@
         async function showCardsList(setId) {
             console.log('🔥 showCardsList called with setId:', setId);
             
+            // Show loading immediately
+            const loadingModal = document.createElement('div');
+            loadingModal.id = 'cardsListLoading';
+            loadingModal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.3); display: flex; align-items: center;
+                justify-content: center; z-index: 10001;
+            `;
+            loadingModal.innerHTML = `
+                <div style="background: white; padding: 24px; border-radius: 12px; text-align: center;">
+                    <div style="color: #667eea; font-weight: 600; margin-bottom: 8px;">Lista betöltése...</div>
+                    <div style="width: 40px; height: 4px; background: #f0f0f0; border-radius: 2px; margin: 0 auto; overflow: hidden;">
+                        <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 2px; animation: loading 1.5s ease-in-out infinite; transform: translateX(-100%);"></div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(loadingModal);
             
             try {
                 // Get set details
@@ -7672,30 +8671,60 @@
                 // Try to get cards directly first (in case they exist in cards table)
                 let cards = [];
                 
-                // Method 1: Try flashcard_set_cards junction table
+                // Method 1: Try flashcard_set_cards junction table with manual join
                 try {
+                    // First get card IDs from junction table
                     const { data: flashcardSetCards, error: junctionError } = await supabase
                         .from('flashcard_set_cards')
-                        .select(`
-                            cards (
-                                id,
-                                title,
-                                english_title,
-                                title_formatted,
-                                english_title_formatted,
-                                media_url,
-                                media_type,
-                                created_at
-                            )
-                        `)
+                        .select('card_id, position')
                         .eq('set_id', setId)
                         .order('position', { ascending: true });
 
                     console.log('🔗 Junction table result:', { flashcardSetCards, junctionError });
                     
                     if (!junctionError && flashcardSetCards && flashcardSetCards.length > 0) {
-                        cards = flashcardSetCards.map(item => item.cards).filter(Boolean);
-                        console.log('✅ Found cards via junction table:', cards.length);
+                        // Extract card IDs
+                        const cardIds = flashcardSetCards.map(item => item.card_id).filter(Boolean);
+                        console.log('📝 Card IDs found:', cardIds);
+                        
+                        // Now get the actual cards with their categories
+                        const { data: cardsData, error: cardsError } = await supabase
+                            .from('cards')
+                            .select('*')
+                            .in('id', cardIds);
+                        
+                        if (!cardsError && cardsData) {
+                            // Optimize: Load all categories for all cards in one query
+                            const cardIds = cardsData.map(card => card.id);
+                            
+                            // Get all card-category relationships for these cards
+                            const { data: allCardCategories } = await supabase
+                                .from('card_categories')
+                                .select(`
+                                    card_id,
+                                    categories!inner(id, name)
+                                `)
+                                .in('card_id', cardIds);
+                            
+                            // Build a map of card_id -> categories
+                            const cardCategoriesMap = {};
+                            if (allCardCategories) {
+                                allCardCategories.forEach(cc => {
+                                    if (!cardCategoriesMap[cc.card_id]) {
+                                        cardCategoriesMap[cc.card_id] = [];
+                                    }
+                                    cardCategoriesMap[cc.card_id].push(cc.categories);
+                                });
+                            }
+                            
+                            // Assign categories to cards
+                            cardsData.forEach(card => {
+                                card.categories = cardCategoriesMap[card.id] || [];
+                            });
+                            
+                            cards = cardsData;
+                            console.log('✅ Found cards via optimized junction table:', cards.length);
+                        }
                     }
                 } catch (jError) {
                     console.log('⚠️ Junction table failed, trying direct method');
@@ -7727,11 +8756,24 @@
                 window.currentListCards = cards;
                 window.currentListSet = set;
 
+                // Remove loading modal
+                const loadingModal = document.getElementById('cardsListLoading');
+                if (loadingModal) {
+                    document.body.removeChild(loadingModal);
+                }
+
                 // Show simple modal for now
                 showSimpleCardsList(set, cards);
 
             } catch (error) {
                 console.error('❌ Error loading cards list:', error);
+                
+                // Remove loading modal in case of error
+                const loadingModal = document.getElementById('cardsListLoading');
+                if (loadingModal) {
+                    document.body.removeChild(loadingModal);
+                }
+                
                 alert('Hiba történt a kártyák betöltésekor: ' + error.message);
             }
         }
@@ -7981,6 +9023,29 @@
                             <div>
                                 ${cardsHTML}
                             </div>
+                            
+                            <!-- Footer with close button -->
+                            <div style="
+                                border-top: 1px solid #e5e7eb;
+                                padding: 20px 0 0 0;
+                                margin-top: 24px;
+                                text-align: center;
+                            ">
+                                <button onclick="closeModal()" style="
+                                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                    color: white;
+                                    border: none;
+                                    padding: 12px 32px;
+                                    border-radius: 8px;
+                                    font-weight: 600;
+                                    cursor: pointer;
+                                    font-size: 16px;
+                                    transition: all 0.3s ease;
+                                " onmouseover="this.style.transform='scale(1.02)'" 
+                                   onmouseout="this.style.transform='scale(1)'">
+                                    Bezár
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -7993,9 +9058,6 @@
             modalContainer.style.height = '100%';
             modalContainer.style.zIndex = '10000';
             console.log('✅ Modal displayed');
-            
-            // Initialize Lucide icons for dynamic content (trash icons)
-            lucide.createIcons();
         }
 
         // Sort cards list by column (hungarian/english)
@@ -8126,9 +9188,6 @@
             `;
             document.getElementById('modalContainer').style.display = 'flex';
             
-            // Initialize Lucide icons for dynamically added content
-            lucide.createIcons();
-            
             } catch (error) {
                 console.error('Error in showCardsListModal:', error);
                 alert('Hiba a modal megjelenítésekor: ' + error.message);
@@ -8182,6 +9241,16 @@
                                 `<video src="${card.media_url}" controls style="max-width: 60px; max-height: 40px; border-radius: 4px;"></video>` :
                                 `<img src="${card.media_url}" alt="Card media" style="max-width: 60px; max-height: 40px; object-fit: cover; border-radius: 4px;">`
                             }
+                        </div>
+                    ` : ''}
+                    
+                    ${card.categories && card.categories.length > 0 ? `
+                        <div class="card-tags" style="display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0;">
+                            ${card.categories.map(cat => `
+                                <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 500;">
+                                    ${cat.name}
+                                </span>
+                            `).join('')}
                         </div>
                     ` : ''}
                     
@@ -8646,14 +9715,6 @@
                     text-align: center; max-width: 450px; margin: 20px;
                     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
                 ">
-                    <div style="margin-bottom: 16px;">
-                        <svg class="lucide-icon" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px;">
-                            <path d="m3 6 2 14h14L21 6"/>
-                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                            <line x1="10" x2="10" y1="11" y2="17"/>
-                            <line x1="14" x2="14" y1="11" y2="17"/>
-                        </svg>
-                    </div>
                     <h3 style="margin: 0 0 16px 0; color: #1f2937; font-size: 20px; font-weight: 700;">
                         Kártya törlése
                     </h3>
@@ -8732,12 +9793,6 @@
                 setTimeout(() => {
                     const successDiv = document.createElement('div');
                     successDiv.innerHTML = `
-                        <svg class="lucide-icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; margin-right: 4px; vertical-align: middle;">
-                            <path d="m3 6 2 14h14L21 6"/>
-                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                            <line x1="10" x2="10" y1="11" y2="17"/>
-                            <line x1="14" x2="14" y1="11" y2="17"/>
-                        </svg>
                         Kártya törölve!
                     `;
                     successDiv.style.cssText = `
@@ -8789,12 +9844,12 @@
                 <div onclick="event.stopPropagation()" style="
                     background: white;
                     border-radius: 12px;
-                    max-width: 1200px;
+                    max-width: 1440px;
                     max-height: 90vh;
                     overflow: hidden;
                     display: flex;
                     flex-direction: column;
-                    width: 95%;
+                    width: 90%;
                     margin: 20px;
                     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
                 ">
@@ -9429,6 +10484,19 @@
         window.createNewSet = createNewSet;
         window.toggleUserMenu = toggleUserMenu;
         window.openSettingsModal = openSettingsModal;
+        window.filterLearningLanguages = filterLearningLanguages;
+        window.showLearningLanguageOptions = showLearningLanguageOptions;
+        window.hideLearningLanguageOptions = hideLearningLanguageOptions;
+        window.addLearningLanguage = addLearningLanguage;
+        window.removeLearningLanguage = removeLearningLanguage;
+        window.loadCurrentUILanguage = loadCurrentUILanguage;
+        window.toggleUILanguageDropdown = toggleUILanguageDropdown;
+        window.loadUILanguageOptions = loadUILanguageOptions;
+        window.showUILanguageOptions = showUILanguageOptions;
+        window.hideUILanguageOptions = hideUILanguageOptions;
+        window.selectUILanguage = selectUILanguage;
+        window.detectBrowserLanguageForUI = detectBrowserLanguageForUI;
+        window.saveAllSettings = saveAllSettings;
         window.closeUserMenu = closeUserMenu;
         window.logout = logout;
         window.closeCreateSetModal = closeCreateSetModal;
@@ -9754,6 +10822,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DEBUG: DOM loaded, calling initDashboard...');
             initDashboard();
+            
+            // Add event listener for user avatar
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar) {
+                userAvatar.addEventListener('click', toggleUserMenu);
+            }
             
             // Initialize Lucide icons
             if (typeof lucide !== 'undefined') {

@@ -38,9 +38,24 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1440px;
+            width: 90%;
             margin: 0 auto;
             padding: 0 24px;
+        }
+        
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1600px;
+                width: 85%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 0 16px;
+            }
         }
 
 
@@ -938,7 +953,7 @@
             </div>
             
             <!-- Hero Content - full width -->
-            <div style="max-width: 1400px; margin: 0 auto; width: 100%;">
+            <div style="max-width: 1600px; margin: 0 auto; width: 90%;">
                 <div style="display: flex; justify-content: center; align-items: center; gap: 4rem; margin-bottom: 3rem;">
                     <div style="flex: 1; text-align: left; max-width: 600px;">
                         <h1 style="color: #1a202c; text-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: clamp(2.2rem, 5vw, 3.2rem); margin-bottom: 1.5rem;" data-i18n="home.heroTitle">
@@ -1279,4 +1294,4 @@
         handleFadeIn();
     </script>
 </body>
-</html> 
+</html> console.log("🔍 DEBUG - No auto redirects in index.html", window.location.href);
