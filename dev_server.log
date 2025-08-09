@@ -1,0 +1,79 @@
+
+> snappycards-api@1.0.1 start
+> node src/server.js
+
+✅ Supabase Admin API initialized
+🔗 Using Supabase project: https://ycxqxdhaxehspypqbnpi.supabase.co
+✅ Resend API initialized - Version 2025.01.25
+node:events:485
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at app.listen (/Volumes/PASSPORT/TELJES/IT/CURSOR/SNAPPYCARDS/backend/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/Volumes/PASSPORT/TELJES/IT/CURSOR/SNAPPYCARDS/backend/src/server.js:23:5)
+    at Module._compile (node:internal/modules/cjs/loader:1692:14)
+    at Object..js (node:internal/modules/cjs/loader:1824:10)
+    at Module.load (node:internal/modules/cjs/loader:1427:32)
+    at Module._load (node:internal/modules/cjs/loader:1250:12)
+    at TracingChannel.traceSync (node:diagnostics_chann::1 - - [08/Aug/2025 01:56:18] "GET /student-dashboard.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 01:56:19] "GET /student-dashboard.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 01:56:19] "GET /components/snappy-cards-logo.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 01:56:19] "GET /config/supabase.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 01:56:19] "GET /lib/i18n.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 01:56:19] "GET /lib/favicon.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 01:56:19] "GET /favicon.svg HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 01:56:53] "GET /student-dashboard.html HTTP/1.1" 304 -
+::1 - - [08/Aug/2025 02:14:36] "GET /student-dashboard.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:14:36] "GET /components/snappy-cards-logo.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:14:36] "GET /config/supabase.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:14:36] "GET /lib/i18n.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:14:36] "GET /lib/favicon.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:14:36] "GET /favicon.svg HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:14:49] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Aug/2025 02:14:49] "GET /favicon.ico HTTP/1.1" 304 -
+::1 - - [08/Aug/2025 02:14:50] "GET /login.html HTTP/1.1" 304 -
+::1 - - [08/Aug/2025 02:25:20] "GET / HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:28] "GET /student-dashboard.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:28] "GET /components/snappy-cards-logo.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:28] "GET /config/supabase.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:28] "GET /lib/i18n.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:28] "GET /lib/favicon.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /login.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /lib/helpers.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /lib/auth.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /lib/custom-auth-client.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /components/common.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /lib/custom-auth.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /lib/api.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:25:29] "GET /favicon.svg HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /student-dashboard.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /config/supabase.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /lib/favicon.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /components/snappy-cards-logo.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /lib/i18n.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /login.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /components/common.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /lib/helpers.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /lib/auth.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /lib/api.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /lib/custom-auth.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:23] "GET /lib/custom-auth-client.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:24] "GET /favicon.svg HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:29:30] "GET /student-dashboard.html HTTP/1.1" 304 -
+::1 - - [08/Aug/2025 02:31:06] "GET /student-dashboard.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /config/supabase.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /lib/favicon.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /components/snappy-cards-logo.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /lib/i18n.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /login.html HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /lib/helpers.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /components/common.css HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /lib/auth.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /lib/custom-auth-client.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /lib/custom-auth.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /lib/api.js HTTP/1.1" 200 -
+::1 - - [08/Aug/2025 02:31:06] "GET /favicon.svg HTTP/1.1" 200 -

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RLS Policies Debug</title>
+</head>
+<body>
+    <h1>RLS Policies Debug</h1>
+    <div id="results"></div>
+    <button onclick="checkRLSPolicies()">Check RLS Policies</button>
+    <button onclick="testAuth()">Test Authentication</button>
+    <button onclick="testFlashcardSetInsert()">Test Flashcard Set Insert</button>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="config/supabase.js"></script>
+    <script>
+        function log(message) {
+            console.log(message);
+            const results = document.getElementById('results');
+            results.innerHTML += '<div style="margin: 10px 0; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">' + 
+                '<pre>' + JSON.stringify(message, null, 2) + '</pre></div>';
+        }
+
+        async function checkRLSPolicies() {
+            log('🔍 Checking RLS Policies...');
+            
+            try {
+                // This will fail due to RLS, but we can check the error
+                const { data, error } = await window.supabaseClient
+                    .from('flashcard_sets')
+                    .select('*')
+                    .limit(1);
+                    
+                if (error) {
+                    log('❌ RLS Policy Check Error: ' + JSON.stringify(error, null, 2));
+                } else {
+                    log('✅ RLS Policy Check Success: ' + JSON.stringify(data, null, 2));
+                }
+            } catch (error) {
+                log('❌ RLS Policy Check Exception: ' + error.message);
+            }
+        }
+
+        async function testAuth() {
+            log('🔍 Testing Authentication...');
+            
+            try {
+                const { data: { user }, error } = await window.supabaseClient.auth.getUser();
+                
+                if (error) {
+                    log('❌ Auth Error: ' + JSON.stringify(error, null, 2));
+                    
+                    // Try to login with test credentials
+                    log('🔍 Attempting login...');
+                    const loginResult = await window.supabaseClient.auth.signInWithPassword({
+                        email: 'vidamkos@gmail.com',
+                        password: 'Palacs1nta'
+                    });
+                    
+                    if (loginResult.error) {
+                        log('❌ Login Failed: ' + JSON.stringify(loginResult.error, null, 2));
+                    } else {
+                        log('✅ Login Success: ' + JSON.stringify(loginResult.data.user, null, 2));
+                    }
+                } else {
+                    log('✅ User authenticated: ' + JSON.stringify({
+                        id: user.id,
+                        email: user.email,
+                        user_metadata: user.user_metadata,
+                        aud: user.aud,
+                        role: user.role
+                    }, null, 2));
+                }
+            } catch (error) {
+                log('❌ Auth Exception: ' + error.message);
+            }
+        }
+
+        async function testFlashcardSetInsert() {
+            log('🔍 Testing Flashcard Set Insert...');
+            
+            try {
+                // First check authentication
+                const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
+                
+                if (authError || !user) {
+                    log('❌ Not authenticated for insert test');
+                    return;
+                }
+                
+                log('✅ User for insert test: ' + JSON.stringify({
+                    id: user.id,
+                    email: user.email
+                }, null, 2));
+                
+                // Test insert
+                const { data, error } = await window.supabaseClient
+                    .from('flashcard_sets')
+                    .insert({
+                        title: 'Test Flashcard Set ' + Date.now(),
+                        description: 'Debug test',
+                        user_id: user.id,
+                        is_public: false,
+                        language_a: 'English',
+                        language_b: 'Hungarian'
+                    })
+                    .select()
+                    .single();
+                    
+                if (error) {
+                    log('❌ Insert Error: ' + JSON.stringify(error, null, 2));
+                } else {
+                    log('✅ Insert Success: ' + JSON.stringify(data, null, 2));
+                    
+                    // Clean up - delete the test set
+                    await window.supabaseClient
+                        .from('flashcard_sets')
+                        .delete()
+                        .eq('id', data.id);
+                    log('🧹 Test set deleted');
+                }
+            } catch (error) {
+                log('❌ Insert Exception: ' + error.message);
+            }
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', async () => {
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for config to load
+            log('🚀 Starting RLS Debug Tests...');
+            await testAuth();
+            await checkRLSPolicies();
+        });
+    </script>
+</body>
+</html>

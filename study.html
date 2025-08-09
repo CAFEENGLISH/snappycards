@@ -34,9 +34,24 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1440px;
+            width: 90%;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
+        }
+        
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1600px;
+                width: 85%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 0 16px;
+            }
         }
 
         /* Header */
@@ -91,7 +106,8 @@
 
         /* Study Interface */
         .study-container {
-            max-width: 1400px;
+            max-width: 1600px;
+            width: 90%;
             margin: 0 auto;
             padding: 60px 40px;
         }
@@ -488,7 +504,7 @@
                 </a>
                 
                 <div class="header-actions">
-                    <a href="student-dashboard.html" class="back-btn">← Vissza a Dashboard-ra</a>
+                    <a href="login.html" class="back-btn">← Bejelentkezés</a>
                 </div>
             </div>
         </div>
@@ -614,8 +630,8 @@
                 currentUser = user;
 
                 if (!setId) {
-                    alert('Nincs kiválasztott szett!');
-                    window.location.href = '/student-dashboard.html';
+                    alert('Nincs kiválasztott szett! Átirányítás a főoldalra...');
+                    window.location.href = '/admin-dashboard.html';
                     return;
                 }
 
@@ -629,7 +645,7 @@
             } catch (error) {
                 console.error('Error initializing study session:', error);
                 alert('Hiba történt a tanulási szesszió indításakor');
-                                        window.location.href = '/student-dashboard.html';
+                                        window.location.href = '/login.html';
             }
         }
 
