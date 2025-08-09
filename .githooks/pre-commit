@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Check for old Supabase project reference
+old_ref='ycxqxdhaxehspypqbnpi'
+files=$(git diff --cached --name-only | grep -v '.githooks' || true)
+
+if [ -z "$files" ]; then
+  exit 0
+fi
+
+# Check each staged file for the old reference
+found=$(echo "$files" | xargs -I{} sh -c 'grep -l "$1" "{}" 2>/dev/null || true' -- "$old_ref")
+
+if [ -n "$found" ]; then
+  echo "❌ Blocked: found old Supabase ref ($old_ref) in staged files:"
+  echo "$found"
+  echo "   Please remove/replace it before commit."
+  exit 1
+fi
+
+echo "✅ Pre-commit hook passed"
